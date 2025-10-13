@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mad Mathematics - Accueil</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f8; color: #222; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; }
+        .card { background: white; padding:30px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.08); max-width:720px; width:100%; }
+        h1 { margin-bottom:8px; }
+        p.lead { color:#555; margin-bottom:20px; }
+        .links { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+        .link { display:block; padding:14px 16px; background:linear-gradient(135deg,#6b4a8d,#9b59b6); color:white; text-decoration:none; border-radius:8px; text-align:center; font-weight:700; }
+        .link.secondary { background:linear-gradient(135deg,#4a90e2,#7fb3ff); }
+        .note { margin-top:16px; color:#666; font-size:14px; }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="style.css">
+    <script src="shared.js"></script>
+    <div class="card">
+        <h1>Bienvenue sur Mad Mathematics 🎓</h1>
+        <p class="lead">Amuse-toi à t'entraîner aux opérations de base. Choisis une page pour commencer :</p>
+
+        <div class="links">
+            <a class="link" href="table-de-multiplication.html">Tables de multiplication</a>
+            <a class="link secondary" href="table-des-additions.html">Tables d'addition</a>
+            <a class="link secondary" href="table-des-soustractions.html">Tables de soustraction</a>
+            <a class="link secondary" href="table-des-divisions.html">Tables de division</a>
+        </div>
+
+        <p class="note">Cette page sert d'accueil commun pour les pages d'additions, soustractions et divisions. Les pages d'opérations reprennent le style et le comportement de la page de multiplication.</p>
+    </div>
+</body>
+</html>

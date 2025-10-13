@@ -1,0 +1,19 @@
+/* Styles partagés pour Mad Mathematics */
+:root{
+  --accent-1: #6b4a8d;
+  --accent-2: #9b59b6;
+  --muted: #666;
+}
+html,body{height:100%;}
+body{font-family: Arial, Helvetica, sans-serif; background:#f5f6fa; margin:0; color:#222;}
+.container{max-width:1000px;margin:24px auto;padding:28px;border-radius:12px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+h1{font-size:28px;margin-bottom:6px}
+.subtitle{color:var(--muted);margin-bottom:18px}
+input[type="text"], input[type="number"]{font-size:18px;padding:10px 12px;border-radius:8px;border:2px solid #ddd}
+.submit-btn{background:linear-gradient(135deg,#ffd700,#ffed4e);color:#2d1b4e;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:700}
+.difficulty-buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.hidden{display:none}
+.highscores-container{margin-top:18px}
+.highscore-list{list-style:none;padding:0;margin:0}
+.highscore-item{display:flex;justify-content:space-between;padding:8px;border-radius:8px;background:#f8f8fb;margin:6px 0}
+.new-highscore{background:linear-gradient(135deg,#ffd700,#ffed4e);padding:8px;border-radius:8px;display:inline-block}
