@@ -30,25 +30,29 @@ Then open `http://localhost:8000`
 ### Install Dependencies
 
 ```bash
-npm install
+# Activer Corepack (une seule fois par machine)
+corepack enable
+
+# Installer les dépendances
+yarn install
 ```
 
 ### Available Commands
 
 ```bash
 # Commit with Commitizen (recommended)
-npm run commit
+yarn commit
 
 # Code quality
-npm run lint              # Check JavaScript
-npm run lint:fix          # Auto-fix JavaScript issues
-npm run format            # Format all files
-npm run format:check      # Check formatting
+yarn lint              # Check JavaScript
+yarn lint:fix          # Auto-fix JavaScript issues
+yarn format            # Format all files
+yarn format:check      # Check formatting
 
 # Testing
-npm test                  # Run tests in watch mode
-npm run test:run          # Run tests once
-npm run test:coverage     # Run with coverage report
+yarn test              # Run tests in watch mode
+yarn test:run          # Run tests once
+yarn test:coverage     # Run with coverage report
 ```
 
 ### Commit Guidelines
@@ -84,6 +88,7 @@ docs/update-readme
 - [Commit Guidelines](docs/COMMIT_GUIDELINES.md) - How to create conventional commits
 - [Testing Guidelines](docs/TESTING_GUIDELINES.md) - Writing and running tests
 - [Documentation Guidelines](docs/DOCUMENTATION_GUIDELINES.md) - Managing documentation
+- [Yarn Migration](docs/YARN_MIGRATION.md) - Yarn v4 setup and usage guide
 
 ## 🏗️ Tech Stack
 
