@@ -1,0 +1,28 @@
+{
+  "name": "mad-mathematics",
+  "version": "1.0.0",
+  "description": "Educational math game suite for practicing arithmetic operations",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
+    "test:related": "vitest related"
+  },
+  "keywords": [
+    "education",
+    "math",
+    "game"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "vitest-localstorage-mock": "^0.1.0",
+    "jsdom": "^23.0.0"
+  }
+}

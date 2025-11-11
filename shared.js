@@ -1,7 +1,7 @@
 // Fonctions partagées pour Mad Mathematics
 function formatTime(seconds){
   const m = Math.floor(seconds/60);
-  const s = seconds%60;
+  const s = Math.floor(seconds%60);
   return m>0? `${m}m ${s}s` : `${s}s`;
 }
 
@@ -131,4 +131,20 @@ function createGameTimer(config) {
   };
   
   return api;
+}
+
+// Make functions globally available
+if (typeof window !== 'undefined') {
+  window.formatTime = formatTime;
+  window.saveHighscore = saveHighscore;
+  window.loadHighscoresToElement = loadHighscoresToElement;
+  window.loadPlayerName = loadPlayerName;
+  window.savePlayerName = savePlayerName;
+  window.createGameTimer = createGameTimer;
+}
+
+// Export for ES6 modules (for testing with Vitest)
+// When Vitest imports this file, it will use these exports
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { formatTime, saveHighscore, loadHighscoresToElement, loadPlayerName, savePlayerName, createGameTimer };
 }
