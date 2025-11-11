@@ -1,11 +1,11 @@
 // Fonctions partagées pour Mad Mathematics
-export function formatTime(seconds){
+function formatTime(seconds){
   const m = Math.floor(seconds/60);
   const s = Math.floor(seconds%60);
   return m>0? `${m}m ${s}s` : `${s}s`;
 }
 
-export function saveHighscore(name, score, time, level){
+function saveHighscore(name, score, time, level){
   try {
     let highscores = JSON.parse(localStorage.getItem(`highscores_${level}`)) || [];
     const newScore = { name, score, time, date: new Date().toISOString() };
@@ -24,7 +24,7 @@ export function saveHighscore(name, score, time, level){
   }
 }
 
-export function loadHighscoresToElement(level, element){
+function loadHighscoresToElement(level, element){
   try {
     const highscores = JSON.parse(localStorage.getItem(`highscores_${level}`)) || [];
     // Insert a header immediately before the element UL if not already present
@@ -62,7 +62,7 @@ export function loadHighscoresToElement(level, element){
 }
 
 // helper to persist player name
-export function loadPlayerName(inputId){
+function loadPlayerName(inputId){
   try {
     const saved = localStorage.getItem('playerName');
     if(saved) document.getElementById(inputId).value = saved;
@@ -71,7 +71,7 @@ export function loadPlayerName(inputId){
   }
 }
 
-export function savePlayerName(name){ 
+function savePlayerName(name){ 
   try {
     localStorage.setItem('playerName', name);
   } catch(e) {
@@ -80,7 +80,7 @@ export function savePlayerName(name){
 }
 
 // Timer management
-export function createGameTimer(config) {
+function createGameTimer(config) {
   // config: { limit, onTick, onTimeout, element }
   let timeRemaining = config.limit;
   let totalTimeSpent = 0;
@@ -133,7 +133,7 @@ export function createGameTimer(config) {
   return api;
 }
 
-// Make functions globally available when loaded as a regular script (not as a module)
+// Make functions globally available
 if (typeof window !== 'undefined') {
   window.formatTime = formatTime;
   window.saveHighscore = saveHighscore;
@@ -141,4 +141,10 @@ if (typeof window !== 'undefined') {
   window.loadPlayerName = loadPlayerName;
   window.savePlayerName = savePlayerName;
   window.createGameTimer = createGameTimer;
+}
+
+// Export for ES6 modules (for testing with Vitest)
+// When Vitest imports this file, it will use these exports
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { formatTime, saveHighscore, loadHighscoresToElement, loadPlayerName, savePlayerName, createGameTimer };
 }
