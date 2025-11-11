@@ -132,3 +132,13 @@ export function createGameTimer(config) {
   
   return api;
 }
+
+// Make functions globally available when loaded as a regular script (not as a module)
+if (typeof window !== 'undefined') {
+  window.formatTime = formatTime;
+  window.saveHighscore = saveHighscore;
+  window.loadHighscoresToElement = loadHighscoresToElement;
+  window.loadPlayerName = loadPlayerName;
+  window.savePlayerName = savePlayerName;
+  window.createGameTimer = createGameTimer;
+}
