@@ -1,11 +1,11 @@
 // Fonctions partagées pour Mad Mathematics
-function formatTime(seconds){
+export function formatTime(seconds){
   const m = Math.floor(seconds/60);
-  const s = seconds%60;
+  const s = Math.floor(seconds%60);
   return m>0? `${m}m ${s}s` : `${s}s`;
 }
 
-function saveHighscore(name, score, time, level){
+export function saveHighscore(name, score, time, level){
   try {
     let highscores = JSON.parse(localStorage.getItem(`highscores_${level}`)) || [];
     const newScore = { name, score, time, date: new Date().toISOString() };
@@ -24,7 +24,7 @@ function saveHighscore(name, score, time, level){
   }
 }
 
-function loadHighscoresToElement(level, element){
+export function loadHighscoresToElement(level, element){
   try {
     const highscores = JSON.parse(localStorage.getItem(`highscores_${level}`)) || [];
     // Insert a header immediately before the element UL if not already present
@@ -62,7 +62,7 @@ function loadHighscoresToElement(level, element){
 }
 
 // helper to persist player name
-function loadPlayerName(inputId){
+export function loadPlayerName(inputId){
   try {
     const saved = localStorage.getItem('playerName');
     if(saved) document.getElementById(inputId).value = saved;
@@ -71,7 +71,7 @@ function loadPlayerName(inputId){
   }
 }
 
-function savePlayerName(name){ 
+export function savePlayerName(name){ 
   try {
     localStorage.setItem('playerName', name);
   } catch(e) {
@@ -80,7 +80,7 @@ function savePlayerName(name){
 }
 
 // Timer management
-function createGameTimer(config) {
+export function createGameTimer(config) {
   // config: { limit, onTick, onTimeout, element }
   let timeRemaining = config.limit;
   let totalTimeSpent = 0;
