@@ -182,17 +182,30 @@ test/add-highscore-tests
 
 ### Valid Types
 
-Same as commit types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+The repository enforces branch naming via server-side validation.
+
+**Accepted patterns:**
+
+- `main` or `master` (protected branches)
+- `develop`
+- `feature/description` (for new features)
+- `fix/description` (for bug fixes)
+- `hotfix/description` (for urgent fixes)
+- `release/description` (for releases)
+
+**Note:** While this project recommends conventional commit types (`feat`, `fix`, `docs`, etc.), the server-side validation currently enforces `feature/`, `fix/`, `hotfix/`, and `release/` prefixes for branch names.
 
 ### Creating a New Branch
 
 ```bash
-# Good ✅
-git checkout -b feat/add-sound-effects
+# Server-side accepted ✅
+git checkout -b feature/add-sound-effects
 git checkout -b fix/timer-reset-bug
-git checkout -b docs/add-contributing-guide
+git checkout -b hotfix/critical-security-fix
+git checkout -b release/v2.0.0
 
-# Bad ❌
+# Will be rejected ❌
+git checkout -b feat/add-sound-effects  # Use 'feature/' not 'feat/'
 git checkout -b new-feature
 git checkout -b my-branch
 git checkout -b updateDocs
@@ -200,7 +213,11 @@ git checkout -b updateDocs
 
 ### Branch Name Validation
 
-Branch names are automatically validated when you push. If your branch name doesn't follow the convention, the push will be rejected with a helpful error message.
+Branch names are automatically validated when you push to the remote repository. If your branch name doesn't follow the server-side pattern, the push will be rejected with an error message:
+
+```
+Pattern: "/^(master|main|develop){1}$|^(feature|fix|hotfix|release)\/.+$/g"
+```
 
 ---
 
