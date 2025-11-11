@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Validate branch name
-echo "🌿 Validating branch name..."
-npx validate-branch-name || exit 1
-
-echo "✅ Branch name is valid!"
