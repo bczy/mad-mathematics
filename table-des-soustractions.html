@@ -1,136 +1,263 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>École de Magie des Soustractions ✨</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="container">
-        <a class="home-link" href="index.html">← Accueil</a>
-        <h1>➖ École de Magie des Soustractions</h1>
-        <p class="subtitle">Entraîne-toi à soustraire sans te tromper</p>
+      <a class="home-link" href="index.html">← Accueil</a>
+      <h1>➖ École de Magie des Soustractions</h1>
+      <p class="subtitle">Entraîne-toi à soustraire sans te tromper</p>
 
-        <div id="difficulty-selection" class="difficulty-selection">
-            <div class="name-form">
-                <label for="player-name">✨ Entre ton nom de sorcier :</label>
-                <input type="text" id="player-name" placeholder="Ton nom" maxlength="20">
-            </div>
-
-            <div class="highscores-container">
-                <h2>🏆 Hall des Grands Mages (Soustractions)</h2>
-                <div class="hs-card"><h3>Facile</h3><ul id="highscore-facile" class="highscore-list"></ul></div>
-                <div class="hs-card"><h3>Moyen</h3><ul id="highscore-moyen" class="highscore-list"></ul></div>
-                <div class="hs-card"><h3>Difficile</h3><ul id="highscore-difficile" class="highscore-list"></ul></div>
-                <div class="hs-card"><h3>Super-Multi</h3><ul id="highscore-super-multi" class="highscore-list"></ul></div>
-            </div>
-
-            <p class="game-mode-subtitle">Choisis ton niveau</p>
-            <div class="difficulty-buttons">
-                <button class="difficulty-btn" onclick="startGame('facile')">🌟 Apprenti (30s)</button>
-                <button class="difficulty-btn" onclick="startGame('moyen')">🔮 Confirmé (10s)</button>
-                <button class="difficulty-btn" onclick="startGame('difficile')">⚡ Grand (5s)</button>
-                <button class="difficulty-btn" onclick="startGame('super-multi')">💫 Super-Multi</button>
-            </div>
+      <div id="difficulty-selection" class="difficulty-selection">
+        <div class="name-form">
+          <label for="player-name">✨ Entre ton nom de sorcier :</label>
+          <input
+            type="text"
+            id="player-name"
+            placeholder="Ton nom"
+            maxlength="20"
+          />
         </div>
 
-        <div id="game-area" class="game-area hidden">
-            <div class="progress" id="progress">Question 1 / 20</div>
-            <div class="timer" id="timer">30</div>
-            <div class="question" id="question">12 - 5 = ?</div>
-            <div class="feedback" id="feedback"></div>
-            <input type="number" id="answer-input" placeholder="?">
-            <br>
-            <button class="submit-btn" onclick="checkAnswer()">🪄 Lancer le sort !</button>
+        <div class="highscores-container">
+          <h2>🏆 Hall des Grands Mages (Soustractions)</h2>
+          <div class="hs-card">
+            <h3>Facile</h3>
+            <ul id="highscore-facile" class="highscore-list"></ul>
+          </div>
+          <div class="hs-card">
+            <h3>Moyen</h3>
+            <ul id="highscore-moyen" class="highscore-list"></ul>
+          </div>
+          <div class="hs-card">
+            <h3>Difficile</h3>
+            <ul id="highscore-difficile" class="highscore-list"></ul>
+          </div>
+          <div class="hs-card">
+            <h3>Super-Multi</h3>
+            <ul id="highscore-super-multi" class="highscore-list"></ul>
+          </div>
         </div>
 
-        <div id="results" class="results hidden">
-            <div class="emoji" id="result-emoji">🎉</div>
-            <div class="result-message" id="result-message">Félicitations !</div>
-            <div class="score" id="score">18 / 20</div>
-            <div class="result-details" id="result-details"></div>
-            <button class="submit-btn" onclick="resetGame()">🔄 Nouvelle partie</button>
+        <p class="game-mode-subtitle">Choisis ton niveau</p>
+        <div class="difficulty-buttons">
+          <button class="difficulty-btn" onclick="startGame('facile')">
+            🌟 Apprenti (30s)
+          </button>
+          <button class="difficulty-btn" onclick="startGame('moyen')">
+            🔮 Confirmé (10s)
+          </button>
+          <button class="difficulty-btn" onclick="startGame('difficile')">
+            ⚡ Grand (5s)
+          </button>
+          <button class="difficulty-btn" onclick="startGame('super-multi')">
+            💫 Super-Multi
+          </button>
         </div>
+      </div>
+
+      <div id="game-area" class="game-area hidden">
+        <div class="progress" id="progress">Question 1 / 20</div>
+        <div class="timer" id="timer">30</div>
+        <div class="question" id="question">12 - 5 = ?</div>
+        <div class="feedback" id="feedback"></div>
+        <input type="number" id="answer-input" placeholder="?" />
+        <br />
+        <button class="submit-btn" onclick="checkAnswer()">
+          🪄 Lancer le sort !
+        </button>
+      </div>
+
+      <div id="results" class="results hidden">
+        <div class="emoji" id="result-emoji">🎉</div>
+        <div class="result-message" id="result-message">Félicitations !</div>
+        <div class="score" id="score">18 / 20</div>
+        <div class="result-details" id="result-details"></div>
+        <button class="submit-btn" onclick="resetGame()">
+          🔄 Nouvelle partie
+        </button>
+      </div>
     </div>
 
     <script src="shared.js"></script>
     <script>
-        // Soustraction : générer des paires pour éviter les résultats négatifs (num1 >= num2)
-        let currentQuestion = 0;
-        let correctAnswers = 0;
-        let totalQuestions = 20;
-        let timeLimit = 30;
-        let timeRemaining = 30;
-        let timerInterval;
-        let num1, num2, correctAnswer;
-        let difficulty;
-        let playerName = '';
-        let totalTimeSpent = 0;
-        let isProcessingAnswer = false;
+      // Soustraction : générer des paires pour éviter les résultats négatifs (num1 >= num2)
+      let currentQuestion = 0;
+      let correctAnswers = 0;
+      let totalQuestions = 20;
+      let timeLimit = 30;
+      let timeRemaining = 30;
+      let timerInterval;
+      let num1, num2, correctAnswer;
+      let difficulty;
+      let playerName = '';
+      let totalTimeSpent = 0;
+      let isProcessingAnswer = false;
 
-        window.addEventListener('DOMContentLoaded', function() {
-            loadPlayerName('player-name');
-            loadHighscoresToElement('facile', document.getElementById('highscore-facile'));
-            loadHighscoresToElement('moyen', document.getElementById('highscore-moyen'));
-            loadHighscoresToElement('difficile', document.getElementById('highscore-difficile'));
-            loadHighscoresToElement('super-multi', document.getElementById('highscore-super-multi'));
-        });
+      window.addEventListener('DOMContentLoaded', function () {
+        loadPlayerName('player-name');
+        loadHighscoresToElement(
+          'facile',
+          document.getElementById('highscore-facile')
+        );
+        loadHighscoresToElement(
+          'moyen',
+          document.getElementById('highscore-moyen')
+        );
+        loadHighscoresToElement(
+          'difficile',
+          document.getElementById('highscore-difficile')
+        );
+        loadHighscoresToElement(
+          'super-multi',
+          document.getElementById('highscore-super-multi')
+        );
+      });
 
-        function startGame(level) {
-            playerName = document.getElementById('player-name').value.trim();
-            if (playerName === '') { alert('⚠️ Entre ton nom de sorcier pour commencer !'); document.getElementById('player-name').focus(); return; }
-            savePlayerName(playerName);
-            difficulty = level;
-            switch(level) { case 'facile': timeLimit = 30; break; case 'moyen': timeLimit = 10; break; case 'difficile': timeLimit = 5; break; case 'super-multi': timeLimit = 30; break; }
-            currentQuestion = 0; correctAnswers = 0; totalTimeSpent = 0; isProcessingAnswer = false;
-            document.getElementById('difficulty-selection').classList.add('hidden');
-            document.getElementById('game-area').classList.remove('hidden');
-            nextQuestion();
+      function startGame(level) {
+        playerName = document.getElementById('player-name').value.trim();
+        if (playerName === '') {
+          alert('⚠️ Entre ton nom de sorcier pour commencer !');
+          document.getElementById('player-name').focus();
+          return;
+        }
+        savePlayerName(playerName);
+        difficulty = level;
+        switch (level) {
+          case 'facile':
+            timeLimit = 30;
+            break;
+          case 'moyen':
+            timeLimit = 10;
+            break;
+          case 'difficile':
+            timeLimit = 5;
+            break;
+          case 'super-multi':
+            timeLimit = 30;
+            break;
+        }
+        currentQuestion = 0;
+        correctAnswers = 0;
+        totalTimeSpent = 0;
+        isProcessingAnswer = false;
+        document.getElementById('difficulty-selection').classList.add('hidden');
+        document.getElementById('game-area').classList.remove('hidden');
+        nextQuestion();
+      }
+
+      function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion > totalQuestions) {
+          showResults();
+          return;
+        }
+        // Générer deux nombres et s'assurer que num1 >= num2
+        num1 = Math.floor(Math.random() * 98) + 2;
+        num2 = Math.floor(Math.random() * 98) + 2;
+        if (num2 > num1) [num1, num2] = [num2, num1];
+        correctAnswer = num1 - num2;
+        document.getElementById('question').textContent =
+          `${num1} - ${num2} = ?`;
+        document.getElementById('progress').textContent =
+          `Question ${currentQuestion} / ${totalQuestions}`;
+        document.getElementById('answer-input').value = '';
+        document.getElementById('feedback').textContent = '';
+        isProcessingAnswer = false;
+        timeRemaining = timeLimit;
+        document.getElementById('timer').textContent = timeRemaining;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      function updateTimer() {
+        timeRemaining--;
+        totalTimeSpent++;
+        document.getElementById('timer').textContent = timeRemaining;
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          showIncorrect(`Temps écoulé ! La réponse était ${correctAnswer}`);
+          setTimeout(nextQuestion, 2000);
+        }
+      }
+
+      function checkAnswer() {
+        if (isProcessingAnswer) return;
+
+        const input = document.getElementById('answer-input');
+        const val = input.value.trim();
+        if (val === '') {
+          input.classList.add('error');
+          document.getElementById('feedback').textContent =
+            '⚠️ Entre une réponse !';
+          setTimeout(() => input.classList.remove('error'), 500);
+          return;
+        }
+        const num = parseInt(val);
+        if (isNaN(num)) {
+          input.classList.add('error');
+          document.getElementById('feedback').textContent =
+            '⚠️ Entrez un nombre valide !';
+          setTimeout(() => input.classList.remove('error'), 500);
+          return;
         }
 
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion > totalQuestions) { showResults(); return; }
-            // Générer deux nombres et s'assurer que num1 >= num2
-            num1 = Math.floor(Math.random() * 98) + 2;
-            num2 = Math.floor(Math.random() * 98) + 2;
-            if (num2 > num1) [num1, num2] = [num2, num1];
-            correctAnswer = num1 - num2;
-            document.getElementById('question').textContent = `${num1} - ${num2} = ?`;
-            document.getElementById('progress').textContent = `Question ${currentQuestion} / ${totalQuestions}`;
-            document.getElementById('answer-input').value = '';
-            document.getElementById('feedback').textContent = '';
-            isProcessingAnswer = false;
-            timeRemaining = timeLimit;
-            document.getElementById('timer').textContent = timeRemaining;
-            clearInterval(timerInterval);
-            timerInterval = setInterval(updateTimer, 1000);
+        isProcessingAnswer = true;
+        clearInterval(timerInterval);
+        if (num === correctAnswer) {
+          correctAnswers++;
+          showCorrect();
+        } else {
+          showIncorrect(`Non, c'était ${correctAnswer}`);
         }
+        setTimeout(nextQuestion, 1200);
+      }
 
-        function updateTimer() { timeRemaining--; totalTimeSpent++; document.getElementById('timer').textContent = timeRemaining; if (timeRemaining <= 0) { clearInterval(timerInterval); showIncorrect(`Temps écoulé ! La réponse était ${correctAnswer}`); setTimeout(nextQuestion, 2000); } }
+      function showCorrect() {
+        document.getElementById('feedback').textContent = '✨ Correct !';
+        document.getElementById('feedback').className = 'feedback correct';
+      }
+      function showIncorrect(msg) {
+        document.getElementById('feedback').textContent = msg;
+        document.getElementById('feedback').className = 'feedback incorrect';
+      }
 
-        function checkAnswer() {
-            if (isProcessingAnswer) return;
-            
-            const input = document.getElementById('answer-input');
-            const val = input.value.trim();
-            if (val === '') { input.classList.add('error'); document.getElementById('feedback').textContent = '⚠️ Entre une réponse !'; setTimeout(()=>input.classList.remove('error'),500); return; }
-            const num = parseInt(val);
-            if (isNaN(num)) { input.classList.add('error'); document.getElementById('feedback').textContent = '⚠️ Entrez un nombre valide !'; setTimeout(()=>input.classList.remove('error'),500); return; }
-            
-            isProcessingAnswer = true;
-            clearInterval(timerInterval);
-            if (num === correctAnswer) { correctAnswers++; showCorrect(); } else { showIncorrect(`Non, c'était ${correctAnswer}`); }
-            setTimeout(nextQuestion, 1200);
-        }
+      function showResults() {
+        clearInterval(timerInterval);
+        document.getElementById('game-area').classList.add('hidden');
+        document.getElementById('results').classList.remove('hidden');
+        document.getElementById('score').textContent =
+          `${correctAnswers} / ${totalQuestions}`;
+        document.getElementById('result-details').textContent = ``;
+        saveHighscore(playerName, correctAnswers, totalTimeSpent, difficulty);
+        loadHighscoresToElement(
+          'facile',
+          document.getElementById('highscore-facile')
+        );
+        loadHighscoresToElement(
+          'moyen',
+          document.getElementById('highscore-moyen')
+        );
+        loadHighscoresToElement(
+          'difficile',
+          document.getElementById('highscore-difficile')
+        );
+        loadHighscoresToElement(
+          'super-multi',
+          document.getElementById('highscore-super-multi')
+        );
+      }
 
-        function showCorrect() { document.getElementById('feedback').textContent = '✨ Correct !'; document.getElementById('feedback').className = 'feedback correct'; }
-        function showIncorrect(msg) { document.getElementById('feedback').textContent = msg; document.getElementById('feedback').className = 'feedback incorrect'; }
-
-        function showResults() { clearInterval(timerInterval); document.getElementById('game-area').classList.add('hidden'); document.getElementById('results').classList.remove('hidden'); document.getElementById('score').textContent = `${correctAnswers} / ${totalQuestions}`; document.getElementById('result-details').textContent = ``; saveHighscore(playerName, correctAnswers, totalTimeSpent, difficulty); loadHighscoresToElement('facile', document.getElementById('highscore-facile')); loadHighscoresToElement('moyen', document.getElementById('highscore-moyen')); loadHighscoresToElement('difficile', document.getElementById('highscore-difficile')); loadHighscoresToElement('super-multi', document.getElementById('highscore-super-multi')); }
-
-        function resetGame() { document.getElementById('results').classList.add('hidden'); document.getElementById('difficulty-selection').classList.remove('hidden'); }
+      function resetGame() {
+        document.getElementById('results').classList.add('hidden');
+        document
+          .getElementById('difficulty-selection')
+          .classList.remove('hidden');
+      }
     </script>
-</body>
+  </body>
 </html>

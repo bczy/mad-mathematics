@@ -1,100 +1,286 @@
 /* Styles partagés pour Mad Mathematics */
-:root{
+:root {
   --accent-1: #6b4a8d;
   --accent-2: #9b59b6;
   --muted: #666;
 }
-html,body{height:100%;}
-body{font-family: Arial, Helvetica, sans-serif; background:#f5f6fa; margin:0; color:#222;}
-.container{max-width:1000px;margin:24px auto;padding:28px;border-radius:12px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
-h1{font-size:28px;margin-bottom:6px}
-.subtitle{color:var(--muted);margin-bottom:18px}
-input[type="text"], input[type="number"]{font-size:18px;padding:10px 12px;border-radius:8px;border:2px solid #ddd}
-.submit-btn{background:linear-gradient(135deg,#ffd700,#ffed4e);color:#2d1b4e;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:700}
-.difficulty-buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.hidden{display:none}
-.highscores-container{margin-top:18px}
-.highscores-container{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}
-.highscores-container > h2{grid-column:1/-1;margin-bottom:6px}
-.highscores-container > ul{background:#fff;padding:10px;border-radius:10px;min-height:120px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-.hs-card{background:transparent;padding:6px;border-radius:8px}
-.hs-card h3{margin:0 0 8px 0}
-.special-bg .highscores-container > ul{background:rgba(255,255,255,0.06);box-shadow:none}
-.highscore-list{list-style:none;padding:0;margin:0}
-.highscore-item{display:flex;justify-content:space-between;padding:8px;border-radius:8px;background:#f8f8fb;margin:6px 0}
-.highscore-item.empty{color:#999;opacity:0.95}
-.highscore-item .hs-left{font-weight:700;color:#2d1b4e}
-.highscore-item .hs-right{font-weight:700;color:#2d1b4e}
-.highscore-item .hs-time{font-weight:400;color:var(--muted);margin-left:6px}
-.new-highscore{background:linear-gradient(135deg,#ffd700,#ffed4e);padding:8px;border-radius:8px;display:inline-block}
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  color: #222;
+}
+.container {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 28px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+h1 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+input[type='text'],
+input[type='number'] {
+  font-size: 18px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+}
+.submit-btn {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #2d1b4e;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.difficulty-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.hidden {
+  display: none;
+}
+.highscores-container {
+  margin-top: 18px;
+}
+.highscores-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.highscores-container > h2 {
+  grid-column: 1/-1;
+  margin-bottom: 6px;
+}
+.highscores-container > ul {
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  min-height: 120px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+.hs-card {
+  background: transparent;
+  padding: 6px;
+  border-radius: 8px;
+}
+.hs-card h3 {
+  margin: 0 0 8px 0;
+}
+.special-bg .highscores-container > ul {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+.highscore-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.highscore-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f8f8fb;
+  margin: 6px 0;
+}
+.highscore-item.empty {
+  color: #999;
+  opacity: 0.95;
+}
+.highscore-item .hs-left {
+  font-weight: 700;
+  color: #2d1b4e;
+}
+.highscore-item .hs-right {
+  font-weight: 700;
+  color: #2d1b4e;
+}
+.highscore-item .hs-time {
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 6px;
+}
+.new-highscore {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  padding: 8px;
+  border-radius: 8px;
+  display: inline-block;
+}
 
-.home-link{display:inline-block;margin-bottom:12px;color:#cfa6e6;text-decoration:none;font-weight:700}
-.home-link:hover{ text-decoration:underline; opacity:1; cursor:pointer }
+.home-link {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #cfa6e6;
+  text-decoration: none;
+  font-weight: 700;
+}
+.home-link:hover {
+  text-decoration: underline;
+  opacity: 1;
+  cursor: pointer;
+}
 
 /* When the page container uses a dark background, ensure subtitle and home link are readable */
-.special-bg .subtitle{ color: rgba(255,255,255,0.92); }
+.special-bg .subtitle {
+  color: rgba(255, 255, 255, 0.92);
+}
 
 /* Slightly lighter subtitle on light backgrounds for improved readability */
-.subtitle{ color: #444; }
-.special-bg .home-link{ color: rgba(255,255,255,0.95); text-shadow: 0 1px 3px rgba(0,0,0,0.45); }
+.subtitle {
+  color: #444;
+}
+.special-bg .home-link {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
 
 /* Result area improvements for better spacing and contrast */
-.results{margin-top:18px;padding:18px;border-radius:8px}
-.results .emoji{font-size:56px;margin-bottom:8px}
-.results .result-message{font-size:20px;margin-bottom:8px;color:#222}
-.results .score{font-size:28px;font-weight:800;color:#111;margin-bottom:8px}
-.results .result-details{color:var(--muted);margin-bottom:12px}
-.results .new-highscore{display:inline-block;margin-right:12px}
+.results {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 8px;
+}
+.results .emoji {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+.results .result-message {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #222;
+}
+.results .score {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 8px;
+}
+.results .result-details {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.results .new-highscore {
+  display: inline-block;
+  margin-right: 12px;
+}
 
 /* When used on dark/special backgrounds (like multiplication page), increase contrast */
-.special-bg .results{
-  background: rgba(255,255,255,0.10);
-  padding:22px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.12);
+.special-bg .results {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 .special-bg .results .result-message,
 .special-bg .results .score,
-.special-bg .results .result-details{color:#fff}
-.special-bg .results .result-details{opacity:0.95}
-.special-bg .results .new-highscore{
-  box-shadow:0 6px 18px rgba(0,0,0,0.35);
-  color:#2d1b4e; /* foncé sur fond jaune */
-  margin-right:16px;
+.special-bg .results .result-details {
+  color: #fff;
 }
-.special-bg .highscore-item{background:rgba(255,255,255,0.08);color:#fff}
-.special-bg .highscore-item .hs-left, .special-bg .highscore-item .hs-right{color:#fff}
-.special-bg .highscore-item.empty{color:rgba(255,255,255,0.6)}
+.special-bg .results .result-details {
+  opacity: 0.95;
+}
+.special-bg .results .new-highscore {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  color: #2d1b4e; /* foncé sur fond jaune */
+  margin-right: 16px;
+}
+.special-bg .highscore-item {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+.special-bg .highscore-item .hs-left,
+.special-bg .highscore-item .hs-right {
+  color: #fff;
+}
+.special-bg .highscore-item.empty {
+  color: rgba(255, 255, 255, 0.6);
+}
 
 /* Highscore header (labels) */
-.hs-headers{display:flex;align-items:center;gap:12px;margin:12px 0;color:var(--muted);font-weight:700}
-.hs-headers .hs-col-rank{width:40px}
-.hs-headers .hs-col-name{flex:1}
-.hs-headers .hs-col-score{width:140px;text-align:right}
+.hs-headers {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+.hs-headers .hs-col-rank {
+  width: 40px;
+}
+.hs-headers .hs-col-name {
+  flex: 1;
+}
+.hs-headers .hs-col-score {
+  width: 140px;
+  text-align: right;
+}
 
 /* Rank number styling inside each row */
-.hs-rank{display:inline-block;width:36px;text-align:right;margin-right:10px;color:var(--muted);font-weight:700}
-.highscore-item{align-items:center}
-.highscore-item.empty .hs-left{color:var(--muted)}
-.special-bg .hs-rank{color:rgba(255,255,255,0.7)}
-.special-bg .hs-headers{color:rgba(255,255,255,0.9)}
-
-@media (max-width: 768px){
-  .highscores-container{grid-template-columns:1fr}
+.hs-rank {
+  display: inline-block;
+  width: 36px;
+  text-align: right;
+  margin-right: 10px;
+  color: var(--muted);
+  font-weight: 700;
 }
-.special-bg .results .new-highscore span, .special-bg .results .new-highscore strong{color:inherit}
+.highscore-item {
+  align-items: center;
+}
+.highscore-item.empty .hs-left {
+  color: var(--muted);
+}
+.special-bg .hs-rank {
+  color: rgba(255, 255, 255, 0.7);
+}
+.special-bg .hs-headers {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+  .highscores-container {
+    grid-template-columns: 1fr;
+  }
+}
+.special-bg .results .new-highscore span,
+.special-bg .results .new-highscore strong {
+  color: inherit;
+}
 
 /* Button contrast and spacing */
-.special-bg .submit-btn{
-  box-shadow:0 6px 18px rgba(0,0,0,0.45);
-  color:#2d1b4e;
+.special-bg .submit-btn {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  color: #2d1b4e;
 }
 
-.results > *{margin-bottom:12px}
-.results .new-highscore{margin-bottom:0}
+.results > * {
+  margin-bottom: 12px;
+}
+.results .new-highscore {
+  margin-bottom: 0;
+}
 
 /* Ensure buttons and icons have space and don't stick */
-.submit-btn{margin-top:8px}
-.difficulty-buttons button{padding:14px}
-
-
+.submit-btn {
+  margin-top: 8px;
+}
+.difficulty-buttons button {
+  padding: 14px;
+}
