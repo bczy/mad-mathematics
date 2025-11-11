@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { MultiplicationPage } from './pages/MultiplicationPage.js';
-import highscoresFixtures from './fixtures/highscores.json' assert { type: 'json' };
+import highscoresFixtures from './fixtures/highscores.json' with { type: 'json' };
 
 /**
  * E2E Tests for Multiplication Game Mode
@@ -174,7 +174,7 @@ test.describe('Multiplication Game - Input Validation', () => {
     expect(inputValue).toBe('');
   });
 
-  test('should accept only numeric input', async ({ page }) => {
+  test('should accept only numeric input', async ({ page: _page }) => {
     await multiplicationPage.startGame('TestUser', 'easy');
 
     // Input type="number" prevents non-numeric input at browser level
@@ -282,7 +282,9 @@ test.describe('Multiplication Game - Player Name Persistence', () => {
     expect(inputValue).toBe('SavedPlayer');
   });
 
-  test('should persist player name across multiple games', async ({ page }) => {
+  test('should persist player name across multiple games', async ({
+    page: _page
+  }) => {
     await multiplicationPage.playCompleteGame(
       'ConsistentPlayer',
       'easy',

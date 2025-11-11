@@ -1,3 +1,7 @@
+/**
+ * Page Object Model for the Multiplication Game
+ * Provides methods to interact with the multiplication game page for E2E testing
+ */
 export class MultiplicationPage {
   /** @param {import('@playwright/test').Page} page */
   constructor(page) {

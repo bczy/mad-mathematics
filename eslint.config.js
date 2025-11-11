@@ -8,14 +8,13 @@ export default [
       '.husky/**',
       'playwright-report/**',
       'test-results/**',
-      'e2e/multiplication-complete.spec.js-snapshots/**',
-      'e2e/**/*.spec.js'
+      'e2e/multiplication-complete.spec.js-snapshots/**'
     ]
   },
   {
     files: ['**/*.js'],
     languageOptions: {
-      ecmaVersion: 2024,
+      ecmaVersion: 2025,
       sourceType: 'module',
       globals: {
         // Browser globals
