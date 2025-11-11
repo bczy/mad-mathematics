@@ -67,6 +67,7 @@
         let difficulty;
         let playerName = '';
         let totalTimeSpent = 0;
+        let isProcessingAnswer = false;
 
         window.addEventListener('DOMContentLoaded', function() {
             loadPlayerName('player-name');
@@ -82,7 +83,7 @@
             savePlayerName(playerName);
             difficulty = level;
             switch(level) { case 'facile': timeLimit = 30; break; case 'moyen': timeLimit = 10; break; case 'difficile': timeLimit = 5; break; case 'super-multi': timeLimit = 30; break; }
-            currentQuestion = 0; correctAnswers = 0; totalTimeSpent = 0;
+            currentQuestion = 0; correctAnswers = 0; totalTimeSpent = 0; isProcessingAnswer = false;
             document.getElementById('difficulty-selection').classList.add('hidden');
             document.getElementById('game-area').classList.remove('hidden');
             nextQuestion();
@@ -99,6 +100,8 @@
             document.getElementById('question').textContent = `${num1} - ${num2} = ?`;
             document.getElementById('progress').textContent = `Question ${currentQuestion} / ${totalQuestions}`;
             document.getElementById('answer-input').value = '';
+            document.getElementById('feedback').textContent = '';
+            isProcessingAnswer = false;
             timeRemaining = timeLimit;
             document.getElementById('timer').textContent = timeRemaining;
             clearInterval(timerInterval);
@@ -108,11 +111,15 @@
         function updateTimer() { timeRemaining--; totalTimeSpent++; document.getElementById('timer').textContent = timeRemaining; if (timeRemaining <= 0) { clearInterval(timerInterval); showIncorrect(`Temps écoulé ! La réponse était ${correctAnswer}`); setTimeout(nextQuestion, 2000); } }
 
         function checkAnswer() {
+            if (isProcessingAnswer) return;
+            
             const input = document.getElementById('answer-input');
             const val = input.value.trim();
             if (val === '') { input.classList.add('error'); document.getElementById('feedback').textContent = '⚠️ Entre une réponse !'; setTimeout(()=>input.classList.remove('error'),500); return; }
             const num = parseInt(val);
             if (isNaN(num)) { input.classList.add('error'); document.getElementById('feedback').textContent = '⚠️ Entrez un nombre valide !'; setTimeout(()=>input.classList.remove('error'),500); return; }
+            
+            isProcessingAnswer = true;
             clearInterval(timerInterval);
             if (num === correctAnswer) { correctAnswers++; showCorrect(); } else { showIncorrect(`Non, c'était ${correctAnswer}`); }
             setTimeout(nextQuestion, 1200);
@@ -121,7 +128,7 @@
         function showCorrect() { document.getElementById('feedback').textContent = '✨ Correct !'; document.getElementById('feedback').className = 'feedback correct'; }
         function showIncorrect(msg) { document.getElementById('feedback').textContent = msg; document.getElementById('feedback').className = 'feedback incorrect'; }
 
-        function showResults() { clearInterval(timerInterval); document.getElementById('game-area').classList.add('hidden'); document.getElementById('results').classList.remove('hidden'); document.getElementById('score').textContent = `${correctAnswers} / ${totalQuestions}`; document.getElementById('result-details').textContent = ``; const isNew = saveHighscore(playerName, correctAnswers, totalTimeSpent, difficulty); loadHighscoresToElement('facile', document.getElementById('highscore-facile')); loadHighscoresToElement('moyen', document.getElementById('highscore-moyen')); loadHighscoresToElement('difficile', document.getElementById('highscore-difficile')); loadHighscoresToElement('super-multi', document.getElementById('highscore-super-multi')); }
+        function showResults() { clearInterval(timerInterval); document.getElementById('game-area').classList.add('hidden'); document.getElementById('results').classList.remove('hidden'); document.getElementById('score').textContent = `${correctAnswers} / ${totalQuestions}`; document.getElementById('result-details').textContent = ``; saveHighscore(playerName, correctAnswers, totalTimeSpent, difficulty); loadHighscoresToElement('facile', document.getElementById('highscore-facile')); loadHighscoresToElement('moyen', document.getElementById('highscore-moyen')); loadHighscoresToElement('difficile', document.getElementById('highscore-difficile')); loadHighscoresToElement('super-multi', document.getElementById('highscore-super-multi')); }
 
         function resetGame() { document.getElementById('results').classList.add('hidden'); document.getElementById('difficulty-selection').classList.remove('hidden'); }
     </script>
