@@ -5,13 +5,17 @@ export default [
       'coverage/**',
       'dist/**',
       'build/**',
-      '.husky/**'
+      '.husky/**',
+      'playwright-report/**',
+      'test-results/**',
+      'e2e/multiplication-complete.spec.js-snapshots/**',
+      'e2e/**/*.spec.js'
     ]
   },
   {
     files: ['**/*.js'],
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2024,
       sourceType: 'module',
       globals: {
         // Browser globals
@@ -24,6 +28,7 @@ export default [
         // Vitest globals for test files
         describe: 'readonly',
         it: 'readonly',
+        test: 'readonly',
         expect: 'readonly',
         beforeEach: 'readonly',
         afterEach: 'readonly',

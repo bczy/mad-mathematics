@@ -22,6 +22,12 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
   - Coverage cible: 90%+
   - Approche: TDD (Test-Driven Development)
 
+- **[Tests E2E - README](../e2e/README.md)** - Tests end-to-end avec Playwright
+  - Framework: Playwright 1.38.0
+  - Scope: Mode Multiplication (46 tests, 89% réussite)
+  - Browsers: Chromium, Firefox, WebKit
+  - Voir aussi: [`e2e/IMPLEMENTATION_SUMMARY.md`](../e2e/IMPLEMENTATION_SUMMARY.md) pour le rapport détaillé
+
 ### 📝 Processus et Méthodologie
 
 - **[DOCUMENTATION_GUIDELINES.md](./DOCUMENTATION_GUIDELINES.md)** - Comment gérer la documentation
@@ -39,7 +45,6 @@ Les guidelines suivantes seront ajoutées au fur et à mesure :
 ### Tests (futur)
 
 - `INTEGRATION_TESTING.md` - Tests d'intégration pour les pages HTML complètes
-- `E2E_TESTING.md` - Tests end-to-end avec Playwright
 - `VISUAL_REGRESSION.md` - Tests de régression visuelle
 
 ### Développement (futur)
