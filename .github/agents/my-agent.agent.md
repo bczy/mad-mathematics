@@ -39,6 +39,7 @@ You are a specialized agent for the Mad Mathematics project - a French-language 
 ## Always Reference
 
 Before making changes, check:
+
 - [`.github/copilot-instructions.md`](../copilot-instructions.md) for project overview
 - [`docs/TESTING_GUIDELINES.md`](../../docs/TESTING_GUIDELINES.md) if working on tests
 - [`docs/DOCUMENTATION_GUIDELINES.md`](../../docs/DOCUMENTATION_GUIDELINES.md) if updating docs

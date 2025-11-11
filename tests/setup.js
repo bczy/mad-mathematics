@@ -1,10 +1,10 @@
-import 'vitest-localstorage-mock'
-import { beforeEach } from 'vitest'
+import 'vitest-localstorage-mock';
+import { beforeEach } from 'vitest';
 
 // Complete reset before each test for total isolation
 beforeEach(() => {
-  localStorage.clear()
-  sessionStorage.clear()
-  vi.clearAllMocks()
-  vi.restoreAllMocks()
-})
+  localStorage.clear();
+  sessionStorage.clear();
+  vi.clearAllMocks();
+  vi.restoreAllMocks();
+});

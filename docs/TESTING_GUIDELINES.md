@@ -44,7 +44,7 @@ npm install -D vitest @vitest/ui @vitest/coverage-v8 vitest-localstorage-mock js
 ### Configuration (`vitest.config.js`)
 
 ```javascript
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
@@ -55,11 +55,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
       include: ['shared.js'],
-      exclude: [
-        'tests/**',
-        '*.config.js',
-        '*.html'
-      ],
+      exclude: ['tests/**', '*.config.js', '*.html'],
       // Seuils de couverture - FAIL si en dessous
       statements: 90,
       branches: 90,
@@ -73,22 +69,22 @@ export default defineConfig({
     // Timeout par défaut
     testTimeout: 5000
   }
-})
+});
 ```
 
 ### Setup global (`tests/setup.js`)
 
 ```javascript
-import 'vitest-localstorage-mock'
-import { beforeEach } from 'vitest'
+import 'vitest-localstorage-mock';
+import { beforeEach } from 'vitest';
 
 // Reset complet avant chaque test pour isolation totale
 beforeEach(() => {
-  localStorage.clear()
-  sessionStorage.clear()
-  vi.clearAllMocks()
-  vi.restoreAllMocks()
-})
+  localStorage.clear();
+  sessionStorage.clear();
+  vi.clearAllMocks();
+  vi.restoreAllMocks();
+});
 ```
 
 ---
@@ -124,77 +120,80 @@ mad-mathematics/
 ### Pattern de base
 
 ```javascript
-import { describe, test, expect, beforeEach } from 'vitest'
-import { formatTime, saveHighscore } from './shared.js'
-import { FIXTURES } from './tests/fixtures/index.js'
+import { describe, test, expect, beforeEach } from 'vitest';
+import { formatTime, saveHighscore } from './shared.js';
+import { FIXTURES } from './tests/fixtures/index.js';
 
 describe('formatTime', () => {
   test('converts 65 seconds to "1m 5s"', () => {
-    const result = formatTime(65)
-    expect(result).toBe('1m 5s')
-  })
-  
+    const result = formatTime(65);
+    expect(result).toBe('1m 5s');
+  });
+
   test('converts 30 seconds to "30s"', () => {
-    const result = formatTime(30)
-    expect(result).toBe('30s')
-  })
-  
+    const result = formatTime(30);
+    expect(result).toBe('30s');
+  });
+
   describe('edge cases', () => {
     test('handles 0 seconds', () => {
-      expect(formatTime(0)).toBe('0s')
-    })
-    
+      expect(formatTime(0)).toBe('0s');
+    });
+
     test('handles negative values gracefully', () => {
-      expect(formatTime(-10)).toBe('0s') // ou throw Error selon spec
-    })
-    
+      expect(formatTime(-10)).toBe('0s'); // ou throw Error selon spec
+    });
+
     test('handles very large values', () => {
-      expect(formatTime(7200)).toBe('120m 0s')
-    })
-  })
-})
+      expect(formatTime(7200)).toBe('120m 0s');
+    });
+  });
+});
 ```
 
 ### Conventions de nommage
 
 #### Describe blocks
+
 ```javascript
 // ✅ BON: Nom de la fonction/feature
-describe('saveHighscore', () => {})
-describe('loadHighscoresToElement', () => {})
+describe('saveHighscore', () => {});
+describe('loadHighscoresToElement', () => {});
 
 // ❌ MAUVAIS: Trop verbeux
-describe('Test de la fonction saveHighscore', () => {})
+describe('Test de la fonction saveHighscore', () => {});
 ```
 
 #### Test cases
+
 ```javascript
 // ✅ BON: Action + résultat attendu (sans "should")
-test('returns true when score is in top 5', () => {})
-test('sorts highscores by score desc then time asc', () => {})
+test('returns true when score is in top 5', () => {});
+test('sorts highscores by score desc then time asc', () => {});
 
 // ❌ MAUVAIS: Trop vague
-test('works correctly', () => {})
-test('test saveHighscore', () => {})
+test('works correctly', () => {});
+test('test saveHighscore', () => {});
 ```
 
 #### Edge cases groupés
+
 ```javascript
 describe('saveHighscore', () => {
-  test('saves valid highscore', () => {})
-  
+  test('saves valid highscore', () => {});
+
   describe('edge cases', () => {
-    test('handles localStorage quota exceeded', () => {})
-    test('handles very long player names (>100 chars)', () => {})
-    test('handles Unicode characters and emojis', () => {})
-    test('handles corrupted localStorage data', () => {})
-  })
-  
+    test('handles localStorage quota exceeded', () => {});
+    test('handles very long player names (>100 chars)', () => {});
+    test('handles Unicode characters and emojis', () => {});
+    test('handles corrupted localStorage data', () => {});
+  });
+
   describe('error handling', () => {
-    test('returns false when localStorage is unavailable', () => {})
-    test('logs error to console on failure', () => {})
-  })
-})
+    test('returns false when localStorage is unavailable', () => {});
+    test('logs error to console on failure', () => {});
+  });
+});
 ```
 
 ---
@@ -206,282 +205,284 @@ describe('saveHighscore', () => {
 ```javascript
 describe('formatTime', () => {
   test('formats seconds under 60', () => {
-    expect(formatTime(0)).toBe('0s')
-    expect(formatTime(1)).toBe('1s')
-    expect(formatTime(30)).toBe('30s')
-    expect(formatTime(59)).toBe('59s')
-  })
-  
+    expect(formatTime(0)).toBe('0s');
+    expect(formatTime(1)).toBe('1s');
+    expect(formatTime(30)).toBe('30s');
+    expect(formatTime(59)).toBe('59s');
+  });
+
   test('formats minutes and seconds', () => {
-    expect(formatTime(60)).toBe('1m 0s')
-    expect(formatTime(61)).toBe('1m 1s')
-    expect(formatTime(90)).toBe('1m 30s')
-    expect(formatTime(125)).toBe('2m 5s')
-  })
-  
+    expect(formatTime(60)).toBe('1m 0s');
+    expect(formatTime(61)).toBe('1m 1s');
+    expect(formatTime(90)).toBe('1m 30s');
+    expect(formatTime(125)).toBe('2m 5s');
+  });
+
   test('formats large durations', () => {
-    expect(formatTime(3600)).toBe('60m 0s')
-    expect(formatTime(3661)).toBe('61m 1s')
-  })
-  
+    expect(formatTime(3600)).toBe('60m 0s');
+    expect(formatTime(3661)).toBe('61m 1s');
+  });
+
   describe('edge cases', () => {
     test('handles zero', () => {
-      expect(formatTime(0)).toBe('0s')
-    })
-    
+      expect(formatTime(0)).toBe('0s');
+    });
+
     test('handles negative input', () => {
       // Définir le comportement attendu
-      expect(formatTime(-10)).toBe('0s')
-    })
-    
+      expect(formatTime(-10)).toBe('0s');
+    });
+
     test('handles non-integer input', () => {
-      expect(formatTime(90.7)).toBe('1m 30s') // Math.floor implicite
-    })
-  })
-})
+      expect(formatTime(90.7)).toBe('1m 30s'); // Math.floor implicite
+    });
+  });
+});
 ```
 
 ### 2. Test avec localStorage mock (saveHighscore)
 
 ```javascript
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
 describe('saveHighscore', () => {
   beforeEach(() => {
-    localStorage.clear()
-  })
-  
+    localStorage.clear();
+  });
+
   test('saves new highscore to empty list', () => {
-    const result = saveHighscore('Alice', 15, 45, 'easy')
-    
-    expect(result).toBe(true)
-    
-    const saved = JSON.parse(localStorage.getItem('highscores_easy'))
-    expect(saved).toHaveLength(1)
+    const result = saveHighscore('Alice', 15, 45, 'easy');
+
+    expect(result).toBe(true);
+
+    const saved = JSON.parse(localStorage.getItem('highscores_easy'));
+    expect(saved).toHaveLength(1);
     expect(saved[0]).toMatchObject({
       name: 'Alice',
       score: 15,
       time: 45
-    })
-    expect(saved[0].date).toBeDefined()
-  })
-  
+    });
+    expect(saved[0].date).toBeDefined();
+  });
+
   test('maintains top 5 limit', () => {
     // Préparer 5 scores existants
-    const existing = FIXTURES.highscores.top5
-    localStorage.setItem('highscores_easy', JSON.stringify(existing))
-    
+    const existing = FIXTURES.highscores.top5;
+    localStorage.setItem('highscores_easy', JSON.stringify(existing));
+
     // Ajouter un 6ème score médiocre
-    const result = saveHighscore('Newbie', 5, 60, 'easy')
-    
-    expect(result).toBe(false) // pas dans le top 5
-    
-    const saved = JSON.parse(localStorage.getItem('highscores_easy'))
-    expect(saved).toHaveLength(5) // toujours 5
-    expect(saved.find(s => s.name === 'Newbie')).toBeUndefined()
-  })
-  
+    const result = saveHighscore('Newbie', 5, 60, 'easy');
+
+    expect(result).toBe(false); // pas dans le top 5
+
+    const saved = JSON.parse(localStorage.getItem('highscores_easy'));
+    expect(saved).toHaveLength(5); // toujours 5
+    expect(saved.find((s) => s.name === 'Newbie')).toBeUndefined();
+  });
+
   test('sorts by score desc, then time asc', () => {
-    saveHighscore('Slow', 10, 60, 'easy')
-    saveHighscore('Fast', 10, 30, 'easy')
-    saveHighscore('Best', 15, 45, 'easy')
-    
-    const saved = JSON.parse(localStorage.getItem('highscores_easy'))
-    
-    expect(saved[0].name).toBe('Best')  // meilleur score
-    expect(saved[1].name).toBe('Fast')  // score égal, temps meilleur
-    expect(saved[2].name).toBe('Slow')  // score égal, temps pire
-  })
-  
+    saveHighscore('Slow', 10, 60, 'easy');
+    saveHighscore('Fast', 10, 30, 'easy');
+    saveHighscore('Best', 15, 45, 'easy');
+
+    const saved = JSON.parse(localStorage.getItem('highscores_easy'));
+
+    expect(saved[0].name).toBe('Best'); // meilleur score
+    expect(saved[1].name).toBe('Fast'); // score égal, temps meilleur
+    expect(saved[2].name).toBe('Slow'); // score égal, temps pire
+  });
+
   describe('edge cases', () => {
     test('handles very long player names', () => {
-      const longName = 'A'.repeat(500)
-      const result = saveHighscore(longName, 15, 45, 'easy')
-      
-      expect(result).toBe(true)
-      
-      const saved = JSON.parse(localStorage.getItem('highscores_easy'))
-      expect(saved[0].name).toBe(longName)
-    })
-    
+      const longName = 'A'.repeat(500);
+      const result = saveHighscore(longName, 15, 45, 'easy');
+
+      expect(result).toBe(true);
+
+      const saved = JSON.parse(localStorage.getItem('highscores_easy'));
+      expect(saved[0].name).toBe(longName);
+    });
+
     test('handles Unicode and emoji in names', () => {
-      const unicodeName = '🎮 Mathéo 数学 🚀'
-      const result = saveHighscore(unicodeName, 15, 45, 'easy')
-      
-      expect(result).toBe(true)
-      
-      const saved = JSON.parse(localStorage.getItem('highscores_easy'))
-      expect(saved[0].name).toBe(unicodeName)
-    })
-    
+      const unicodeName = '🎮 Mathéo 数学 🚀';
+      const result = saveHighscore(unicodeName, 15, 45, 'easy');
+
+      expect(result).toBe(true);
+
+      const saved = JSON.parse(localStorage.getItem('highscores_easy'));
+      expect(saved[0].name).toBe(unicodeName);
+    });
+
     test('handles localStorage quota exceeded', () => {
       // Mock setItem pour simuler quota exceeded
       vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-        throw new DOMException('QuotaExceededError')
-      })
-      
-      const consoleSpy = vi.spyOn(console, 'error')
-      const result = saveHighscore('Player', 15, 45, 'easy')
-      
-      expect(result).toBe(false)
+        throw new DOMException('QuotaExceededError');
+      });
+
+      const consoleSpy = vi.spyOn(console, 'error');
+      const result = saveHighscore('Player', 15, 45, 'easy');
+
+      expect(result).toBe(false);
       expect(consoleSpy).toHaveBeenCalledWith(
         'Failed to save highscore:',
         expect.any(DOMException)
-      )
-    })
-    
+      );
+    });
+
     test('handles corrupted localStorage data', () => {
-      localStorage.setItem('highscores_easy', 'INVALID_JSON{')
-      
-      const result = saveHighscore('Player', 15, 45, 'easy')
-      
+      localStorage.setItem('highscores_easy', 'INVALID_JSON{');
+
+      const result = saveHighscore('Player', 15, 45, 'easy');
+
       // Devrait parser comme [] et sauvegarder
-      expect(result).toBe(true)
-      const saved = JSON.parse(localStorage.getItem('highscores_easy'))
-      expect(saved).toHaveLength(1)
-    })
-  })
-  
+      expect(result).toBe(true);
+      const saved = JSON.parse(localStorage.getItem('highscores_easy'));
+      expect(saved).toHaveLength(1);
+    });
+  });
+
   describe('error handling', () => {
     test('returns false when localStorage is unavailable', () => {
       vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-        throw new Error('localStorage disabled')
-      })
-      
-      const result = saveHighscore('Player', 15, 45, 'easy')
-      expect(result).toBe(false)
-    })
-    
+        throw new Error('localStorage disabled');
+      });
+
+      const result = saveHighscore('Player', 15, 45, 'easy');
+      expect(result).toBe(false);
+    });
+
     test('logs errors to console', () => {
-      const consoleSpy = vi.spyOn(console, 'error')
+      const consoleSpy = vi.spyOn(console, 'error');
       vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-        throw new Error('Test error')
-      })
-      
-      saveHighscore('Player', 15, 45, 'easy')
-      
+        throw new Error('Test error');
+      });
+
+      saveHighscore('Player', 15, 45, 'easy');
+
       expect(consoleSpy).toHaveBeenCalledWith(
         'Failed to save highscore:',
         expect.any(Error)
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});
 ```
 
 ### 3. Test avec DOM (loadHighscoresToElement)
 
 ```javascript
 describe('loadHighscoresToElement', () => {
-  let container, listElement
-  
+  let container, listElement;
+
   beforeEach(() => {
     // Créer un DOM minimal pour le test
     document.body.innerHTML = `
       <div id="container">
         <ul id="highscore-list"></ul>
       </div>
-    `
-    container = document.getElementById('container')
-    listElement = document.getElementById('highscore-list')
-  })
-  
+    `;
+    container = document.getElementById('container');
+    listElement = document.getElementById('highscore-list');
+  });
+
   test('renders empty slots when no highscores', () => {
-    loadHighscoresToElement('easy', listElement)
-    
-    const items = listElement.querySelectorAll('.highscore-item')
-    expect(items).toHaveLength(5)
-    
+    loadHighscoresToElement('easy', listElement);
+
+    const items = listElement.querySelectorAll('.highscore-item');
+    expect(items).toHaveLength(5);
+
     items.forEach((item, index) => {
-      expect(item.classList.contains('empty')).toBe(true)
-      expect(item.textContent).toContain(`${index + 1}.`)
-      expect(item.textContent).toContain('Aucun score')
-    })
-  })
-  
+      expect(item.classList.contains('empty')).toBe(true);
+      expect(item.textContent).toContain(`${index + 1}.`);
+      expect(item.textContent).toContain('Aucun score');
+    });
+  });
+
   test('renders highscores with medals', () => {
-    const scores = FIXTURES.highscores.top3
-    localStorage.setItem('highscores_easy', JSON.stringify(scores))
-    
-    loadHighscoresToElement('easy', listElement)
-    
-    const items = listElement.querySelectorAll('.highscore-item:not(.empty)')
-    expect(items).toHaveLength(3)
-    
-    expect(items[0].textContent).toContain('🥇')
-    expect(items[1].textContent).toContain('🥈')
-    expect(items[2].textContent).toContain('🥉')
-  })
-  
+    const scores = FIXTURES.highscores.top3;
+    localStorage.setItem('highscores_easy', JSON.stringify(scores));
+
+    loadHighscoresToElement('easy', listElement);
+
+    const items = listElement.querySelectorAll('.highscore-item:not(.empty)');
+    expect(items).toHaveLength(3);
+
+    expect(items[0].textContent).toContain('🥇');
+    expect(items[1].textContent).toContain('🥈');
+    expect(items[2].textContent).toContain('🥉');
+  });
+
   test('displays score as X/15 for normal levels', () => {
-    localStorage.setItem('highscores_easy', JSON.stringify([
-      { name: 'Test', score: 12, time: 45 }
-    ]))
-    
-    loadHighscoresToElement('easy', listElement)
-    
-    expect(listElement.textContent).toContain('12/15')
-  })
-  
+    localStorage.setItem(
+      'highscores_easy',
+      JSON.stringify([{ name: 'Test', score: 12, time: 45 }])
+    );
+
+    loadHighscoresToElement('easy', listElement);
+
+    expect(listElement.textContent).toContain('12/15');
+  });
+
   test('displays score as X pts for super-multi level', () => {
-    localStorage.setItem('highscores_super-multi', JSON.stringify([
-      { name: 'Test', score: 250, time: 45 }
-    ]))
-    
-    loadHighscoresToElement('super-multi', listElement)
-    
-    expect(listElement.textContent).toContain('250 pts')
-  })
-  
+    localStorage.setItem(
+      'highscores_super-multi',
+      JSON.stringify([{ name: 'Test', score: 250, time: 45 }])
+    );
+
+    loadHighscoresToElement('super-multi', listElement);
+
+    expect(listElement.textContent).toContain('250 pts');
+  });
+
   test('inserts headers before list element', () => {
-    loadHighscoresToElement('easy', listElement)
-    
-    const headers = listElement.previousElementSibling
-    expect(headers).not.toBeNull()
-    expect(headers.classList.contains('hs-headers')).toBe(true)
-    expect(headers.textContent).toContain('Rang')
-    expect(headers.textContent).toContain('Nom')
-    expect(headers.textContent).toContain('Score / Temps')
-  })
-  
+    loadHighscoresToElement('easy', listElement);
+
+    const headers = listElement.previousElementSibling;
+    expect(headers).not.toBeNull();
+    expect(headers.classList.contains('hs-headers')).toBe(true);
+    expect(headers.textContent).toContain('Rang');
+    expect(headers.textContent).toContain('Nom');
+    expect(headers.textContent).toContain('Score / Temps');
+  });
+
   test('does not duplicate headers on multiple calls', () => {
-    loadHighscoresToElement('easy', listElement)
-    loadHighscoresToElement('easy', listElement)
-    loadHighscoresToElement('easy', listElement)
-    
-    const allHeaders = container.querySelectorAll('.hs-headers')
-    expect(allHeaders).toHaveLength(1)
-  })
-  
+    loadHighscoresToElement('easy', listElement);
+    loadHighscoresToElement('easy', listElement);
+    loadHighscoresToElement('easy', listElement);
+
+    const allHeaders = container.querySelectorAll('.hs-headers');
+    expect(allHeaders).toHaveLength(1);
+  });
+
   describe('edge cases', () => {
     test('handles corrupted localStorage gracefully', () => {
-      localStorage.setItem('highscores_easy', 'INVALID{JSON')
-      
-      loadHighscoresToElement('easy', listElement)
-      
-      expect(listElement.textContent).toContain('Erreur de chargement')
-    })
-    
+      localStorage.setItem('highscores_easy', 'INVALID{JSON');
+
+      loadHighscoresToElement('easy', listElement);
+
+      expect(listElement.textContent).toContain('Erreur de chargement');
+    });
+
     test('handles null element gracefully', () => {
       expect(() => {
-        loadHighscoresToElement('easy', null)
-      }).not.toThrow()
-    })
-    
+        loadHighscoresToElement('easy', null);
+      }).not.toThrow();
+    });
+
     test('handles localStorage unavailable', () => {
       vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-        throw new Error('localStorage disabled')
-      })
-      
-      const consoleSpy = vi.spyOn(console, 'error')
-      
-      loadHighscoresToElement('easy', listElement)
-      
-      expect(consoleSpy).toHaveBeenCalled()
-      expect(listElement.textContent).toContain('Erreur de chargement')
-    })
-  })
-})
+        throw new Error('localStorage disabled');
+      });
+
+      const consoleSpy = vi.spyOn(console, 'error');
+
+      loadHighscoresToElement('easy', listElement);
+
+      expect(consoleSpy).toHaveBeenCalled();
+      expect(listElement.textContent).toContain('Erreur de chargement');
+    });
+  });
+});
 ```
 
 ### 4. Test des utilitaires de persistence (loadPlayerName, savePlayerName)
@@ -489,71 +490,71 @@ describe('loadHighscoresToElement', () => {
 ```javascript
 describe('loadPlayerName', () => {
   beforeEach(() => {
-    document.body.innerHTML = '<input type="text" id="player-name">'
-  })
-  
+    document.body.innerHTML = '<input type="text" id="player-name">';
+  });
+
   test('populates input with saved name', () => {
-    localStorage.setItem('playerName', 'Mathéo')
-    
-    loadPlayerName('player-name')
-    
-    const input = document.getElementById('player-name')
-    expect(input.value).toBe('Mathéo')
-  })
-  
+    localStorage.setItem('playerName', 'Mathéo');
+
+    loadPlayerName('player-name');
+
+    const input = document.getElementById('player-name');
+    expect(input.value).toBe('Mathéo');
+  });
+
   test('does nothing when no saved name', () => {
-    loadPlayerName('player-name')
-    
-    const input = document.getElementById('player-name')
-    expect(input.value).toBe('')
-  })
-  
+    loadPlayerName('player-name');
+
+    const input = document.getElementById('player-name');
+    expect(input.value).toBe('');
+  });
+
   test('handles missing input element gracefully', () => {
-    localStorage.setItem('playerName', 'Test')
-    
+    localStorage.setItem('playerName', 'Test');
+
     expect(() => {
-      loadPlayerName('non-existent-id')
-    }).not.toThrow()
-  })
-})
+      loadPlayerName('non-existent-id');
+    }).not.toThrow();
+  });
+});
 
 describe('savePlayerName', () => {
   test('saves name to localStorage', () => {
-    savePlayerName('Alice')
-    
-    expect(localStorage.getItem('playerName')).toBe('Alice')
-  })
-  
+    savePlayerName('Alice');
+
+    expect(localStorage.getItem('playerName')).toBe('Alice');
+  });
+
   test('overwrites previous name', () => {
-    savePlayerName('Alice')
-    savePlayerName('Bob')
-    
-    expect(localStorage.getItem('playerName')).toBe('Bob')
-  })
-  
+    savePlayerName('Alice');
+    savePlayerName('Bob');
+
+    expect(localStorage.getItem('playerName')).toBe('Bob');
+  });
+
   describe('edge cases', () => {
     test('handles empty string', () => {
-      savePlayerName('')
-      expect(localStorage.getItem('playerName')).toBe('')
-    })
-    
+      savePlayerName('');
+      expect(localStorage.getItem('playerName')).toBe('');
+    });
+
     test('handles Unicode characters', () => {
-      const name = '🎮 Élève 学生'
-      savePlayerName(name)
-      expect(localStorage.getItem('playerName')).toBe(name)
-    })
-    
+      const name = '🎮 Élève 学生';
+      savePlayerName(name);
+      expect(localStorage.getItem('playerName')).toBe(name);
+    });
+
     test('handles localStorage error gracefully', () => {
       vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-        throw new Error('localStorage full')
-      })
-      
+        throw new Error('localStorage full');
+      });
+
       expect(() => {
-        savePlayerName('Test')
-      }).not.toThrow()
-    })
-  })
-})
+        savePlayerName('Test');
+      }).not.toThrow();
+    });
+  });
+});
 ```
 
 ### 5. Test du timer (createGameTimer)
@@ -561,101 +562,101 @@ describe('savePlayerName', () => {
 ```javascript
 describe('createGameTimer', () => {
   beforeEach(() => {
-    vi.useFakeTimers()
-    document.body.innerHTML = '<div id="timer">60</div>'
-  })
-  
+    vi.useFakeTimers();
+    document.body.innerHTML = '<div id="timer">60</div>';
+  });
+
   afterEach(() => {
-    vi.restoreAllMocks()
-  })
-  
+    vi.restoreAllMocks();
+  });
+
   test('creates timer with initial state', () => {
-    const timer = createGameTimer({ limit: 30 })
-    
-    expect(timer).toHaveProperty('start')
-    expect(timer).toHaveProperty('stop')
-    expect(timer).toHaveProperty('getTotalTime')
-    expect(timer).toHaveProperty('reset')
-  })
-  
+    const timer = createGameTimer({ limit: 30 });
+
+    expect(timer).toHaveProperty('start');
+    expect(timer).toHaveProperty('stop');
+    expect(timer).toHaveProperty('getTotalTime');
+    expect(timer).toHaveProperty('reset');
+  });
+
   test('decrements time on each tick', () => {
-    const element = document.getElementById('timer')
-    const timer = createGameTimer({ limit: 5, element })
-    
-    timer.start()
-    
-    expect(element.textContent).toBe('5')
-    
-    vi.advanceTimersByTime(1000)
-    expect(element.textContent).toBe('4')
-    
-    vi.advanceTimersByTime(1000)
-    expect(element.textContent).toBe('3')
-  })
-  
+    const element = document.getElementById('timer');
+    const timer = createGameTimer({ limit: 5, element });
+
+    timer.start();
+
+    expect(element.textContent).toBe('5');
+
+    vi.advanceTimersByTime(1000);
+    expect(element.textContent).toBe('4');
+
+    vi.advanceTimersByTime(1000);
+    expect(element.textContent).toBe('3');
+  });
+
   test('calls onTick callback', () => {
-    const onTick = vi.fn()
-    const timer = createGameTimer({ limit: 3, onTick })
-    
-    timer.start()
-    vi.advanceTimersByTime(1000)
-    
-    expect(onTick).toHaveBeenCalledWith(2, 1) // remaining, total
-  })
-  
+    const onTick = vi.fn();
+    const timer = createGameTimer({ limit: 3, onTick });
+
+    timer.start();
+    vi.advanceTimersByTime(1000);
+
+    expect(onTick).toHaveBeenCalledWith(2, 1); // remaining, total
+  });
+
   test('calls onTimeout when time expires', () => {
-    const onTimeout = vi.fn()
-    const timer = createGameTimer({ limit: 2, onTimeout })
-    
-    timer.start()
-    vi.advanceTimersByTime(2000)
-    
-    expect(onTimeout).toHaveBeenCalledTimes(1)
-  })
-  
+    const onTimeout = vi.fn();
+    const timer = createGameTimer({ limit: 2, onTimeout });
+
+    timer.start();
+    vi.advanceTimersByTime(2000);
+
+    expect(onTimeout).toHaveBeenCalledTimes(1);
+  });
+
   test('stops timer correctly', () => {
-    const onTick = vi.fn()
-    const timer = createGameTimer({ limit: 10, onTick })
-    
-    timer.start()
-    vi.advanceTimersByTime(3000)
-    timer.stop()
-    vi.advanceTimersByTime(5000) // should not trigger more ticks
-    
-    expect(onTick).toHaveBeenCalledTimes(3)
-  })
-  
+    const onTick = vi.fn();
+    const timer = createGameTimer({ limit: 10, onTick });
+
+    timer.start();
+    vi.advanceTimersByTime(3000);
+    timer.stop();
+    vi.advanceTimersByTime(5000); // should not trigger more ticks
+
+    expect(onTick).toHaveBeenCalledTimes(3);
+  });
+
   test('getTotalTime returns accumulated time', () => {
-    const timer = createGameTimer({ limit: 10 })
-    
-    timer.start()
-    vi.advanceTimersByTime(3000)
-    
-    expect(timer.getTotalTime()).toBe(3)
-  })
-  
+    const timer = createGameTimer({ limit: 10 });
+
+    timer.start();
+    vi.advanceTimersByTime(3000);
+
+    expect(timer.getTotalTime()).toBe(3);
+  });
+
   test('reset clears timer state', () => {
-    const timer = createGameTimer({ limit: 10 })
-    
-    timer.start()
-    vi.advanceTimersByTime(5000)
-    timer.reset()
-    
-    expect(timer.getTotalTime()).toBe(0)
-  })
-  
+    const timer = createGameTimer({ limit: 10 });
+
+    timer.start();
+    vi.advanceTimersByTime(5000);
+    timer.reset();
+
+    expect(timer.getTotalTime()).toBe(0);
+  });
+
   test('prevents multiple timers when start called twice', () => {
-    const onTick = vi.fn()
-    const timer = createGameTimer({ limit: 10, onTick })
-    
-    timer.start()
-    timer.start() // second call
-    
-    vi.advanceTimersByTime(1000)
-    
-    expect(onTick).toHaveBeenCalledTimes(1) // only one timer running
-  })
-})
+    const onTick = vi.fn();
+    const timer = createGameTimer({ limit: 10, onTick });
+
+    timer.start();
+    timer.start(); // second call
+
+    vi.advanceTimersByTime(1000);
+
+    expect(onTick).toHaveBeenCalledTimes(1); // only one timer running
+  });
+});
 ```
 
 ---
@@ -668,32 +669,47 @@ describe('createGameTimer', () => {
 export const FIXTURES = {
   highscores: {
     empty: [],
-    
+
     top3: [
       { name: 'Alice', score: 15, time: 45, date: '2025-01-01T10:00:00.000Z' },
       { name: 'Bob', score: 14, time: 50, date: '2025-01-01T10:05:00.000Z' },
       { name: 'Charlie', score: 13, time: 55, date: '2025-01-01T10:10:00.000Z' }
     ],
-    
+
     top5: [
       { name: 'Alice', score: 15, time: 45, date: '2025-01-01T10:00:00.000Z' },
       { name: 'Bob', score: 14, time: 50, date: '2025-01-01T10:05:00.000Z' },
-      { name: 'Charlie', score: 13, time: 55, date: '2025-01-01T10:10:00.000Z' },
+      {
+        name: 'Charlie',
+        score: 13,
+        time: 55,
+        date: '2025-01-01T10:10:00.000Z'
+      },
       { name: 'David', score: 12, time: 60, date: '2025-01-01T10:15:00.000Z' },
       { name: 'Eve', score: 11, time: 65, date: '2025-01-01T10:20:00.000Z' }
     ],
-    
+
     sameScorediffTimes: [
       { name: 'Fast', score: 10, time: 30, date: '2025-01-01T10:00:00.000Z' },
       { name: 'Slow', score: 10, time: 60, date: '2025-01-01T10:05:00.000Z' }
     ],
-    
+
     withUnicode: [
-      { name: '🎮 Mathéo', score: 15, time: 45, date: '2025-01-01T10:00:00.000Z' },
-      { name: '学生 Zhang', score: 14, time: 50, date: '2025-01-01T10:05:00.000Z' }
+      {
+        name: '🎮 Mathéo',
+        score: 15,
+        time: 45,
+        date: '2025-01-01T10:00:00.000Z'
+      },
+      {
+        name: '学生 Zhang',
+        score: 14,
+        time: 50,
+        date: '2025-01-01T10:05:00.000Z'
+      }
     ]
   },
-  
+
   players: {
     valid: 'Mathéo',
     empty: '',
@@ -702,7 +718,7 @@ export const FIXTURES = {
     withSpaces: '  Jean Dupont  ',
     specialChars: "O'Connor-Smith <script>alert('xss')</script>"
   },
-  
+
   times: {
     zero: 0,
     underMinute: [1, 30, 59],
@@ -711,9 +727,9 @@ export const FIXTURES = {
     large: [3600, 7200],
     negative: -10
   },
-  
+
   levels: ['facile', 'moyen', 'difficile', 'super-multi']
-}
+};
 ```
 
 ---
@@ -771,12 +787,12 @@ coverage/
 
 ### Seuils critiques
 
-| Métrique | Minimum | Objectif |
-|----------|---------|----------|
-| Statements | 90% | 95%+ |
-| Branches | 90% | 95%+ |
-| Functions | 90% | 100% |
-| Lines | 90% | 95%+ |
+| Métrique   | Minimum | Objectif |
+| ---------- | ------- | -------- |
+| Statements | 90%     | 95%+     |
+| Branches   | 90%     | 95%+     |
+| Functions  | 90%     | 100%     |
+| Lines      | 90%     | 95%+     |
 
 **Note:** Les tests **échouent** si coverage < 90% sur n'importe quelle métrique.
 
@@ -805,32 +821,32 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run tests
         run: npm run test:run
-      
+
       - name: Generate coverage
         run: npm run test:coverage
-      
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage/lcov.info
           flags: unittests
           fail_ci_if_error: true
-      
+
       - name: Comment PR with coverage
         if: github.event_name == 'pull_request'
         uses: romeovs/lcov-reporter-action@v0.3.1
@@ -858,18 +874,18 @@ Chaque test suit cette structure :
 ```javascript
 test('saves highscore correctly', () => {
   // ARRANGE - Préparer les données et mocks
-  const name = 'Alice'
-  const score = 15
-  const time = 45
-  const level = 'easy'
-  
+  const name = 'Alice';
+  const score = 15;
+  const time = 45;
+  const level = 'easy';
+
   // ACT - Exécuter la fonction testée
-  const result = saveHighscore(name, score, time, level)
-  
+  const result = saveHighscore(name, score, time, level);
+
   // ASSERT - Vérifier le résultat
-  expect(result).toBe(true)
-  expect(localStorage.getItem('highscores_easy')).toBeDefined()
-})
+  expect(result).toBe(true);
+  expect(localStorage.getItem('highscores_easy')).toBeDefined();
+});
 ```
 
 ### 2. **One Assertion Per Test (flexible)**
@@ -879,16 +895,16 @@ Privilégier un concept par test, mais regrouper assertions cohérentes :
 ```javascript
 // ✅ BON: Assertions sur le même concept
 test('formats time correctly', () => {
-  const result = formatTime(65)
-  expect(result).toBe('1m 5s')
-  expect(typeof result).toBe('string')
-})
+  const result = formatTime(65);
+  expect(result).toBe('1m 5s');
+  expect(typeof result).toBe('string');
+});
 
 // ❌ MAUVAIS: Tester plusieurs concepts
 test('formats time and saves highscore', () => {
-  expect(formatTime(65)).toBe('1m 5s')
-  expect(saveHighscore('A', 15, 45, 'easy')).toBe(true)
-})
+  expect(formatTime(65)).toBe('1m 5s');
+  expect(saveHighscore('A', 15, 45, 'easy')).toBe(true);
+});
 ```
 
 ### 3. **Test Isolation**
@@ -898,48 +914,52 @@ Chaque test doit être **indépendant** et **répétable** :
 ```javascript
 // ✅ BON: Reset avant chaque test
 beforeEach(() => {
-  localStorage.clear()
-})
+  localStorage.clear();
+});
 
-test('test 1', () => { /* ... */ })
-test('test 2', () => { /* ... */ }) // Ne dépend pas de test 1
+test('test 1', () => {
+  /* ... */
+});
+test('test 2', () => {
+  /* ... */
+}); // Ne dépend pas de test 1
 
 // ❌ MAUVAIS: Tests dépendants
-test('add first score', () => { 
-  saveHighscore('A', 15, 45, 'easy')
-})
-test('add second score', () => { 
+test('add first score', () => {
+  saveHighscore('A', 15, 45, 'easy');
+});
+test('add second score', () => {
   // Dépend du test précédent !
-  saveHighscore('B', 14, 50, 'easy')
-  const scores = JSON.parse(localStorage.getItem('highscores_easy'))
-  expect(scores).toHaveLength(2) // FAIL si test 1 skip
-})
+  saveHighscore('B', 14, 50, 'easy');
+  const scores = JSON.parse(localStorage.getItem('highscores_easy'));
+  expect(scores).toHaveLength(2); // FAIL si test 1 skip
+});
 ```
 
 ### 4. **Nommer les constantes magiques**
 
 ```javascript
 // ✅ BON
-const MAX_HIGHSCORES = 5
-const DEFAULT_LEVEL = 'easy'
+const MAX_HIGHSCORES = 5;
+const DEFAULT_LEVEL = 'easy';
 
 test('maintains top 5 limit', () => {
   // Ajouter MAX_HIGHSCORES + 1 scores
   for (let i = 0; i < MAX_HIGHSCORES + 1; i++) {
-    saveHighscore(`Player${i}`, i, 30, DEFAULT_LEVEL)
+    saveHighscore(`Player${i}`, i, 30, DEFAULT_LEVEL);
   }
-  
-  const saved = JSON.parse(localStorage.getItem(`highscores_${DEFAULT_LEVEL}`))
-  expect(saved).toHaveLength(MAX_HIGHSCORES)
-})
+
+  const saved = JSON.parse(localStorage.getItem(`highscores_${DEFAULT_LEVEL}`));
+  expect(saved).toHaveLength(MAX_HIGHSCORES);
+});
 
 // ❌ MAUVAIS
 test('maintains top 5 limit', () => {
   for (let i = 0; i < 6; i++) {
-    saveHighscore(`Player${i}`, i, 30, 'easy')
+    saveHighscore(`Player${i}`, i, 30, 'easy');
   }
-  expect(saved).toHaveLength(5) // Pourquoi 5 ?
-})
+  expect(saved).toHaveLength(5); // Pourquoi 5 ?
+});
 ```
 
 ### 5. **Tester les cas limites (boundaries)**
@@ -947,25 +967,25 @@ test('maintains top 5 limit', () => {
 ```javascript
 describe('formatTime boundaries', () => {
   test('handles 0 (minimum)', () => {
-    expect(formatTime(0)).toBe('0s')
-  })
-  
+    expect(formatTime(0)).toBe('0s');
+  });
+
   test('handles 59 (just before minute)', () => {
-    expect(formatTime(59)).toBe('59s')
-  })
-  
+    expect(formatTime(59)).toBe('59s');
+  });
+
   test('handles 60 (exact minute)', () => {
-    expect(formatTime(60)).toBe('1m 0s')
-  })
-  
+    expect(formatTime(60)).toBe('1m 0s');
+  });
+
   test('handles 61 (just after minute)', () => {
-    expect(formatTime(61)).toBe('1m 1s')
-  })
-  
+    expect(formatTime(61)).toBe('1m 1s');
+  });
+
   test('handles very large value', () => {
-    expect(formatTime(Number.MAX_SAFE_INTEGER)).toBeDefined()
-  })
-})
+    expect(formatTime(Number.MAX_SAFE_INTEGER)).toBeDefined();
+  });
+});
 ```
 
 ### 6. **Mock avec parcimonie**
@@ -976,19 +996,19 @@ Ne mock que ce qui est **nécessaire** :
 // ✅ BON: Mock seulement l'API externe
 test('handles localStorage error', () => {
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-    throw new Error('Quota exceeded')
-  })
-  
-  const result = saveHighscore('A', 15, 45, 'easy')
-  expect(result).toBe(false)
-})
+    throw new Error('Quota exceeded');
+  });
+
+  const result = saveHighscore('A', 15, 45, 'easy');
+  expect(result).toBe(false);
+});
 
 // ❌ MAUVAIS: Tout mocker
 test('saves highscore', () => {
-  vi.mock('./shared.js')
-  const result = saveHighscore('A', 15, 45, 'easy')
-  expect(result).toBe(true) // Ce test ne teste rien !
-})
+  vi.mock('./shared.js');
+  const result = saveHighscore('A', 15, 45, 'easy');
+  expect(result).toBe(true); // Ce test ne teste rien !
+});
 ```
 
 ### 7. **Messages d'erreur clairs**
@@ -996,18 +1016,18 @@ test('saves highscore', () => {
 ```javascript
 // ✅ BON: Message descriptif
 test('sorts by score descending', () => {
-  saveHighscore('Low', 5, 30, 'easy')
-  saveHighscore('High', 15, 30, 'easy')
-  
-  const saved = JSON.parse(localStorage.getItem('highscores_easy'))
-  expect(saved[0].name).toBe('High') // "High should be first (highest score)"
-})
+  saveHighscore('Low', 5, 30, 'easy');
+  saveHighscore('High', 15, 30, 'easy');
+
+  const saved = JSON.parse(localStorage.getItem('highscores_easy'));
+  expect(saved[0].name).toBe('High'); // "High should be first (highest score)"
+});
 
 // Ou avec matcher personnalisé
 expect(saved[0]).toMatchObject({
   name: 'High',
   score: 15
-})
+});
 ```
 
 ### 8. **Tests lisibles comme documentation**
@@ -1016,21 +1036,21 @@ expect(saved[0]).toMatchObject({
 // ✅ BON: Très lisible
 describe('saveHighscore sorting logic', () => {
   test('higher score comes first', () => {
-    saveHighscore('Alice', 15, 60, 'easy')
-    saveHighscore('Bob', 10, 30, 'easy')
-    
-    const [first, second] = JSON.parse(localStorage.getItem('highscores_easy'))
-    expect(first.name).toBe('Alice')
-  })
-  
+    saveHighscore('Alice', 15, 60, 'easy');
+    saveHighscore('Bob', 10, 30, 'easy');
+
+    const [first, second] = JSON.parse(localStorage.getItem('highscores_easy'));
+    expect(first.name).toBe('Alice');
+  });
+
   test('when scores equal, faster time comes first', () => {
-    saveHighscore('Slow', 10, 60, 'easy')
-    saveHighscore('Fast', 10, 30, 'easy')
-    
-    const [first, second] = JSON.parse(localStorage.getItem('highscores_easy'))
-    expect(first.name).toBe('Fast')
-  })
-})
+    saveHighscore('Slow', 10, 60, 'easy');
+    saveHighscore('Fast', 10, 30, 'easy');
+
+    const [first, second] = JSON.parse(localStorage.getItem('highscores_easy'));
+    expect(first.name).toBe('Fast');
+  });
+});
 ```
 
 ---
@@ -1064,27 +1084,27 @@ describe('saveHighscore sorting logic', () => {
 // 1. Isoler un test avec .only
 test.only('this one test', () => {
   // Seulement ce test sera exécuté
-})
+});
 
 // 2. Skip un test avec .skip
 test.skip('broken test', () => {
   // Temporairement désactivé
-})
+});
 
 // 3. Verbose logging
 test('debug issue', () => {
-  const result = saveHighscore('Test', 15, 45, 'easy')
-  console.log('Result:', result)
-  console.log('localStorage:', localStorage.getItem('highscores_easy'))
-  expect(result).toBe(true)
-})
+  const result = saveHighscore('Test', 15, 45, 'easy');
+  console.log('Result:', result);
+  console.log('localStorage:', localStorage.getItem('highscores_easy'));
+  expect(result).toBe(true);
+});
 
 // 4. Debugger dans le code
 test('pause execution', () => {
-  debugger // Le test pausera ici si lancé avec --inspect
-  const result = formatTime(65)
-  expect(result).toBe('1m 5s')
-})
+  debugger; // Le test pausera ici si lancé avec --inspect
+  const result = formatTime(65);
+  expect(result).toBe('1m 5s');
+});
 ```
 
 ---

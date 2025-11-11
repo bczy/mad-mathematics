@@ -8,16 +8,20 @@
 ## 🎯 Principes Fondamentaux
 
 ### 1. **Documentation as Code**
+
 La documentation fait partie intégrante du projet. Elle doit être :
+
 - ✅ **À jour** - Synchronisée avec chaque modification de code
 - ✅ **Versionnée** - Commitée avec les changements de code
 - ✅ **Accessible** - Centralisée et facile à trouver
 - ✅ **Utile** - Contient des informations actionnables, pas des évidences
 
 ### 2. **La règle d'or : Demander avant de documenter**
+
 > **Toute mise à jour de documentation nécessite l'autorisation explicite de l'utilisateur**
 
 Processus obligatoire :
+
 1. 🔍 Détecter qu'une modification de code nécessite une mise à jour de documentation
 2. 🤚 **STOP** - Ne pas modifier la documentation immédiatement
 3. 💬 Demander à l'utilisateur : "Cette modification impacte [fichier.md]. Dois-je mettre à jour la documentation ?"
@@ -50,13 +54,13 @@ mad-mathematics/
 
 ### Règles de Placement
 
-| Type de document | Emplacement | Exemple |
-|------------------|-------------|---------|
-| **Instructions pour AI agents** | `.github/copilot-instructions.md` | Index principal |
-| **Guidelines techniques** | `docs/*.md` | Tests, déploiement, architecture |
-| **Revues/Audits** | Racine (`*.md`) | CODE_REVIEW.md |
-| **README projet** | Racine | README.md |
-| **Documentation code** | À côté du code | JSDoc inline |
+| Type de document                | Emplacement                       | Exemple                          |
+| ------------------------------- | --------------------------------- | -------------------------------- |
+| **Instructions pour AI agents** | `.github/copilot-instructions.md` | Index principal                  |
+| **Guidelines techniques**       | `docs/*.md`                       | Tests, déploiement, architecture |
+| **Revues/Audits**               | Racine (`*.md`)                   | CODE_REVIEW.md                   |
+| **README projet**               | Racine                            | README.md                        |
+| **Documentation code**          | À côté du code                    | JSDoc inline                     |
 
 ---
 
@@ -67,12 +71,14 @@ mad-mathematics/
 **Rôle:** Point d'entrée unique pour tous les AI agents et développeurs.
 
 **Contenu obligatoire:**
+
 - Vision et architecture du projet (big picture)
 - Conventions de code spécifiques au projet
 - Références vers TOUTE la documentation technique
 - Workflows critiques (build, test, deploy)
 
 **Format de référence:**
+
 ```markdown
 ## 📚 Documentation Technique
 
@@ -85,6 +91,7 @@ Pour des guidelines détaillées, consultez :
 ```
 
 **Mise à jour requise quand:**
+
 - ✅ Nouveau fichier de documentation créé dans `docs/`
 - ✅ Changement architectural majeur
 - ✅ Nouvelle convention de code adoptée
@@ -95,12 +102,14 @@ Pour des guidelines détaillées, consultez :
 **Rôle:** Documentation détaillée et spécialisée par domaine.
 
 **Exemples:**
+
 - `TESTING_GUIDELINES.md` - Comment écrire des tests
 - `DEPLOYMENT.md` - Procédure de déploiement
 - `ARCHITECTURE.md` - Décisions d'architecture
 - `ACCESSIBILITY.md` - Standards d'accessibilité
 
 **Format standard:**
+
 ```markdown
 # [Sujet] - Mad Mathematics
 
@@ -108,10 +117,12 @@ Pour des guidelines détaillées, consultez :
 **Scope:** [Périmètre du document]
 
 ## Table des matières
+
 - [Section 1](#section-1)
 - [Section 2](#section-2)
 
 ## Section 1
+
 [Contenu...]
 
 ---
@@ -120,6 +131,7 @@ Pour des guidelines détaillées, consultez :
 ```
 
 **Mise à jour requise quand:**
+
 - ✅ Code modifié dans le domaine concerné
 - ✅ Nouvelle best practice adoptée
 - ✅ Correction d'erreur dans la documentation
@@ -130,23 +142,28 @@ Pour des guidelines détaillées, consultez :
 **Rôle:** Table des matières du dossier `docs/`.
 
 **Contenu:**
+
 ```markdown
 # Documentation Technique - Mad Mathematics
 
 Index de toute la documentation technique du projet.
 
 ## 🧪 Tests
+
 - [TESTING_GUIDELINES.md](./TESTING_GUIDELINES.md) - Tests unitaires (shared.js)
 - [INTEGRATION_TESTING.md](./INTEGRATION_TESTING.md) - Tests d'intégration
 - [E2E_TESTING.md](./E2E_TESTING.md) - Tests end-to-end
 
 ## 🚀 Déploiement
+
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Procédures de déploiement
 
 ## 🏗️ Architecture
+
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Décisions d'architecture (ADR)
 
 ## ♿ Accessibilité
+
 - [ACCESSIBILITY.md](./ACCESSIBILITY.md) - Standards WCAG 2.1
 
 ---
@@ -155,6 +172,7 @@ Index de toute la documentation technique du projet.
 ```
 
 **Mise à jour requise quand:**
+
 - ✅ Nouveau fichier ajouté dans `docs/`
 - ✅ Fichier renommé ou supprimé
 - ✅ Changement de structure
@@ -164,35 +182,36 @@ Index de toute la documentation technique du projet.
 **Rôle:** Documentation du code source directement dans les fichiers.
 
 **Exemple pour `shared.js`:**
+
 ```javascript
 /**
  * Formate un nombre de secondes en chaîne "Xm Ys" ou "Xs"
- * 
+ *
  * @param {number} seconds - Nombre de secondes à formater
  * @returns {string} Temps formaté (ex: "1m 30s" ou "45s")
- * 
+ *
  * @example
  * formatTime(65)  // "1m 5s"
  * formatTime(30)  // "30s"
  * formatTime(0)   // "0s"
  */
 function formatTime(seconds) {
-  const m = Math.floor(seconds/60);
-  const s = seconds%60;
-  return m>0? `${m}m ${s}s` : `${s}s`;
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
 }
 
 /**
  * Sauvegarde un score dans le top 5 du niveau spécifié
- * 
+ *
  * @param {string} name - Nom du joueur (max 500 caractères)
  * @param {number} score - Score obtenu (0-15 pour niveaux normaux)
  * @param {number} time - Temps en secondes
  * @param {string} level - Niveau de difficulté ('facile', 'moyen', 'difficile', 'super-multi')
  * @returns {boolean} true si dans le top 5, false sinon ou en cas d'erreur
- * 
+ *
  * @throws Ne throw jamais - retourne false en cas d'erreur localStorage
- * 
+ *
  * @example
  * saveHighscore('Alice', 15, 45, 'facile')  // true
  * saveHighscore('Bob', 5, 120, 'difficile') // false (pas top 5)
@@ -203,6 +222,7 @@ function saveHighscore(name, score, time, level) {
 ```
 
 **Mise à jour requise quand:**
+
 - ✅ Signature de fonction modifiée (params, return)
 - ✅ Comportement modifié
 - ✅ Nouveaux edge cases découverts
@@ -328,25 +348,27 @@ Dois-je les mettre à jour ?
 ### Scénario 1: Ajout d'une fonction à `shared.js`
 
 **Code:**
+
 ```javascript
 // Nouvelle fonction ajoutée
 function resetAllHighscores() {
-  const levels = ['facile', 'moyen', 'difficile', 'super-multi']
-  levels.forEach(level => localStorage.removeItem(`highscores_${level}`))
+  const levels = ['facile', 'moyen', 'difficile', 'super-multi'];
+  levels.forEach((level) => localStorage.removeItem(`highscores_${level}`));
 }
 ```
 
 **Action AI Agent:**
+
 ```
 🔔 Nouvelle fonction `resetAllHighscores` ajoutée à shared.js
 
 Fichiers impactés:
-1. `.github/copilot-instructions.md` 
+1. `.github/copilot-instructions.md`
    → Ajouter dans section "Shared Utilities"
-   
+
 2. `docs/TESTING_GUIDELINES.md`
    → Ajouter exemples de tests pour cette fonction
-   
+
 3. `shared.js`
    → Ajouter JSDoc
 
@@ -354,6 +376,7 @@ Dois-je mettre à jour ces 3 fichiers ?
 ```
 
 **Après autorisation:**
+
 - ✅ Ajouter JSDoc à la fonction
 - ✅ Ajouter section de tests dans TESTING_GUIDELINES.md
 - ✅ Mettre à jour copilot-instructions.md
@@ -364,20 +387,22 @@ Dois-je mettre à jour ces 3 fichiers ?
 ### Scénario 2: Changement de comportement
 
 **Code:**
+
 ```javascript
 // AVANT
-function formatTime(seconds){
-  return m>0? `${m}m ${s}s` : `${s}s`;
+function formatTime(seconds) {
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
 }
 
 // APRÈS (gestion des négatifs)
-function formatTime(seconds){
-  if (seconds < 0) return '0s'
-  return m>0? `${m}m ${s}s` : `${s}s`;
+function formatTime(seconds) {
+  if (seconds < 0) return '0s';
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
 }
 ```
 
 **Action AI Agent:**
+
 ```
 🔔 Comportement de `formatTime` modifié
 
@@ -399,7 +424,8 @@ Dois-je documenter ce changement ?
 **Fichier créé:** `docs/DEPLOYMENT.md`
 
 **Action AI Agent:**
-```
+
+````
 🔔 Nouveau fichier de documentation créé
 
 Fichier: `docs/DEPLOYMENT.md`
@@ -409,15 +435,18 @@ Actions requises:
 1. Ajouter référence dans `.github/copilot-instructions.md`:
    ```markdown
    - **Déploiement:** [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md)
-   ```
+````
 
 2. Mettre à jour `docs/README.md`:
+
    ```markdown
    ## 🚀 Déploiement
+
    - [DEPLOYMENT.md](./DEPLOYMENT.md) - Procédures de déploiement
    ```
 
 Dois-je procéder ?
+
 ```
 
 ---
@@ -429,6 +458,7 @@ Dois-je procéder ?
 Si l'utilisateur travaille sur une feature incomplète :
 
 ```
+
 ❓ Je remarque que la documentation n'est pas à jour avec vos changements.
 
 Souhaitez-vous:
@@ -437,6 +467,7 @@ b) Attendre la fin de votre feature
 c) Me rappeler plus tard
 
 Répondez a, b ou c.
+
 ```
 
 ### 2. **Branche expérimentale**
@@ -444,12 +475,15 @@ Répondez a, b ou c.
 Sur une branche de test/expérimentation :
 
 ```
+
 ℹ️ Nous sommes sur la branche [nom-branche] (non-main).
 
 La documentation devrait-elle être mise à jour :
+
 - Maintenant (pour cette branche)
 - Seulement lors du merge vers main
 - Jamais (expérimentation temporaire)
+
 ```
 
 ### 3. **Hotfix urgent**
@@ -457,14 +491,17 @@ La documentation devrait-elle être mise à jour :
 En cas de hotfix critique :
 
 ```
+
 🚨 Hotfix détecté
 
 Je peux:
+
 1. Commiter le fix immédiatement sans doc
 2. Ajouter un TODO dans le code pour doc ultérieure
 3. Mettre à jour doc rapidement (2 min)
 
 Que préférez-vous ?
+
 ```
 
 ### 4. **Documentation contradictoire**
@@ -472,6 +509,7 @@ Que préférez-vous ?
 Si la doc existante contredit le nouveau code :
 
 ```
+
 ⚠️ CONFLIT DÉTECTÉ
 
 Le code actuel:
@@ -481,11 +519,13 @@ La documentation dit:
 [Comportement B]
 
 Options:
+
 1. Le code est correct → Mettre à jour la doc
 2. La doc est correcte → Corriger le code
 3. Les deux ont changé → Synchroniser
 
 Quelle est la source de vérité ?
+
 ```
 
 ---
@@ -518,44 +558,56 @@ Checklist à faire chaque mois :
 ### ❌ À NE JAMAIS FAIRE
 
 1. **Modifier la documentation sans demander**
-   ```
-   ❌ BAD: Modifier silencieusement après un changement de code
-   ✅ GOOD: Toujours demander "Dois-je mettre à jour [fichier] ?"
-   ```
+```
+
+❌ BAD: Modifier silencieusement après un changement de code
+✅ GOOD: Toujours demander "Dois-je mettre à jour [fichier] ?"
+
+```
 
 2. **Créer des docs en dehors de `docs/`**
-   ```
-   ❌ BAD: TESTING.md à la racine
-   ✅ GOOD: docs/TESTING_GUIDELINES.md
-   ```
+```
+
+❌ BAD: TESTING.md à la racine
+✅ GOOD: docs/TESTING_GUIDELINES.md
+
+```
 
 3. **Oublier de référencer dans l'index**
-   ```
-   ❌ BAD: Créer docs/NEW.md sans ajouter référence
-   ✅ GOOD: Créer docs/NEW.md + mettre à jour copilot-instructions.md
-   ```
+```
+
+❌ BAD: Créer docs/NEW.md sans ajouter référence
+✅ GOOD: Créer docs/NEW.md + mettre à jour copilot-instructions.md
+
+```
 
 4. **Documentation vague**
-   ```
-   ❌ BAD: "Cette fonction gère les scores"
-   ✅ GOOD: "Sauvegarde un score dans le top 5. Retourne true si top 5, false sinon."
-   ```
+```
+
+❌ BAD: "Cette fonction gère les scores"
+✅ GOOD: "Sauvegarde un score dans le top 5. Retourne true si top 5, false sinon."
+
+```
 
 5. **Exemples obsolètes**
-   ```
-   ❌ BAD: Garder exemple avec ancienne API
-   ✅ GOOD: Mettre à jour tous les exemples après changement
-   ```
+```
+
+❌ BAD: Garder exemple avec ancienne API
+✅ GOOD: Mettre à jour tous les exemples après changement
+
+```
 
 6. **Commit séparé code/docs**
-   ```
-   ❌ BAD: 
-      Commit 1: "Add feature X"
-      Commit 2: "Update docs for feature X"
-   
-   ✅ GOOD:
-      Commit 1: "feat: add feature X + update docs"
-   ```
+```
+
+❌ BAD:
+Commit 1: "Add feature X"
+Commit 2: "Update docs for feature X"
+
+✅ GOOD:
+Commit 1: "feat: add feature X + update docs"
+
+````
 
 ---
 
@@ -585,7 +637,7 @@ refactor: extract timer logic + synchronize documentation
 - Move timer code from game pages to shared.js
 - Update all affected documentation files
 - Fix outdated examples in guidelines
-```
+````
 
 ### Sans documentation (cas rares)
 
@@ -612,6 +664,7 @@ Toujours maintenir cette section à jour :
 ## 📚 Documentation Technique Complète
 
 ### Guidelines de développement
+
 - **Tests unitaires:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests pour shared.js avec Vitest
 - **Tests d'intégration:** [`docs/INTEGRATION_TESTING.md`](../docs/INTEGRATION_TESTING.md) - Tests des pages complètes
 - **Tests E2E:** [`docs/E2E_TESTING.md`](../docs/E2E_TESTING.md) - Tests end-to-end avec Playwright
@@ -620,9 +673,11 @@ Toujours maintenir cette section à jour :
 - **Accessibilité:** [`docs/ACCESSIBILITY.md`](../docs/ACCESSIBILITY.md) - Standards WCAG 2.1
 
 ### Revues et audits
+
 - **Code Review:** [`CODE_REVIEW.md`](../CODE_REVIEW.md) - Analyse complète du 11 nov 2025
 
 ### Index complet
+
 Voir [`docs/README.md`](../docs/README.md) pour la liste complète.
 ```
 
@@ -633,17 +688,20 @@ Voir [`docs/README.md`](../docs/README.md) pour la liste complète.
 Avant chaque modification de documentation :
 
 ### Pré-modification
+
 - [ ] Autorisation utilisateur obtenue
 - [ ] Fichiers impactés identifiés
 - [ ] Changements planifiés documentés
 
 ### Pendant modification
+
 - [ ] Mettre à jour date "Dernière mise à jour"
 - [ ] Vérifier cohérence avec le code actuel
 - [ ] Tester tous les exemples de code
 - [ ] Vérifier liens internes fonctionnent
 
 ### Post-modification
+
 - [ ] Vérifier `.github/copilot-instructions.md` à jour
 - [ ] Vérifier `docs/README.md` à jour
 - [ ] Commit atomique code + docs

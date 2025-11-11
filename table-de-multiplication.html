@@ -1,615 +1,683 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>École de Magie des Multiplications ✨</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <style>
-        /* Styles locaux supplémentaires si besoin */
-        .special-bg{background:linear-gradient(135deg,#2d1b4e 0%, #4a2c6b 50%, #6b4a8d 100%); color:#fff; padding:20px; border-radius:12px}
-        
-        /* Styles pour aérer et agrandir la zone de jeu */
-        #game-area {
-            padding: 40px 20px;
-            max-width: 600px;
-            margin: 0 auto;
+      /* Styles locaux supplémentaires si besoin */
+      .special-bg {
+        background: linear-gradient(
+          135deg,
+          #2d1b4e 0%,
+          #4a2c6b 50%,
+          #6b4a8d 100%
+        );
+        color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+      }
+
+      /* Styles pour aérer et agrandir la zone de jeu */
+      #game-area {
+        padding: 40px 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      #game-area .progress {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      /* Barre de progression du temps */
+      .time-progress-container {
+        width: 100%;
+        margin: 20px 0;
+        position: relative;
+      }
+
+      .time-progress-bar {
+        width: 100%;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .time-progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          #22c55e 0%,
+          #16a34a 50%,
+          #15803d 100%
+        );
+        border-radius: 15px;
+        transition: all 0.5s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .time-progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
         }
-        
-        #game-area .progress {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            opacity: 0.9;
+        100% {
+          transform: translateX(100%);
         }
-        
-        /* Barre de progression du temps */
-        .time-progress-container {
-            width: 100%;
-            margin: 20px 0;
-            position: relative;
+      }
+
+      .time-progress-fill.warning {
+        background: linear-gradient(
+          90deg,
+          #f59e0b 0%,
+          #d97706 50%,
+          #b45309 100%
+        );
+      }
+
+      .time-progress-fill.danger {
+        background: linear-gradient(
+          90deg,
+          #ef4444 0%,
+          #dc2626 50%,
+          #b91c1c 100%
+        );
+        animation: pulse-bar 1s infinite;
+      }
+
+      @keyframes pulse-bar {
+        0%,
+        100% {
+          opacity: 1;
         }
-        
-        .time-progress-bar {
-            width: 100%;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+        50% {
+          opacity: 0.7;
         }
-        
-        .time-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e 0%, #16a34a 50%, #15803d 100%);
-            border-radius: 15px;
-            transition: all 0.5s ease;
-            position: relative;
-            overflow: hidden;
+      }
+
+      .time-progress-label {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        font-size: 0.9rem;
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        white-space: nowrap;
+      }
+
+      #game-area .timer {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 15px 0;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        display: none;
+        min-width: 100px;
+      }
+
+      #game-area .question {
+        font-size: 4rem;
+        font-weight: bold;
+        margin: 40px 0;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        letter-spacing: 3px;
+      }
+
+      #game-area .feedback {
+        display: none;
+        font-size: 1.3rem;
+        margin: 15px 0;
+        min-height: 40px;
+        font-weight: 600;
+      }
+
+      #game-area #answer-input {
+        font-size: 2.5rem;
+        padding: 20px;
+        width: 200px;
+        text-align: center;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 15px;
+        margin: 15px 0;
+      }
+
+      #game-area .submit-btn {
+        font-size: 1.5rem;
+        padding: 18px 40px;
+        margin-top: 15px;
+      }
+
+      #game-area .submit-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Boutons d'actions */
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 15px;
+      }
+
+      .skip-btn {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+        padding: 18px 40px;
+        font-size: 1.5rem;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+      }
+
+      .skip-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+      }
+
+      .skip-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Badge pour les questions en révision */
+      .review-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
         }
-        
-        .time-progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
+        50% {
+          opacity: 0.8;
+          transform: scale(1.05);
         }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .time-progress-fill.warning {
-            background: linear-gradient(90deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
-        }
-        
-        .time-progress-fill.danger {
-            background: linear-gradient(90deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
-            animation: pulse-bar 1s infinite;
-        }
-        
-        @keyframes pulse-bar {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .time-progress-label {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            z-index: 1;
-            white-space: nowrap;
-        }
-        
-        #game-area .timer {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 15px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            display: none;
-            min-width: 100px;
-        }
-        
-        #game-area .question {
-            font-size: 4rem;
-            font-weight: bold;
-            margin: 40px 0;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 3px;
-        }
-        
-        #game-area .feedback {
-            display: none;
-            font-size: 1.3rem;
-            margin: 15px 0;
-            min-height: 40px;
-            font-weight: 600;
-        }
-        
-        #game-area #answer-input {
-            font-size: 2.5rem;
-            padding: 20px;
-            width: 200px;
-            text-align: center;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px;
-            margin: 15px 0;
-        }
-        
-        #game-area .submit-btn {
-            font-size: 1.5rem;
-            padding: 18px 40px;
-            margin-top: 15px;
-        }
-        
-        #game-area .submit-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* Boutons d'actions */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-        
-        .skip-btn {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            padding: 18px 40px;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-        }
-        
-        .skip-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
-        }
-        
-        .skip-btn:active {
-            transform: translateY(0);
-        }
-        
-        /* Badge pour les questions en révision */
-        .review-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.05); }
-        }
-        
-        /* Correction détaillée */
-        .correction-section {
-            margin-top: 30px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-        }
-        
-        .correction-section h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #fbbf24;
-        }
-        
-        .correction-list {
-            list-style: none;
-            padding: 0;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .correction-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border-left: 5px solid;
-            background: rgba(255, 255, 255, 0.05);
-            display: grid;
-            grid-template-columns: 40px 1fr;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .correction-item.correct {
-            border-left-color: #22c55e;
-        }
-        
-        .correction-item.incorrect {
-            border-left-color: #ef4444;
-        }
-        
-        .correction-item.skipped {
-            border-left-color: #f59e0b;
-        }
-        
-        .correction-icon {
-            font-size: 1.5rem;
-            text-align: center;
-        }
-        
-        .correction-details {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        
-        .correction-question {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        
-        .correction-answer {
-            font-size: 1rem;
-        }
-        
-        .user-answer {
-            color: #fbbf24;
-            font-weight: bold;
-        }
-        
-        .correct-answer {
-            color: #22c55e;
-            font-weight: bold;
-        }
-        
-        .skipped-message {
-            color: #f59e0b;
-            font-style: italic;
-        }
+      }
+
+      /* Correction détaillée */
+      .correction-section {
+        margin-top: 30px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+      }
+
+      .correction-section h3 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #fbbf24;
+      }
+
+      .correction-list {
+        list-style: none;
+        padding: 0;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .correction-item {
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        border-left: 5px solid;
+        background: rgba(255, 255, 255, 0.05);
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .correction-item.correct {
+        border-left-color: #22c55e;
+      }
+
+      .correction-item.incorrect {
+        border-left-color: #ef4444;
+      }
+
+      .correction-item.skipped {
+        border-left-color: #f59e0b;
+      }
+
+      .correction-icon {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      .correction-details {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .correction-question {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .correction-answer {
+        font-size: 1rem;
+      }
+
+      .user-answer {
+        color: #fbbf24;
+        font-weight: bold;
+      }
+
+      .correct-answer {
+        color: #22c55e;
+        font-weight: bold;
+      }
+
+      .skipped-message {
+        color: #f59e0b;
+        font-style: italic;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>🧙‍♂️ École de Magie des Multiplications ✨</h1>
-            <p>Deviens un grand sorcier des mathématiques !</p>
-        </header>
+      <header>
+        <h1>🧙‍♂️ École de Magie des Multiplications ✨</h1>
+        <p>Deviens un grand sorcier des mathématiques !</p>
+      </header>
 
-        <!-- Écran de sélection de difficulté -->
-        <div id="difficulty-selection" class="difficulty-selection">
-            <h2>Choisis ton niveau de magie</h2>
-            <input type="text" id="player-name" placeholder="Entre ton prénom" class="player-name-input">
-            <div class="difficulty-buttons">
-                <button onclick="setDifficulty('easy')" class="difficulty-btn easy">
-                    <span class="level-icon">⭐</span>
-                    <span class="level-name">Apprenti</span>
-                    <span class="level-desc">Tables 2 à 5</span>
-                </button>
-                <button onclick="setDifficulty('medium')" class="difficulty-btn medium">
-                    <span class="level-icon">⭐⭐</span>
-                    <span class="level-name">Sorcier</span>
-                    <span class="level-desc">Tables 2 à 9</span>
-                </button>
-                <button onclick="setDifficulty('hard')" class="difficulty-btn hard">
-                    <span class="level-icon">⭐⭐⭐</span>
-                    <span class="level-name">Archimage</span>
-                    <span class="level-desc">Tables 2 à 12</span>
-                </button>
+      <!-- Écran de sélection de difficulté -->
+      <div id="difficulty-selection" class="difficulty-selection">
+        <h2>Choisis ton niveau de magie</h2>
+        <input
+          type="text"
+          id="player-name"
+          placeholder="Entre ton prénom"
+          class="player-name-input"
+        />
+        <div class="difficulty-buttons">
+          <button onclick="setDifficulty('easy')" class="difficulty-btn easy">
+            <span class="level-icon">⭐</span>
+            <span class="level-name">Apprenti</span>
+            <span class="level-desc">Tables 2 à 5</span>
+          </button>
+          <button
+            onclick="setDifficulty('medium')"
+            class="difficulty-btn medium"
+          >
+            <span class="level-icon">⭐⭐</span>
+            <span class="level-name">Sorcier</span>
+            <span class="level-desc">Tables 2 à 9</span>
+          </button>
+          <button onclick="setDifficulty('hard')" class="difficulty-btn hard">
+            <span class="level-icon">⭐⭐⭐</span>
+            <span class="level-name">Archimage</span>
+            <span class="level-desc">Tables 2 à 12</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Zone de jeu -->
+      <div id="game-area" class="game-area special-bg hidden">
+        <div class="progress" id="progress">Question 1 / 15</div>
+
+        <!-- Barre de progression du temps -->
+        <div class="time-progress-container">
+          <div class="time-progress-bar">
+            <div class="time-progress-fill" id="time-progress-fill"></div>
+            <div class="time-progress-label" id="time-progress-label">
+              0:00 / 1:00
             </div>
+          </div>
         </div>
 
-        <!-- Zone de jeu -->
-        <div id="game-area" class="game-area special-bg hidden">
-            <div class="progress" id="progress">Question 1 / 15</div>
-            
-            <!-- Barre de progression du temps -->
-            <div class="time-progress-container">
-                <div class="time-progress-bar">
-                    <div class="time-progress-fill" id="time-progress-fill"></div>
-                    <div class="time-progress-label" id="time-progress-label">0:00 / 1:00</div>
-                </div>
-            </div>
-            
-            <div class="timer" id="timer">0:00</div>
-            <div id="review-badge-container"></div>
-            <div class="question" id="question">? × ?</div>
-            <div class="feedback" id="feedback"></div>
-            <input type="number" id="answer-input" placeholder="?" autocomplete="off">
-            <div class="action-buttons">
-                <button onclick="skipQuestion()" class="skip-btn" id="skip-btn">
-                    ⏭️ Passer
-                </button>
-                <button onclick="checkAnswer()" class="submit-btn" id="submit-btn">
-                    ✨ Valider
-                </button>
-            </div>
+        <div class="timer" id="timer">0:00</div>
+        <div id="review-badge-container"></div>
+        <div class="question" id="question">? × ?</div>
+        <div class="feedback" id="feedback"></div>
+        <input
+          type="number"
+          id="answer-input"
+          placeholder="?"
+          autocomplete="off"
+        />
+        <div class="action-buttons">
+          <button onclick="skipQuestion()" class="skip-btn" id="skip-btn">
+            ⏭️ Passer
+          </button>
+          <button onclick="checkAnswer()" class="submit-btn" id="submit-btn">
+            ✨ Valider
+          </button>
         </div>
+      </div>
 
-        <!-- Écran de résultats -->
-        <div id="results" class="results hidden">
-            <div class="special-bg">
-                <div class="result-emoji" id="result-emoji">🎉</div>
-                <h2 id="result-message">Bravo !</h2>
-                <div class="score-display">
-                    <div class="score-label">Score</div>
-                    <div class="score-value" id="score">0 / 15</div>
-                </div>
-                <div class="result-details" id="result-details"></div>
-                
-                <div id="new-highscore-message" class="new-highscore hidden">
-                    🏆 Nouveau record ! Tu es dans le top 10 ! 🏆
-                </div>
-                
-                <!-- Section correction détaillée -->
-                <div class="correction-section">
-                    <h3>📋 Détail de tes réponses</h3>
-                    <ul class="correction-list" id="correction-list"></ul>
-                </div>
-                
-                <!-- Tableau des highscores -->
-                <div class="highscores-container">
-                    <h3>🏆 Meilleurs Scores 🏆</h3>
-                    <ul class="highscore-list" id="highscore-list"></ul>
-                </div>
-                
-                <button onclick="resetGame()" class="submit-btn">🔄 Rejouer</button>
-            </div>
+      <!-- Écran de résultats -->
+      <div id="results" class="results hidden">
+        <div class="special-bg">
+          <div class="result-emoji" id="result-emoji">🎉</div>
+          <h2 id="result-message">Bravo !</h2>
+          <div class="score-display">
+            <div class="score-label">Score</div>
+            <div class="score-value" id="score">0 / 15</div>
+          </div>
+          <div class="result-details" id="result-details"></div>
+
+          <div id="new-highscore-message" class="new-highscore hidden">
+            🏆 Nouveau record ! Tu es dans le top 10 ! 🏆
+          </div>
+
+          <!-- Section correction détaillée -->
+          <div class="correction-section">
+            <h3>📋 Détail de tes réponses</h3>
+            <ul class="correction-list" id="correction-list"></ul>
+          </div>
+
+          <!-- Tableau des highscores -->
+          <div class="highscores-container">
+            <h3>🏆 Meilleurs Scores 🏆</h3>
+            <ul class="highscore-list" id="highscore-list"></ul>
+          </div>
+
+          <button onclick="resetGame()" class="submit-btn">🔄 Rejouer</button>
         </div>
+      </div>
     </div>
 
     <script src="shared.js"></script>
     <script>
-        let currentQuestion = 1;
-        const totalQuestions = 15;
-        const timeLimit = 60; // 1 minute en secondes
-        let correctAnswers = 0;
-        let num1, num2, correctAnswer;
-        let startTime, timerInterval;
-        let totalTimeSpent = 0;
-        let minTable, maxTable;
-        let playerName = '';
-        let currentDifficulty = '';
-        let isProcessingAnswer = false;
-        let answersHistory = [];
-        let skippedQuestions = [];
-        let questionsAnswered = 0;
+      let currentQuestion = 1;
+      const totalQuestions = 15;
+      const timeLimit = 60; // 1 minute en secondes
+      let correctAnswers = 0;
+      let num1, num2, correctAnswer;
+      let startTime, timerInterval;
+      let totalTimeSpent = 0;
+      let minTable, maxTable;
+      let playerName = '';
+      let currentDifficulty = '';
+      let isProcessingAnswer = false;
+      let answersHistory = [];
+      let skippedQuestions = [];
+      let questionsAnswered = 0;
 
-        loadPlayerName('player-name');
+      loadPlayerName('player-name');
 
-        function setDifficulty(level) {
-            const nameInput = document.getElementById('player-name');
-            playerName = nameInput.value.trim();
-            
-            if(!playerName) {
-                nameInput.classList.add('error');
-                setTimeout(() => nameInput.classList.remove('error'), 500);
-                return;
-            }
-            
-            savePlayerName(playerName);
-            currentDifficulty = level;
-            
-            switch(level) {
-                case 'easy':
-                    minTable = 2;
-                    maxTable = 5;
-                    break;
-                case 'medium':
-                    minTable = 2;
-                    maxTable = 9;
-                    break;
-                case 'hard':
-                    minTable = 2;
-                    maxTable = 12;
-                    break;
-            }
-            startGame();
+      function setDifficulty(level) {
+        const nameInput = document.getElementById('player-name');
+        playerName = nameInput.value.trim();
+
+        if (!playerName) {
+          nameInput.classList.add('error');
+          setTimeout(() => nameInput.classList.remove('error'), 500);
+          return;
         }
 
-        function startGame() {
-            document.getElementById('difficulty-selection').classList.add('hidden');
-            document.getElementById('game-area').classList.remove('hidden');
-            currentQuestion = 1;
-            correctAnswers = 0;
-            totalTimeSpent = 0;
-            isProcessingAnswer = false;
-            answersHistory = [];
-            skippedQuestions = [];
-            questionsAnswered = 0;
-            startTimer();
-            nextQuestion();
+        savePlayerName(playerName);
+        currentDifficulty = level;
+
+        switch (level) {
+          case 'easy':
+            minTable = 2;
+            maxTable = 5;
+            break;
+          case 'medium':
+            minTable = 2;
+            maxTable = 9;
+            break;
+          case 'hard':
+            minTable = 2;
+            maxTable = 12;
+            break;
+        }
+        startGame();
+      }
+
+      function startGame() {
+        document.getElementById('difficulty-selection').classList.add('hidden');
+        document.getElementById('game-area').classList.remove('hidden');
+        currentQuestion = 1;
+        correctAnswers = 0;
+        totalTimeSpent = 0;
+        isProcessingAnswer = false;
+        answersHistory = [];
+        skippedQuestions = [];
+        questionsAnswered = 0;
+        startTimer();
+        nextQuestion();
+      }
+
+      function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+          const elapsed =
+            Math.floor((Date.now() - startTime) / 1000) + totalTimeSpent;
+          const remaining = Math.max(0, timeLimit - elapsed);
+          const percentage = Math.min(100, (elapsed / timeLimit) * 100);
+
+          // Mettre à jour le timer
+          document.getElementById('timer').textContent = formatTime(elapsed);
+
+          // Mettre à jour la barre de progression
+          const progressFill = document.getElementById('time-progress-fill');
+          const progressLabel = document.getElementById('time-progress-label');
+
+          progressFill.style.width = percentage + '%';
+          progressLabel.textContent = `${formatTime(elapsed)} / ${formatTime(timeLimit)}`;
+
+          // Changer la couleur selon le temps restant
+          if (percentage >= 75) {
+            progressFill.className = 'time-progress-fill danger';
+            document.getElementById('timer').classList.add('danger');
+            document.getElementById('timer').classList.remove('warning');
+          } else if (percentage >= 50) {
+            progressFill.className = 'time-progress-fill warning';
+            document.getElementById('timer').classList.add('warning');
+            document.getElementById('timer').classList.remove('danger');
+          } else {
+            progressFill.className = 'time-progress-fill';
+            document
+              .getElementById('timer')
+              .classList.remove('warning', 'danger');
+          }
+
+          // Terminer le jeu si le temps est écoulé
+          if (remaining === 0) {
+            clearInterval(timerInterval);
+            showResults();
+          }
+        }, 100); // Mise à jour toutes les 100ms pour une animation fluide
+      }
+
+      function nextQuestion() {
+        // Vérifier si on a terminé les 15 questions
+        if (questionsAnswered >= totalQuestions) {
+          showResults();
+          return;
         }
 
-        function startTimer() {
-            startTime = Date.now();
-            timerInterval = setInterval(() => {
-                const elapsed = Math.floor((Date.now() - startTime) / 1000) + totalTimeSpent;
-                const remaining = Math.max(0, timeLimit - elapsed);
-                const percentage = Math.min(100, (elapsed / timeLimit) * 100);
-                
-                // Mettre à jour le timer
-                document.getElementById('timer').textContent = formatTime(elapsed);
-                
-                // Mettre à jour la barre de progression
-                const progressFill = document.getElementById('time-progress-fill');
-                const progressLabel = document.getElementById('time-progress-label');
-                
-                progressFill.style.width = percentage + '%';
-                progressLabel.textContent = `${formatTime(elapsed)} / ${formatTime(timeLimit)}`;
-                
-                // Changer la couleur selon le temps restant
-                if(percentage >= 75) {
-                    progressFill.className = 'time-progress-fill danger';
-                    document.getElementById('timer').classList.add('danger');
-                    document.getElementById('timer').classList.remove('warning');
-                } else if(percentage >= 50) {
-                    progressFill.className = 'time-progress-fill warning';
-                    document.getElementById('timer').classList.add('warning');
-                    document.getElementById('timer').classList.remove('danger');
-                } else {
-                    progressFill.className = 'time-progress-fill';
-                    document.getElementById('timer').classList.remove('warning', 'danger');
-                }
-                
-                // Terminer le jeu si le temps est écoulé
-                if(remaining === 0) {
-                    clearInterval(timerInterval);
-                    showResults();
-                }
-            }, 100); // Mise à jour toutes les 100ms pour une animation fluide
-        }
+        // Masquer le badge de révision et générer une nouvelle question
+        document.getElementById('review-badge-container').innerHTML = '';
+        num1 = Math.floor(Math.random() * (maxTable - minTable + 1)) + minTable;
+        num2 = Math.floor(Math.random() * (maxTable - minTable + 1)) + minTable;
+        correctAnswer = num1 * num2;
 
-        function nextQuestion() {
-            // Vérifier si on a terminé les 15 questions
-            if (questionsAnswered >= totalQuestions) {
-                showResults();
-                return;
-            }
-            
-            // Masquer le badge de révision et générer une nouvelle question
-            document.getElementById('review-badge-container').innerHTML = '';
-            num1 = Math.floor(Math.random() * (maxTable - minTable + 1)) + minTable;
-            num2 = Math.floor(Math.random() * (maxTable - minTable + 1)) + minTable;
-            correctAnswer = num1 * num2;
+        document.getElementById('question').textContent = `${num1} × ${num2}`;
+        document.getElementById('progress').textContent =
+          `Question ${currentQuestion} / ${totalQuestions}`;
 
-            document.getElementById('question').textContent = `${num1} × ${num2}`;
-            document.getElementById('progress').textContent = `Question ${currentQuestion} / ${totalQuestions}`;
-            
-            const input = document.getElementById('answer-input');
-            input.value = '';
-            input.classList.remove('correct', 'incorrect', 'error');
+        const input = document.getElementById('answer-input');
+        input.value = '';
+        input.classList.remove('correct', 'incorrect', 'error');
+        document.getElementById('feedback').textContent = '';
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('skip-btn').disabled = false;
+        isProcessingAnswer = false;
+        input.focus();
+      }
+
+      function skipQuestion() {
+        if (isProcessingAnswer) return;
+
+        isProcessingAnswer = true;
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('skip-btn').disabled = true;
+
+        // Ajouter à la liste des questions passées
+        skippedQuestions.push({
+          num1: num1,
+          num2: num2,
+          answer: correctAnswer
+        });
+
+        // Enregistrer dans l'historique
+        answersHistory.push({
+          question: `${num1} × ${num2}`,
+          userAnswer: null,
+          correctAnswer: correctAnswer,
+          isCorrect: false,
+          skipped: true
+        });
+
+        document.getElementById('feedback').textContent = '⏭️ Question passée';
+        document.getElementById('feedback').style.color = '#f59e0b';
+
+        currentQuestion++;
+        questionsAnswered++;
+        setTimeout(nextQuestion, 800);
+      }
+
+      function checkAnswer() {
+        if (isProcessingAnswer) return;
+
+        const input = document.getElementById('answer-input');
+        const userAnswer = input.value.trim();
+
+        if (userAnswer === '') {
+          input.classList.add('error');
+          document.getElementById('feedback').textContent =
+            '⚠️ Entre une réponse !';
+          document.getElementById('feedback').style.color = '#ef4444';
+          setTimeout(() => {
+            input.classList.remove('error');
             document.getElementById('feedback').textContent = '';
-            document.getElementById('submit-btn').disabled = false;
-            document.getElementById('skip-btn').disabled = false;
-            isProcessingAnswer = false;
-            input.focus();
+          }, 1000);
+          input.focus();
+          return;
         }
 
-        function skipQuestion() {
-            if (isProcessingAnswer) return;
-            
-            isProcessingAnswer = true;
-            document.getElementById('submit-btn').disabled = true;
-            document.getElementById('skip-btn').disabled = true;
-            
-            // Ajouter à la liste des questions passées
-            skippedQuestions.push({
-                num1: num1,
-                num2: num2,
-                answer: correctAnswer
-            });
-            
-            // Enregistrer dans l'historique
-            answersHistory.push({
-                question: `${num1} × ${num2}`,
-                userAnswer: null,
-                correctAnswer: correctAnswer,
-                isCorrect: false,
-                skipped: true
-            });
-            
-            document.getElementById('feedback').textContent = '⏭️ Question passée';
-            document.getElementById('feedback').style.color = '#f59e0b';
-            
-            currentQuestion++;
-            questionsAnswered++;
-            setTimeout(nextQuestion, 800);
+        const userNum = parseInt(userAnswer);
+
+        if (isNaN(userNum)) {
+          input.classList.add('error');
+          document.getElementById('feedback').textContent =
+            "⚠️ Ce n'est pas un nombre !";
+          document.getElementById('feedback').style.color = '#ef4444';
+          setTimeout(() => {
+            input.classList.remove('error');
+            document.getElementById('feedback').textContent = '';
+          }, 1000);
+          input.focus();
+          return;
         }
 
-        function checkAnswer() {
-            if (isProcessingAnswer) return;
-            
-            const input = document.getElementById('answer-input');
-            const userAnswer = input.value.trim();
-            
-            if (userAnswer === '') {
-                input.classList.add('error');
-                document.getElementById('feedback').textContent = '⚠️ Entre une réponse !';
-                document.getElementById('feedback').style.color = '#ef4444';
-                setTimeout(() => {
-                    input.classList.remove('error');
-                    document.getElementById('feedback').textContent = '';
-                }, 1000);
-                input.focus();
-                return;
-            }
-            
-            const userNum = parseInt(userAnswer);
-            
-            if (isNaN(userNum)) {
-                input.classList.add('error');
-                document.getElementById('feedback').textContent = '⚠️ Ce n\'est pas un nombre !';
-                document.getElementById('feedback').style.color = '#ef4444';
-                setTimeout(() => {
-                    input.classList.remove('error');
-                    document.getElementById('feedback').textContent = '';
-                }, 1000);
-                input.focus();
-                return;
-            }
-            
-            isProcessingAnswer = true;
-            document.getElementById('submit-btn').disabled = true;
-            document.getElementById('skip-btn').disabled = true;
-            
-            const isCorrect = userNum === correctAnswer;
-            
-            if (isCorrect) {
-                correctAnswers++;
-            }
-            
-            // Enregistrer la réponse dans l'historique
-            answersHistory.push({
-                question: `${num1} × ${num2}`,
-                userAnswer: userNum,
-                correctAnswer: correctAnswer,
-                isCorrect: isCorrect,
-                skipped: false
-            });
-            
-            // Ne pas afficher si c'est correct ou faux - juste passer à la suite
-            document.getElementById('feedback').textContent = '✓ Réponse enregistrée';
-            document.getElementById('feedback').style.color = '#3b82f6';
-            
-            currentQuestion++;
-            questionsAnswered++;
-            setTimeout(nextQuestion, 500);
+        isProcessingAnswer = true;
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('skip-btn').disabled = true;
+
+        const isCorrect = userNum === correctAnswer;
+
+        if (isCorrect) {
+          correctAnswers++;
         }
 
-        function displayCorrection() {
-            const correctionList = document.getElementById('correction-list');
-            correctionList.innerHTML = '';
-            
-            answersHistory.forEach((answer, index) => {
-                const li = document.createElement('li');
-                li.className = 'correction-item';
-                
-                if (answer.skipped) {
-                    li.classList.add('skipped');
-                    li.innerHTML = `
+        // Enregistrer la réponse dans l'historique
+        answersHistory.push({
+          question: `${num1} × ${num2}`,
+          userAnswer: userNum,
+          correctAnswer: correctAnswer,
+          isCorrect: isCorrect,
+          skipped: false
+        });
+
+        // Ne pas afficher si c'est correct ou faux - juste passer à la suite
+        document.getElementById('feedback').textContent =
+          '✓ Réponse enregistrée';
+        document.getElementById('feedback').style.color = '#3b82f6';
+
+        currentQuestion++;
+        questionsAnswered++;
+        setTimeout(nextQuestion, 500);
+      }
+
+      function displayCorrection() {
+        const correctionList = document.getElementById('correction-list');
+        correctionList.innerHTML = '';
+
+        answersHistory.forEach((answer, index) => {
+          const li = document.createElement('li');
+          li.className = 'correction-item';
+
+          if (answer.skipped) {
+            li.classList.add('skipped');
+            li.innerHTML = `
                         <div class="correction-icon">⏭️</div>
                         <div class="correction-details">
                             <div class="correction-question">${answer.question} = ${answer.correctAnswer}</div>
                             <div class="correction-answer skipped-message">Question passée</div>
                         </div>
                     `;
-                } else if (answer.isCorrect) {
-                    li.classList.add('correct');
-                    li.innerHTML = `
+          } else if (answer.isCorrect) {
+            li.classList.add('correct');
+            li.innerHTML = `
                         <div class="correction-icon">✅</div>
                         <div class="correction-details">
                             <div class="correction-question">${answer.question} = ${answer.correctAnswer}</div>
                             <div class="correction-answer">Bonne réponse !</div>
                         </div>
                     `;
-                } else {
-                    li.classList.add('incorrect');
-                    li.innerHTML = `
+          } else {
+            li.classList.add('incorrect');
+            li.innerHTML = `
                         <div class="correction-icon">❌</div>
                         <div class="correction-details">
                             <div class="correction-question">${answer.question}</div>
@@ -619,77 +687,100 @@
                             </div>
                         </div>
                     `;
-                }
-                
-                correctionList.appendChild(li);
-            });
-        }
+          }
 
-        function showResults() {
-            clearInterval(timerInterval);
-            totalTimeSpent = Math.floor((Date.now() - startTime) / 1000) + totalTimeSpent;
-            
-            document.getElementById('game-area').classList.add('hidden');
-            document.getElementById('results').classList.remove('hidden');
-            
-            document.getElementById('score').textContent = `${correctAnswers} / ${totalQuestions}`;
-            document.getElementById('result-details').textContent = `⏱️ Temps total : ${formatTime(totalTimeSpent)}`;
-            
-            const resultEmoji = document.getElementById('result-emoji');
-            const resultMessage = document.getElementById('result-message');
-            
-            const percentage = (correctAnswers / totalQuestions) * 100;
-            
-            if(percentage === 100) {
-                resultEmoji.textContent = '🏆';
-                resultMessage.textContent = 'Parfait ! Tu es un vrai champion !';
-            } else if(percentage >= 80) {
-                resultEmoji.textContent = '🌟';
-                resultMessage.textContent = 'Excellent travail !';
-            } else if(percentage >= 60) {
-                resultEmoji.textContent = '👍';
-                resultMessage.textContent = 'Bien joué !';
-            } else {
-                resultEmoji.textContent = '💪';
-                resultMessage.textContent = 'Continue à t\'entraîner !';
-            }
-            
-            displayCorrection();
-            
-            const isNew = saveHighscore(playerName, correctAnswers, totalTimeSpent, currentDifficulty);
-            if(isNew) {
-                document.getElementById('new-highscore-message').classList.remove('hidden');
-            } else {
-                document.getElementById('new-highscore-message').classList.add('hidden');
-            }
-            
-            loadHighscoresToElement(currentDifficulty, document.getElementById('highscore-list'));
-        }
-
-        function resetGame() {
-            document.getElementById('results').classList.add('hidden');
-            document.getElementById('difficulty-selection').classList.remove('hidden');
-            document.getElementById('timer').classList.remove('warning', 'danger');
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('answer-input').addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') {
-                    e.preventDefault();
-                    checkAnswer();
-                }
-            });
-            
-            document.getElementById('answer-input').addEventListener('keydown', function(e) {
-                if(e.key === 'Enter' && e.repeat) {
-                    e.preventDefault();
-                }
-            });
-            
-            document.getElementById('player-name').addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') startGame();
-            });
+          correctionList.appendChild(li);
         });
+      }
+
+      function showResults() {
+        clearInterval(timerInterval);
+        totalTimeSpent =
+          Math.floor((Date.now() - startTime) / 1000) + totalTimeSpent;
+
+        document.getElementById('game-area').classList.add('hidden');
+        document.getElementById('results').classList.remove('hidden');
+
+        document.getElementById('score').textContent =
+          `${correctAnswers} / ${totalQuestions}`;
+        document.getElementById('result-details').textContent =
+          `⏱️ Temps total : ${formatTime(totalTimeSpent)}`;
+
+        const resultEmoji = document.getElementById('result-emoji');
+        const resultMessage = document.getElementById('result-message');
+
+        const percentage = (correctAnswers / totalQuestions) * 100;
+
+        if (percentage === 100) {
+          resultEmoji.textContent = '🏆';
+          resultMessage.textContent = 'Parfait ! Tu es un vrai champion !';
+        } else if (percentage >= 80) {
+          resultEmoji.textContent = '🌟';
+          resultMessage.textContent = 'Excellent travail !';
+        } else if (percentage >= 60) {
+          resultEmoji.textContent = '👍';
+          resultMessage.textContent = 'Bien joué !';
+        } else {
+          resultEmoji.textContent = '💪';
+          resultMessage.textContent = "Continue à t'entraîner !";
+        }
+
+        displayCorrection();
+
+        const isNew = saveHighscore(
+          playerName,
+          correctAnswers,
+          totalTimeSpent,
+          currentDifficulty
+        );
+        if (isNew) {
+          document
+            .getElementById('new-highscore-message')
+            .classList.remove('hidden');
+        } else {
+          document
+            .getElementById('new-highscore-message')
+            .classList.add('hidden');
+        }
+
+        loadHighscoresToElement(
+          currentDifficulty,
+          document.getElementById('highscore-list')
+        );
+      }
+
+      function resetGame() {
+        document.getElementById('results').classList.add('hidden');
+        document
+          .getElementById('difficulty-selection')
+          .classList.remove('hidden');
+        document.getElementById('timer').classList.remove('warning', 'danger');
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        document
+          .getElementById('answer-input')
+          .addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              checkAnswer();
+            }
+          });
+
+        document
+          .getElementById('answer-input')
+          .addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && e.repeat) {
+              e.preventDefault();
+            }
+          });
+
+        document
+          .getElementById('player-name')
+          .addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') startGame();
+          });
+      });
     </script>
-</body>
+  </body>
 </html>

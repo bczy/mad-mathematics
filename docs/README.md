@@ -37,11 +37,13 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
 Les guidelines suivantes seront ajoutées au fur et à mesure :
 
 ### Tests (futur)
+
 - `INTEGRATION_TESTING.md` - Tests d'intégration pour les pages HTML complètes
 - `E2E_TESTING.md` - Tests end-to-end avec Playwright
 - `VISUAL_REGRESSION.md` - Tests de régression visuelle
 
 ### Développement (futur)
+
 - `ARCHITECTURE.md` - Décisions d'architecture (ADR)
 - `ACCESSIBILITY.md` - Standards d'accessibilité WCAG 2.1
 - `DEPLOYMENT.md` - Procédures de déploiement GitHub Pages

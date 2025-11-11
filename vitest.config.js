@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
@@ -9,11 +9,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
       include: ['shared.js'],
-      exclude: [
-        'tests/**',
-        '*.config.js',
-        '*.html'
-      ],
+      exclude: ['tests/**', '*.config.js', '*.html'],
       // Coverage thresholds - FAIL if below 90%
       statements: 90,
       branches: 90,
@@ -26,4 +22,4 @@ export default defineConfig({
     // Default timeout
     testTimeout: 5000
   }
-})
+});
