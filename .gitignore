@@ -1,6 +1,19 @@
 # Dependencies
 node_modules/
 
+# npm (legacy - keep for reference)
+package-lock.json
+npm-debug.log*
+
+# Yarn v4 (Berry)
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 # Test coverage
 coverage/
 .nyc_output/

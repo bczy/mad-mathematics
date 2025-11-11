@@ -108,6 +108,7 @@ Pour des guidelines détaillées, consultez le dossier [`docs/`](../docs/) :
 
 - **Documentation:** [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md) - Comment gérer la documentation (demander autorisation, organisation, workflows)
 - **Tests unitaires:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests pour shared.js avec Vitest (TDD, coverage 90%+)
+- **Gestion des dépendances:** [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md) - Migration npm → Yarn v4, commandes et troubleshooting
 
 ### Revues et Audits
 
@@ -121,23 +122,47 @@ Voir [`docs/README.md`](../docs/README.md) pour la liste complète et les guidel
 
 ## Build, Test, and Lint Commands
 
+### Package Manager
+
+- **Gestionnaire** : Yarn v4 (Modern/Berry) avec Plug'n'Play
+- **Lockfile** : `yarn.lock`
+- **Installation** : `yarn install`
+- **CI/CD** : `yarn install --immutable`
+- **Documentation** : [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md)
+
 ### Build
 
 No build step required. This is a static website with vanilla HTML/CSS/JS.
 
 ### Testing
 
-Tests are configured but not yet implemented. See [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) for details.
+Tests are implemented using Vitest. See [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) for details.
 
 - Test framework: Vitest
-- To install test dependencies: `npm install -D vitest @vitest/ui @vitest/coverage-v8 vitest-localstorage-mock jsdom`
-- To run tests (when implemented): `npm test`
-- To run with coverage: `npm run test:coverage`
-- To run with UI: `npm run test:ui`
+- To run tests: `yarn test` (watch mode) or `yarn test:run` (once)
+- To run with coverage: `yarn test:coverage`
+- To run with UI: `yarn test:ui`
+
+**Installation (first time):**
+
+```bash
+# Activer Corepack (une seule fois par machine)
+corepack enable
+
+# Installer les dépendances
+yarn install
+```
 
 ### Linting
 
-No linter currently configured. Follow existing code style:
+ESLint is configured for code quality checks:
+
+- Check code: `yarn lint`
+- Auto-fix issues: `yarn lint:fix`
+- Format code: `yarn format`
+- Check formatting: `yarn format:check`
+
+**Code style:**
 
 - Use 2-space indentation
 - Use `const`/`let` (not `var`)
@@ -248,5 +273,5 @@ Then open `http://localhost:8000` in your browser.
 ## Notes
 
 - This is a pure vanilla JS project with no build step - keep it simple and avoid adding framework dependencies
-- `yarn.lock` exists but project has no dependencies - avoid modifications unless absolutely necessary
+- Uses Yarn v4 (Berry) with Plug'n'Play for dependency management - see [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md) for details
 - All documentation updates require explicit approval (see [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md))

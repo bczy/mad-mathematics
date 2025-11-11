@@ -22,6 +22,14 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
   - Coverage cible: 90%+
   - Approche: TDD (Test-Driven Development)
 
+### 📦 Gestion des Dépendances
+
+- **[YARN_MIGRATION.md](./YARN_MIGRATION.md)** - Migration npm → Yarn v4 et guide d'utilisation
+  - Version: Yarn v4 (Modern/Berry)
+  - Mode: Plug'n'Play (PnP)
+  - Configuration et troubleshooting
+  - Tableau de correspondance npm ↔ yarn
+
 ### 📝 Processus et Méthodologie
 
 - **[DOCUMENTATION_GUIDELINES.md](./DOCUMENTATION_GUIDELINES.md)** - Comment gérer la documentation
@@ -29,6 +37,11 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
   - Organisation des fichiers dans `docs/`
   - Synchronisation avec `.github/copilot-instructions.md`
   - Templates de demande et workflows
+
+- **[COMMIT_GUIDELINES.md](./COMMIT_GUIDELINES.md)** - Conventional Commits et bonnes pratiques
+  - Format: `type(scope): description`
+  - Utilisation de Commitizen
+  - Validation automatique avec commitlint
 
 ---
 
@@ -74,8 +87,10 @@ Les guidelines suivantes seront ajoutées au fur et à mesure :
 ```
 docs/
 ├── README.md                        # Ce fichier (index)
+├── COMMIT_GUIDELINES.md             # Conventional Commits
 ├── DOCUMENTATION_GUIDELINES.md      # Gestion de la documentation
 ├── TESTING_GUIDELINES.md            # Tests unitaires
+├── YARN_MIGRATION.md                # Migration npm → Yarn v4
 └── [futurs fichiers...]             # Guidelines à venir
 ```
 

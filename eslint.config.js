@@ -5,7 +5,9 @@ export default [
       'coverage/**',
       'dist/**',
       'build/**',
-      '.husky/**'
+      '.husky/**',
+      '.yarn/**',
+      '.pnp.*'
     ]
   },
   {
