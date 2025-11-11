@@ -99,6 +99,115 @@ Voir [`docs/README.md`](../docs/README.md) pour la liste complète et les guidel
 
 ---
 
+## Build, Test, and Lint Commands
+
+### Build
+No build step required. This is a static website with vanilla HTML/CSS/JS.
+
+### Testing
+Tests are configured but not yet implemented. See [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) for details.
+- Test framework: Vitest
+- To install test dependencies: `npm install -D vitest @vitest/ui @vitest/coverage-v8 vitest-localstorage-mock jsdom`
+- To run tests (when implemented): `npm test`
+- To run with coverage: `npm run test:coverage`
+- To run with UI: `npm run test:ui`
+
+### Linting
+No linter currently configured. Follow existing code style:
+- Use 2-space indentation
+- Use `const`/`let` (not `var`)
+- Use semicolons
+- Use single quotes for strings
+- Keep functions small and focused
+
+### Local Development Server
+```bash
+# Option 1: Python
+python3 -m http.server 8000
+
+# Option 2: Node.js
+npx serve .
+```
+
+Then open `http://localhost:8000` in your browser.
+
+## Security Guidelines
+
+### Code Security
+- **Never commit secrets** or API keys to the repository
+- **Validate all user input** before using it (e.g., player names, scores)
+- **Sanitize localStorage data** when reading to prevent injection attacks
+- **Use `textContent` instead of `innerHTML`** when displaying user-generated content
+- **Avoid `eval()` and similar dangerous functions**
+
+### Data Privacy
+- All data is stored locally in browser localStorage - no server-side storage
+- Player names and scores never leave the user's device
+- No tracking, analytics, or third-party scripts
+
+### Dependencies
+- Avoid adding new dependencies unless absolutely necessary
+- If you must add a dependency, check for known vulnerabilities
+- Keep the project lightweight and framework-free
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue: Highscores not saving**
+- Check browser DevTools → Application → Local Storage
+- Ensure localStorage is enabled in the browser
+- Verify the `level` parameter matches the expected format in `shared.js`
+
+**Issue: Timer not working correctly**
+- Check if `startTime` is being set correctly in the game logic
+- Verify `setInterval` is being cleared properly on game end
+- Look for race conditions between timer updates and game completion
+
+**Issue: Questions are invalid (negative results, non-integer division)**
+- Review question generation logic
+- For subtraction: ensure `num1 >= num2`
+- For division: ensure `num1 = num2 × quotient` before presenting question
+
+**Issue: Responsive layout broken**
+- Check if changes respect `@media (max-width: 768px)` breakpoints
+- Verify grid layouts degrade properly to single column
+- Test on mobile viewport in DevTools
+
+**Issue: GitHub Pages deployment not updating**
+- Check GitHub Actions workflow status in repository
+- Verify changes are pushed to `main` branch
+- Check `.github/workflows/static.yml` is valid
+- Wait up to 5 minutes for deployment to complete
+
+### Debugging Tools
+- **Browser DevTools Console**: Check for JavaScript errors
+- **DevTools Network tab**: Verify all resources load correctly
+- **DevTools Application tab**: Inspect localStorage data
+- **DevTools Device Toolbar**: Test responsive layouts
+- **GitHub Actions logs**: Check deployment status
+
+## Tool Preferences and Constraints
+
+### Required Tools
+- **Vanilla JavaScript only** - no frameworks (React, Vue, Angular, etc.)
+- **No build tools** - no webpack, vite, parcel for production code
+- **No preprocessors** - no TypeScript, Sass, Less for production code
+- **No package dependencies** for production - keep `package.json` dev-only
+
+### Allowed Tools (Development Only)
+- Test frameworks (Vitest) for testing `shared.js`
+- Local development servers for live reload
+- Linters/formatters if needed (but follow existing style)
+
+### Coding Principles
+1. **Simplicity first** - prefer simple, readable code over clever solutions
+2. **Avoid premature optimization** - focus on correctness, then performance
+3. **Minimal changes** - don't refactor working code unless fixing a bug
+4. **Progressive enhancement** - ensure core functionality works without JavaScript
+5. **Accessibility** - use semantic HTML, ARIA labels, keyboard navigation
+
 ## Notes
 - This is a pure vanilla JS project with no build step - keep it simple and avoid adding framework dependencies
 - `yarn.lock` exists but project has no dependencies - avoid modifications unless absolutely necessary
+- All documentation updates require explicit approval (see [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md))
