@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { MultiplicationPage } from './pages/MultiplicationPage.js';
-import highscoresFixtures from './fixtures/highscores.json' assert { type: 'json' };
+import highscoresFixtures from './fixtures/highscores.json' with { type: 'json' };
 
 /**
  * E2E Tests for Multiplication Game Mode
@@ -62,23 +62,20 @@ test.describe('Multiplication Game - Complete Flow', () => {
     expect(finalScore).toBeLessThan(15);
   });
 
-  test('should handle skip functionality', async ({ page }) => {
+  test('should handle skip functionality', async ({ page: _page }) => {
     await multiplicationPage.startGame('Skipper', 'easy');
 
     // Skip first question
     await multiplicationPage.skipQuestion();
-    await page.waitForTimeout(1000);
 
     // Answer second question correctly
     const correctAnswer = await multiplicationPage.getCorrectAnswer();
     await multiplicationPage.answerQuestion(correctAnswer);
-    await page.waitForTimeout(1000);
 
     // Complete remaining questions
     for (let i = 0; i < 13; i++) {
       const answer = await multiplicationPage.getCorrectAnswer();
       await multiplicationPage.answerQuestion(answer);
-      await page.waitForTimeout(600);
     }
 
     await multiplicationPage.waitForResults();
@@ -97,7 +94,6 @@ test.describe('Multiplication Game - Complete Flow', () => {
 
       const correctAnswer = await multiplicationPage.getCorrectAnswer();
       await multiplicationPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(600);
     }
 
     await multiplicationPage.waitForResults();
@@ -112,13 +108,11 @@ test.describe('Multiplication Game - Input Validation', () => {
     await multiplicationPage.clearLocalStorage();
   });
 
-  test('should accept correct answer', async ({ page }) => {
+  test('should accept correct answer', async ({ page: _page }) => {
     await multiplicationPage.startGame('TestUser', 'easy');
 
     const correctAnswer = await multiplicationPage.getCorrectAnswer();
     await multiplicationPage.answerQuestion(correctAnswer);
-
-    await page.waitForTimeout(600);
 
     // Verify we can progress to next question
     const secondQuestion = await multiplicationPage.getQuestionText();
@@ -139,13 +133,11 @@ test.describe('Multiplication Game - Input Validation', () => {
     expect(secondQuestion).toBeTruthy();
   });
 
-  test('should support Enter key to submit answer', async ({ page }) => {
+  test('should support Enter key to submit answer', async ({ page: _page }) => {
     await multiplicationPage.startGame('TestUser', 'easy');
 
     const correctAnswer = await multiplicationPage.getCorrectAnswer();
     await multiplicationPage.answerQuestionWithEnter(correctAnswer);
-
-    await page.waitForTimeout(600);
 
     // Verify we progressed to next question
     const secondQuestion = await multiplicationPage.getQuestionText();
@@ -163,18 +155,16 @@ test.describe('Multiplication Game - Input Validation', () => {
     expect(feedback).toContain('réponse');
   });
 
-  test('should clear input after each question', async ({ page }) => {
+  test('should clear input after each question', async ({ page: _page }) => {
     await multiplicationPage.startGame('TestUser', 'easy');
 
     const correctAnswer = await multiplicationPage.getCorrectAnswer();
     await multiplicationPage.answerQuestion(correctAnswer);
-
-    await page.waitForTimeout(600);
     const inputValue = await multiplicationPage.answerInput.inputValue();
     expect(inputValue).toBe('');
   });
 
-  test('should accept only numeric input', async ({ page }) => {
+  test('should accept only numeric input', async ({ page: _page }) => {
     await multiplicationPage.startGame('TestUser', 'easy');
 
     // Input type="number" prevents non-numeric input at browser level
@@ -211,7 +201,17 @@ test.describe('Multiplication Game - Timer and Time Limits', () => {
         return window.getComputedStyle(el).width;
       });
 
-    await page.waitForTimeout(2000); // Wait 2 seconds
+    // Wait for progress bar to update (it updates every second)
+    await page.waitForFunction(
+      (initialWidth) => {
+        const currentWidth = window.getComputedStyle(
+          document.querySelector('.time-progress-fill')
+        ).width;
+        return currentWidth !== initialWidth;
+      },
+      initialWidth,
+      { timeout: 3000 }
+    );
 
     const updatedWidth = await page
       .locator('.time-progress-fill')
@@ -239,7 +239,7 @@ test.describe('Multiplication Game - Timer and Time Limits', () => {
     expect(finalTime).toMatch(/\d+/); // Contains numbers
   });
 
-  test.skip('should end game when time runs out', async ({ page }) => {
+  test.skip('should end game when time runs out', async ({ page: _page }) => {
     // This test is skipped as manipulating the timer requires internal game state access
     // The timer functionality is validated through the complete game flow instead
     await multiplicationPage.startGame('Timeout', 'easy');
@@ -247,10 +247,10 @@ test.describe('Multiplication Game - Timer and Time Limits', () => {
     // Manipulate timer to expire
     await multiplicationPage.setStartTimeOffset(65); // Move start time 65s back
 
-    await page.waitForTimeout(2000); // Wait for timer check
-
-    // Should show results
-    await expect(multiplicationPage.resultsScreen).toBeVisible();
+    // Wait for results screen to appear (timer should trigger game end)
+    await expect(multiplicationPage.resultsScreen).toBeVisible({
+      timeout: 3000
+    });
   });
 });
 
@@ -282,7 +282,9 @@ test.describe('Multiplication Game - Player Name Persistence', () => {
     expect(inputValue).toBe('SavedPlayer');
   });
 
-  test('should persist player name across multiple games', async ({ page }) => {
+  test('should persist player name across multiple games', async ({
+    page: _page
+  }) => {
     await multiplicationPage.playCompleteGame(
       'ConsistentPlayer',
       'easy',
@@ -296,14 +298,13 @@ test.describe('Multiplication Game - Player Name Persistence', () => {
     expect(inputValue).toBe('ConsistentPlayer');
   });
 
-  test('should update player name when changed', async ({ page }) => {
+  test('should update player name when changed', async ({ page: _page }) => {
     await multiplicationPage.startGame('FirstName', 'easy');
 
     // Complete the game quickly to get to results
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiplicationPage.getCorrectAnswer();
       await multiplicationPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(600);
     }
 
     await multiplicationPage.waitForResults();
@@ -471,7 +472,7 @@ test.describe('Multiplication Game - Difficulty Levels', () => {
   });
 
   test('should complete game on Apprenti difficulty (tables 2-5)', async ({
-    page
+    page: _page
   }) => {
     await multiplicationPage.startGame('Apprenti1', 'easy');
 
@@ -491,12 +492,11 @@ test.describe('Multiplication Game - Difficulty Levels', () => {
 
       const answer = await multiplicationPage.getCorrectAnswer();
       await multiplicationPage.answerQuestion(answer);
-      await page.waitForTimeout(600);
     }
   });
 
   test('should complete game on Sorcier difficulty (tables 2-9)', async ({
-    page
+    page: _page
   }) => {
     await multiplicationPage.startGame('Sorcier1', 'medium');
 
@@ -516,12 +516,11 @@ test.describe('Multiplication Game - Difficulty Levels', () => {
 
       const answer = await multiplicationPage.getCorrectAnswer();
       await multiplicationPage.answerQuestion(answer);
-      await page.waitForTimeout(600);
     }
   });
 
   test('should complete game on Archimage difficulty (tables 2-12)', async ({
-    page
+    page: _page
   }) => {
     await multiplicationPage.startGame('Archimage1', 'hard');
 
@@ -541,7 +540,6 @@ test.describe('Multiplication Game - Difficulty Levels', () => {
 
       const answer = await multiplicationPage.getCorrectAnswer();
       await multiplicationPage.answerQuestion(answer);
-      await page.waitForTimeout(600);
     }
   });
 
@@ -602,7 +600,7 @@ test.describe('Multiplication Game - Corrections and Review', () => {
   });
 
   // SKIP: Question skip currently has timing issues - needs investigation
-  test.skip('should show skipped questions', async ({ page }) => {
+  test.skip('should show skipped questions', async ({ page: _page }) => {
     await multiplicationPage.startGame('Skipper', 'easy');
 
     // Answer all 15 questions: skip 3, answer 12 correctly
@@ -615,7 +613,6 @@ test.describe('Multiplication Game - Corrections and Review', () => {
         const answer = await multiplicationPage.getCorrectAnswer();
         await multiplicationPage.answerQuestion(answer);
       }
-      await page.waitForTimeout(600);
     }
 
     await multiplicationPage.waitForResults();

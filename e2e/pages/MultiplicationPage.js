@@ -1,3 +1,8 @@
+/**
+ * Page Object Model for the Multiplication Game
+ * Provides methods to interact with the multiplication game page for E2E testing
+ */
+
 export class MultiplicationPage {
   /** @param {import('@playwright/test').Page} page */
   constructor(page) {
@@ -67,15 +72,51 @@ export class MultiplicationPage {
   async answerQuestion(answer) {
     await this.answerInput.fill(String(answer));
     await this.submitButton.click();
+
+    // Wait for next question to load by checking if input was cleared
+    // Input is cleared automatically when moving to next question
+    await this.page
+      .waitForFunction(
+        () => {
+          const input = document.querySelector('#answer-input');
+          return input?.value === '' || !input; // Input cleared or results shown
+        },
+        { timeout: 2000 }
+      )
+      .catch(() => {
+        // Timeout is okay - continue anyway
+      });
   }
 
   async answerQuestionWithEnter(answer) {
     await this.answerInput.fill(String(answer));
     await this.answerInput.press('Enter');
+
+    // Wait for next question (input cleared)
+    await this.page
+      .waitForFunction(
+        () => {
+          const input = document.querySelector('#answer-input');
+          return input?.value === '' || !input;
+        },
+        { timeout: 2000 }
+      )
+      .catch(() => {});
   }
 
   async skipQuestion() {
     await this.skipButton.click();
+
+    // Wait for next question to load
+    await this.page
+      .waitForFunction(
+        () => {
+          const input = document.querySelector('#answer-input');
+          return input?.value === '' || !input;
+        },
+        { timeout: 2000 }
+      )
+      .catch(() => {});
   }
 
   async waitForResults() {
@@ -86,28 +127,6 @@ export class MultiplicationPage {
     const scoreText = await this.page.locator('#score').textContent();
     const match = scoreText?.match(/(\d+)\s*\/\s*\d+/);
     return match ? parseInt(match[1]) : 0;
-  }
-
-  async getCurrentScore() {
-    // Wait a bit for the game state to update
-    await this.page.waitForTimeout(300);
-
-    // Get score from the global state exposed by the game
-    const score = await this.page.evaluate(() => {
-      // Try to access the correctAnswers variable
-      if (typeof window.correctAnswers !== 'undefined') {
-        return window.correctAnswers;
-      }
-      // Fallback: try to count correct answers from history
-      if (
-        typeof window.answersHistory !== 'undefined' &&
-        Array.isArray(window.answersHistory)
-      ) {
-        return window.answersHistory.filter((a) => a.isCorrect).length;
-      }
-      return 0;
-    });
-    return score;
   }
 
   async getFinalTime() {
@@ -201,18 +220,14 @@ export class MultiplicationPage {
       }
 
       await this.answerQuestion(answerToUse);
-      await this.page.waitForTimeout(600); // Wait for next question
     }
 
     await this.waitForResults();
   }
 
   async setStartTimeOffset(secondsBack) {
-    // Move startTime back by secondsBack seconds so timer expires
-    await this.page.evaluate((s) => {
-      if (window.startTime) {
-        window.startTime = Date.now() - s * 1000;
-      }
-    }, secondsBack);
+    // Use Playwright's clock manipulation instead of internal state
+    await this.page.clock.install({ time: Date.now() });
+    await this.page.clock.tick(secondsBack * 1000);
   }
 }
