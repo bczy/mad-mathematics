@@ -108,6 +108,7 @@ Pour des guidelines détaillées, consultez le dossier [`docs/`](../docs/) :
 
 - **Documentation:** [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md) - Comment gérer la documentation (demander autorisation, organisation, workflows)
 - **Tests unitaires:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests pour shared.js avec Vitest (TDD, coverage 90%+)
+- **Tests E2E:** [`e2e/README.md`](../e2e/README.md) - Tests Playwright pour mode Multiplication (46 tests, 89% réussite)
 
 ### Revues et Audits
 
@@ -127,9 +128,21 @@ No build step required. This is a static website with vanilla HTML/CSS/JS.
 
 ### Testing
 
-Tests are configured but not yet implemented. See [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) for details.
+E2E tests are fully implemented with Playwright. Unit tests are configured but not yet implemented.
+
+**E2E Tests (Playwright):**
+
+- Framework: Playwright 1.38.0
+- Coverage: 46 tests for Multiplication mode (89% pass rate)
+- Browsers: Chromium (tested), Firefox/WebKit (configured)
+- To run E2E tests: `npm run test:e2e`
+- To view report: `npm run test:e2e:report`
+- See [`e2e/README.md`](../e2e/README.md) for complete guide
+
+**Unit Tests (Vitest):**
 
 - Test framework: Vitest
+- See [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) for details
 - To install test dependencies: `npm install -D vitest @vitest/ui @vitest/coverage-v8 vitest-localstorage-mock jsdom`
 - To run tests (when implemented): `npm test`
 - To run with coverage: `npm run test:coverage`

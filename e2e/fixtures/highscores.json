@@ -1,0 +1,61 @@
+{
+  "empty": [],
+  "partial": [
+    {
+      "name": "Alice",
+      "score": 12,
+      "time": 45,
+      "date": "2025-11-01T10:00:00.000Z"
+    },
+    {
+      "name": "Bob",
+      "score": 10,
+      "time": 50,
+      "date": "2025-11-02T10:00:00.000Z"
+    }
+  ],
+  "full": [
+    {
+      "name": "Champion",
+      "score": 15,
+      "time": 30,
+      "date": "2025-11-01T10:00:00.000Z"
+    },
+    {
+      "name": "Expert",
+      "score": 14,
+      "time": 35,
+      "date": "2025-11-02T10:00:00.000Z"
+    },
+    {
+      "name": "Maître",
+      "score": 13,
+      "time": 40,
+      "date": "2025-11-03T10:00:00.000Z"
+    },
+    {
+      "name": "Pro",
+      "score": 12,
+      "time": 45,
+      "date": "2025-11-04T10:00:00.000Z"
+    },
+    {
+      "name": "Novice",
+      "score": 11,
+      "time": 50,
+      "date": "2025-11-05T10:00:00.000Z"
+    }
+  ],
+  "newRecord": {
+    "name": "TestPlayer",
+    "score": 15,
+    "time": 25,
+    "date": "2025-11-11T10:00:00.000Z"
+  },
+  "notInTop5": {
+    "name": "TestPlayer",
+    "score": 8,
+    "time": 55,
+    "date": "2025-11-11T10:00:00.000Z"
+  }
+}
