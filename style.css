@@ -258,7 +258,39 @@ input[type='number'] {
   .highscores-container {
     grid-template-columns: 1fr;
   }
+  .container {
+    padding: 16px;
+    margin: 12px;
+  }
 }
+
+/* Responsive breakpoint for small tablets and large phones */
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+    margin: 8px;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  input[type='text'],
+  input[type='number'] {
+    font-size: 16px;
+    padding: 8px 10px;
+  }
+}
+
+/* Responsive breakpoint for small mobile devices */
+@media (max-width: 360px) {
+  .container {
+    padding: 10px;
+    margin: 4px;
+  }
+  h1 {
+    font-size: 22px;
+  }
+}
+
 .special-bg .results .new-highscore span,
 .special-bg .results .new-highscore strong {
   color: inherit;
