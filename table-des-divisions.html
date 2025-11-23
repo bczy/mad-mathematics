@@ -6,127 +6,114 @@
     <title>École de Magie des Divisions ✨</title>
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <div class="container">
+  <body class="magic-theme">
+    <div class="container glass-container">
       <a class="home-link" href="index.html">← Accueil</a>
-      <h1>➗ École de Magie des Divisions</h1>
-      <p class="subtitle">Entraîne-toi aux divisions (quotient entier)</p>
+      <h1>➗ École de Magie des Divisions ✨</h1>
+      <p class="subtitle">Entraîne-toi à diviser comme un magicien !</p>
 
+      <!-- Écran de sélection de difficulté -->
       <div id="difficulty-selection" class="difficulty-selection">
-        <div class="name-form">
-          <label for="player-name">✨ Entre ton nom de sorcier :</label>
-          <input
-            type="text"
-            id="player-name"
-            placeholder="Ton nom"
-            maxlength="20"
-          />
-        </div>
-
-        <div class="highscores-container">
-          <h2>🏆 Hall des Grands Mages (Divisions)</h2>
-          <div class="hs-card">
-            <h3>Facile</h3>
-            <ul id="highscore-facile" class="highscore-list"></ul>
-          </div>
-          <div class="hs-card">
-            <h3>Moyen</h3>
-            <ul id="highscore-moyen" class="highscore-list"></ul>
-          </div>
-          <div class="hs-card">
-            <h3>Difficile</h3>
-            <ul id="highscore-difficile" class="highscore-list"></ul>
-          </div>
-          <div class="hs-card">
-            <h3>Super-Multi</h3>
-            <ul id="highscore-super-multi" class="highscore-list"></ul>
-          </div>
-        </div>
-
-        <p class="game-mode-subtitle">Choisis ton niveau</p>
+        <h2>Choisis ton niveau de magie</h2>
+        <input
+          type="text"
+          id="player-name"
+          placeholder="Entre ton prénom"
+          class="player-name-input"
+        />
         <div class="difficulty-buttons">
-          <button class="difficulty-btn" onclick="startGame('facile')">
-            🌟 Apprenti (30s)
+          <button onclick="setDifficulty('facile')" class="difficulty-btn">
+            <span class="level-icon">⭐</span>
+            <span class="level-name">Apprenti</span>
+            <span class="level-desc">30 secondes</span>
           </button>
-          <button class="difficulty-btn" onclick="startGame('moyen')">
-            🔮 Confirmé (10s)
+          <button onclick="setDifficulty('moyen')" class="difficulty-btn">
+            <span class="level-icon">⭐⭐</span>
+            <span class="level-name">Confirmé</span>
+            <span class="level-desc">10 secondes</span>
           </button>
-          <button class="difficulty-btn" onclick="startGame('difficile')">
-            ⚡ Grand (5s)
-          </button>
-          <button class="difficulty-btn" onclick="startGame('super-multi')">
-            💫 Super-Multi
+          <button onclick="setDifficulty('difficile')" class="difficulty-btn">
+            <span class="level-icon">⭐⭐⭐</span>
+            <span class="level-name">Grand Mage</span>
+            <span class="level-desc">5 secondes</span>
           </button>
         </div>
       </div>
 
-      <div id="game-area" class="game-area hidden">
+      <!-- Zone de jeu -->
+      <div id="game-area" class="game-area special-bg hidden">
         <div class="progress" id="progress">Question 1 / 20</div>
         <div class="timer" id="timer">30</div>
-        <div class="question" id="question">12 ÷ 3 = ?</div>
+        <div class="question" id="question">5 + 7 = ?</div>
         <div class="feedback" id="feedback"></div>
-        <input type="number" id="answer-input" placeholder="?" />
-        <br />
-        <button class="submit-btn" onclick="checkAnswer()">
-          🪄 Lancer le sort !
-        </button>
+        <input
+          type="number"
+          id="answer-input"
+          placeholder="?"
+          autocomplete="off"
+        />
+        <div class="action-buttons">
+          <button onclick="checkAnswer()" class="submit-btn" id="submit-btn">
+            ✨ Valider
+          </button>
+        </div>
       </div>
 
+      <!-- Écran de résultats -->
       <div id="results" class="results hidden">
-        <div class="emoji" id="result-emoji">🎉</div>
-        <div class="result-message" id="result-message">Félicitations !</div>
-        <div class="score" id="score">18 / 20</div>
-        <div class="result-details" id="result-details"></div>
-        <button class="submit-btn" onclick="resetGame()">
-          🔄 Nouvelle partie
-        </button>
+        <div class="special-bg">
+          <div class="result-emoji" id="result-emoji">🎉</div>
+          <h2 id="result-message">Bravo !</h2>
+          <div class="score-display">
+            <div class="score-label">Score</div>
+            <div class="score-value" id="score">0 / 20</div>
+          </div>
+          <div class="result-details" id="result-details"></div>
+
+          <div id="new-highscore-message" class="new-highscore hidden">
+            🏆 Nouveau record ! Tu es dans le top 5 ! 🏆
+          </div>
+
+          <!-- Tableau des highscores -->
+          <div class="highscores-container">
+            <h3>🏆 Meilleurs Scores 🏆</h3>
+            <ul class="highscore-list" id="highscore-list"></ul>
+          </div>
+
+          <button onclick="resetGame()" class="submit-btn">🔄 Rejouer</button>
+        </div>
       </div>
     </div>
 
     <script src="shared.js"></script>
     <script>
-      // Division : générer des paires (dividende, diviseur) tels que le dividende soit divisible par le diviseur
       let currentQuestion = 0;
       let correctAnswers = 0;
-      let totalQuestions = 20;
+      const totalQuestions = 20;
       let timeLimit = 30;
       let timeRemaining = 30;
       let timerInterval;
-      let dividend, divisor, correctAnswer;
+      let num1, num2, correctAnswer;
       let difficulty;
       let playerName = '';
       let totalTimeSpent = 0;
       let isProcessingAnswer = false;
 
-      window.addEventListener('DOMContentLoaded', function () {
-        loadPlayerName('player-name');
-        loadHighscoresToElement(
-          'facile',
-          document.getElementById('highscore-facile')
-        );
-        loadHighscoresToElement(
-          'moyen',
-          document.getElementById('highscore-moyen')
-        );
-        loadHighscoresToElement(
-          'difficile',
-          document.getElementById('highscore-difficile')
-        );
-        loadHighscoresToElement(
-          'super-multi',
-          document.getElementById('highscore-super-multi')
-        );
-      });
+      loadPlayerName('player-name');
 
-      function startGame(level) {
-        playerName = document.getElementById('player-name').value.trim();
-        if (playerName === '') {
-          alert('⚠️ Entre ton nom de sorcier pour commencer !');
-          document.getElementById('player-name').focus();
+      function setDifficulty(level) {
+        const nameInput = document.getElementById('player-name');
+        playerName = nameInput.value.trim();
+
+        if (!playerName) {
+          nameInput.classList.add('error');
+          setTimeout(() => nameInput.classList.remove('error'), 500);
           return;
         }
+
         savePlayerName(playerName);
         difficulty = level;
+
         switch (level) {
           case 'facile':
             timeLimit = 30;
@@ -137,16 +124,17 @@
           case 'difficile':
             timeLimit = 5;
             break;
-          case 'super-multi':
-            timeLimit = 30;
-            break;
         }
+        startGame();
+      }
+
+      function startGame() {
+        document.getElementById('difficulty-selection').classList.add('hidden');
+        document.getElementById('game-area').classList.remove('hidden');
         currentQuestion = 0;
         correctAnswers = 0;
         totalTimeSpent = 0;
         isProcessingAnswer = false;
-        document.getElementById('difficulty-selection').classList.add('hidden');
-        document.getElementById('game-area').classList.remove('hidden');
         nextQuestion();
       }
 
@@ -156,31 +144,53 @@
           showResults();
           return;
         }
-        // Générer un diviseur puis un dividende multiple de ce diviseur
-        divisor = Math.floor(Math.random() * 9) + 2; // 2..10
-        const factor = Math.floor(Math.random() * 12) + 1; // 1..12
-        dividend = divisor * factor;
-        correctAnswer = factor; // quotient entier
-        document.getElementById('question').textContent =
-          `${dividend} ÷ ${divisor} = ?`;
+
+        // Générer divisions avec quotient entier
+        // num2 est le diviseur (2-10), num1 est le dividende (multiple de num2)
+        num2 = Math.floor(Math.random() * 9) + 2; // diviseur: 2-10
+        const quotient = Math.floor(Math.random() * 12) + 1; // quotient: 1-12
+        num1 = num2 * quotient; // dividende = diviseur × quotient
+        correctAnswer = quotient;
+
+        document.getElementById('question').textContent = `${num1} ÷ ${num2}`;
         document.getElementById('progress').textContent =
           `Question ${currentQuestion} / ${totalQuestions}`;
-        document.getElementById('answer-input').value = '';
+
+        const input = document.getElementById('answer-input');
+        input.value = '';
+        input.classList.remove('correct', 'incorrect', 'error');
         document.getElementById('feedback').textContent = '';
+        document.getElementById('submit-btn').disabled = false;
         isProcessingAnswer = false;
+
         timeRemaining = timeLimit;
         document.getElementById('timer').textContent = timeRemaining;
+        document.getElementById('timer').classList.remove('warning', 'danger');
+
         clearInterval(timerInterval);
         timerInterval = setInterval(updateTimer, 1000);
+        input.focus();
       }
 
       function updateTimer() {
         timeRemaining--;
         totalTimeSpent++;
         document.getElementById('timer').textContent = timeRemaining;
+
+        const timerEl = document.getElementById('timer');
+        if (timeRemaining <= 2) {
+          timerEl.classList.add('danger');
+          timerEl.classList.remove('warning');
+        } else if (timeRemaining <= 5) {
+          timerEl.classList.add('warning');
+          timerEl.classList.remove('danger');
+        }
+
         if (timeRemaining <= 0) {
           clearInterval(timerInterval);
-          showIncorrect(`Temps écoulé ! La réponse était ${correctAnswer}`);
+          document.getElementById('feedback').textContent =
+            `⏰ Temps écoulé ! La réponse était ${correctAnswer}`;
+          document.getElementById('feedback').style.color = '#ef4444';
           setTimeout(nextQuestion, 2000);
         }
       }
@@ -189,66 +199,104 @@
         if (isProcessingAnswer) return;
 
         const input = document.getElementById('answer-input');
-        const val = input.value.trim();
-        if (val === '') {
+        const userAnswer = input.value.trim();
+
+        if (userAnswer === '') {
           input.classList.add('error');
           document.getElementById('feedback').textContent =
             '⚠️ Entre une réponse !';
-          setTimeout(() => input.classList.remove('error'), 500);
+          document.getElementById('feedback').style.color = '#ef4444';
+          setTimeout(() => {
+            input.classList.remove('error');
+            document.getElementById('feedback').textContent = '';
+          }, 1000);
+          input.focus();
           return;
         }
-        const num = parseInt(val);
-        if (isNaN(num)) {
+
+        const userNum = parseInt(userAnswer);
+
+        if (isNaN(userNum)) {
           input.classList.add('error');
           document.getElementById('feedback').textContent =
-            '⚠️ Entrez un nombre valide !';
-          setTimeout(() => input.classList.remove('error'), 500);
+            "⚠️ Ce n'est pas un nombre !";
+          document.getElementById('feedback').style.color = '#ef4444';
+          setTimeout(() => {
+            input.classList.remove('error');
+            document.getElementById('feedback').textContent = '';
+          }, 1000);
+          input.focus();
           return;
         }
 
         isProcessingAnswer = true;
+        document.getElementById('submit-btn').disabled = true;
         clearInterval(timerInterval);
-        if (num === correctAnswer) {
-          correctAnswers++;
-          showCorrect();
-        } else {
-          showIncorrect(`Non, c'était ${correctAnswer}`);
-        }
-        setTimeout(nextQuestion, 1200);
-      }
 
-      function showCorrect() {
-        document.getElementById('feedback').textContent = '✨ Correct !';
-        document.getElementById('feedback').className = 'feedback correct';
-      }
-      function showIncorrect(msg) {
-        document.getElementById('feedback').textContent = msg;
-        document.getElementById('feedback').className = 'feedback incorrect';
+        const isCorrect = userNum === correctAnswer;
+
+        if (isCorrect) {
+          correctAnswers++;
+          document.getElementById('feedback').textContent = '✨ Correct !';
+          document.getElementById('feedback').style.color = '#22c55e';
+        } else {
+          document.getElementById('feedback').textContent =
+            `❌ Non, c'était ${correctAnswer}`;
+          document.getElementById('feedback').style.color = '#ef4444';
+        }
+
+        setTimeout(nextQuestion, 1200);
       }
 
       function showResults() {
         clearInterval(timerInterval);
+
         document.getElementById('game-area').classList.add('hidden');
         document.getElementById('results').classList.remove('hidden');
+
         document.getElementById('score').textContent =
           `${correctAnswers} / ${totalQuestions}`;
-        document.getElementById('result-details').textContent = ``;
-        saveHighscore(playerName, correctAnswers, totalTimeSpent, difficulty);
-        loadHighscoresToElement(
-          'facile',
-          document.getElementById('highscore-facile')
+        document.getElementById('result-details').textContent =
+          `⏱️ Temps total : ${formatTime(totalTimeSpent)}`;
+
+        const resultEmoji = document.getElementById('result-emoji');
+        const resultMessage = document.getElementById('result-message');
+
+        const percentage = (correctAnswers / totalQuestions) * 100;
+
+        if (percentage === 100) {
+          resultEmoji.textContent = '🏆';
+          resultMessage.textContent = 'Parfait ! Tu es un vrai champion !';
+        } else if (percentage >= 80) {
+          resultEmoji.textContent = '🌟';
+          resultMessage.textContent = 'Excellent travail !';
+        } else if (percentage >= 60) {
+          resultEmoji.textContent = '👍';
+          resultMessage.textContent = 'Bien joué !';
+        } else {
+          resultEmoji.textContent = '💪';
+          resultMessage.textContent = "Continue à t'entraîner !";
+        }
+
+        const isNew = saveHighscore(
+          playerName,
+          correctAnswers,
+          totalTimeSpent,
+          difficulty
         );
+        if (isNew) {
+          document
+            .getElementById('new-highscore-message')
+            .classList.remove('hidden');
+        } else {
+          document
+            .getElementById('new-highscore-message')
+            .classList.add('hidden');
+        }
+
         loadHighscoresToElement(
-          'moyen',
-          document.getElementById('highscore-moyen')
-        );
-        loadHighscoresToElement(
-          'difficile',
-          document.getElementById('highscore-difficile')
-        );
-        loadHighscoresToElement(
-          'super-multi',
-          document.getElementById('highscore-super-multi')
+          difficulty,
+          document.getElementById('highscore-list')
         );
       }
 
@@ -257,7 +305,36 @@
         document
           .getElementById('difficulty-selection')
           .classList.remove('hidden');
+        document.getElementById('timer').classList.remove('warning', 'danger');
       }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        document
+          .getElementById('answer-input')
+          .addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              checkAnswer();
+            }
+          });
+
+        document
+          .getElementById('answer-input')
+          .addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && e.repeat) {
+              e.preventDefault();
+            }
+          });
+
+        document
+          .getElementById('player-name')
+          .addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+              const level = 'facile'; // default
+              setDifficulty(level);
+            }
+          });
+      });
     </script>
   </body>
 </html>
