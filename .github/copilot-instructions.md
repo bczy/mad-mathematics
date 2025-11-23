@@ -1,5 +1,23 @@
 # Mad Mathematics - AI Agent Instructions
 
+## 🇫🇷 Langue du Projet : FRANÇAIS OBLIGATOIRE
+
+> **RÈGLE ABSOLUE : Tout le code et toute la documentation de ce projet doivent être en français.**
+
+Cela signifie :
+
+- ✅ **Tous les commentaires** dans le code (JavaScript, HTML, CSS)
+- ✅ **Toutes les JSDoc** et docstrings
+- ✅ **Tous les noms de variables** et fonctions (ex: `tempsEcoule`, `calculerScore()`)
+- ✅ **Tous les messages** console.log et console.error
+- ✅ **Toute la documentation** Markdown (README, guides, etc.)
+- ✅ **Tous les commits** et messages de commit
+- ✅ **Tous les textes UI** visibles par l'utilisateur
+
+**📖 Référence complète :** [`docs/CODE_STYLE.md`](../docs/CODE_STYLE.md) - Conventions obligatoires de code
+
+---
+
 ## Project Overview
 
 **Mad Mathematics** is a French-language educational math game suite with multiple interactive arithmetic practice pages. It's a static web app using vanilla HTML/CSS/JS, designed for children to practice multiplication, addition, subtraction, and division with gamification (scores, timers, medals).
@@ -104,15 +122,20 @@ Check browser DevTools → Application → Local Storage → `file://` or site d
 
 Pour des guidelines détaillées, consultez le dossier [`docs/`](../docs/) :
 
-### Processus et Méthodologie
+### Conventions et Standards
 
+- **⭐ Style de Code (FRANÇAIS OBLIGATOIRE):** [`docs/CODE_STYLE.md`](../docs/CODE_STYLE.md) - Conventions de nommage, commentaires, JSDoc, style JS/HTML/CSS
 - **Documentation:** [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md) - Comment gérer la documentation (demander autorisation, organisation, workflows)
+- **Commits:** [`docs/COMMIT_GUIDELINES.md`](../docs/COMMIT_GUIDELINES.md) - Conventional Commits en français
+
+### Tests et Qualité
+
 - **Tests unitaires:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests pour shared.js avec Vitest (TDD, coverage 90%+)
 - **Gestion des dépendances:** [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md) - Migration npm → Yarn v4, commandes et troubleshooting
 
 ### Revues et Audits
 
-- **Code Review:** [`docs/CODE_REVIEW.md`](../docs/CODE_REVIEW.md) - Analyse complète du code (11 novembre 2025)
+- **Code Review:** [`CODE_REVIEW.md`](../CODE_REVIEW.md) - Analyse complète du code (11 novembre 2025)
 
 ### Index Complet
 

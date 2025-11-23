@@ -2,6 +2,8 @@
 
 Index de toute la documentation technique du projet.
 
+**⚠️ Important :** Toute la documentation et le code de ce projet doivent être **en français**. Voir [CODE_STYLE.md](./CODE_STYLE.md) pour les conventions obligatoires.
+
 ---
 
 ## 📚 Vue d'ensemble
@@ -31,6 +33,12 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
   - Tableau de correspondance npm ↔ yarn
 
 ### 📝 Processus et Méthodologie
+
+- **[CODE_STYLE.md](./CODE_STYLE.md)** - **Conventions de code obligatoires (FRANÇAIS)**
+  - Nommage des variables et fonctions en français
+  - Commentaires et JSDoc en français
+  - Style JavaScript, HTML et CSS
+  - Exemples et anti-patterns
 
 - **[DOCUMENTATION_GUIDELINES.md](./DOCUMENTATION_GUIDELINES.md)** - Comment gérer la documentation
   - Règle d'or: Demander autorisation avant mise à jour
