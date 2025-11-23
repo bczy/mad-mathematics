@@ -317,6 +317,191 @@
         color: #f59e0b;
         font-style: italic;
       }
+
+      /* Responsive styles for tablets and smaller */
+      @media (max-width: 768px) {
+        #game-area {
+          padding: 30px 15px;
+        }
+
+        #game-area .question {
+          font-size: 3.5rem;
+          padding: 25px;
+          margin: 30px 0;
+        }
+
+        #game-area #answer-input {
+          font-size: 2.2rem;
+          padding: 18px;
+          width: 180px;
+        }
+
+        #game-area .submit-btn,
+        .skip-btn {
+          font-size: 1.3rem;
+          padding: 16px 35px;
+        }
+      }
+
+      /* Responsive styles for mobile phones */
+      @media (max-width: 480px) {
+        #game-area {
+          padding: 20px 15px;
+        }
+
+        #game-area .progress {
+          font-size: 1rem;
+          margin-bottom: 15px;
+        }
+
+        .time-progress-container {
+          margin: 15px 0;
+        }
+
+        .time-progress-bar {
+          height: 25px;
+        }
+
+        .time-progress-label {
+          font-size: 0.8rem;
+        }
+
+        #game-area .question {
+          font-size: 3rem;
+          padding: 20px;
+          margin: 25px 0;
+          letter-spacing: 2px;
+        }
+
+        #game-area #answer-input {
+          font-size: 2rem;
+          padding: 16px;
+          width: 160px;
+          margin: 12px 0;
+        }
+
+        #game-area .submit-btn,
+        .skip-btn {
+          font-size: 1.2rem;
+          padding: 14px 30px;
+        }
+
+        .correction-section h3 {
+          font-size: 1.5rem;
+        }
+
+        .correction-item {
+          padding: 12px;
+          grid-template-columns: 35px 1fr;
+          gap: 12px;
+        }
+
+        .correction-icon {
+          font-size: 1.3rem;
+        }
+
+        .correction-question {
+          font-size: 1.1rem;
+        }
+
+        .correction-answer {
+          font-size: 0.95rem;
+        }
+      }
+
+      /* Responsive styles for very small mobile devices */
+      @media (max-width: 360px) {
+        #game-area {
+          padding: 15px 10px;
+        }
+
+        #game-area .progress {
+          font-size: 0.95rem;
+          margin-bottom: 12px;
+        }
+
+        .time-progress-container {
+          margin: 12px 0;
+        }
+
+        .time-progress-bar {
+          height: 22px;
+        }
+
+        .time-progress-label {
+          font-size: 0.75rem;
+        }
+
+        #game-area .question {
+          font-size: 2.5rem;
+          padding: 15px;
+          margin: 20px 0;
+          letter-spacing: 1px;
+        }
+
+        #game-area .feedback {
+          font-size: 1.1rem;
+          margin: 12px 0;
+          min-height: 35px;
+        }
+
+        #game-area #answer-input {
+          font-size: 1.8rem;
+          padding: 14px;
+          width: 140px;
+          margin: 10px 0;
+        }
+
+        #game-area .submit-btn,
+        .skip-btn {
+          font-size: 1.1rem;
+          padding: 12px 25px;
+        }
+
+        .action-buttons {
+          gap: 10px;
+          margin-top: 10px;
+        }
+
+        .review-badge {
+          font-size: 0.9rem;
+          padding: 6px 16px;
+          margin-bottom: 12px;
+        }
+
+        .correction-section {
+          margin-top: 20px;
+          padding: 12px;
+        }
+
+        .correction-section h3 {
+          font-size: 1.3rem;
+          margin-bottom: 15px;
+        }
+
+        .correction-list {
+          max-height: 350px;
+        }
+
+        .correction-item {
+          padding: 10px;
+          margin-bottom: 8px;
+          grid-template-columns: 30px 1fr;
+          gap: 10px;
+        }
+
+        .correction-icon {
+          font-size: 1.2rem;
+        }
+
+        .correction-question {
+          font-size: 1rem;
+        }
+
+        .correction-answer {
+          font-size: 0.9rem;
+        }
+      }
     </style>
   </head>
   <body>
