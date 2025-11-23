@@ -12,9 +12,6 @@ test.describe('Multiplication Game - Happy Path', () => {
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-
-      // Attendre un peu pour la transition
-      await page.waitForTimeout(200);
     }
 
     // Attendre les résultats
@@ -50,8 +47,6 @@ test.describe('Multiplication Game - Happy Path', () => {
         const correctAnswer = await multiPage.getCorrectAnswer();
         await multiPage.answerQuestion(correctAnswer);
       }
-
-      await page.waitForTimeout(200);
     }
 
     // Attendre les résultats
@@ -84,14 +79,12 @@ test.describe('Multiplication Game - Edge Cases', () => {
     // Skip les 3 premières questions
     for (let i = 0; i < 3; i++) {
       await multiPage.skipQuestion();
-      await page.waitForTimeout(200);
     }
 
     // Répondre correctement aux 12 autres
     for (let i = 0; i < 12; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(200);
     }
 
     // Attendre les résultats
@@ -122,7 +115,6 @@ test.describe('Multiplication Game - Edge Cases', () => {
     for (let i = 0; i < 5; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(200);
     }
 
     // Attendre l'expiration du timer (60 secondes + marge)
@@ -156,7 +148,6 @@ test.describe('Multiplication Game - Edge Cases', () => {
     for (let i = 1; i <= 5; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(200);
 
       if (i < 5) {
         // Pas après la dernière réponse car on passe aux résultats
@@ -169,7 +160,6 @@ test.describe('Multiplication Game - Edge Cases', () => {
     for (let i = 5; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(200);
     }
 
     await multiPage.waitForResults();

@@ -66,15 +66,49 @@ export class MultiplicationPage extends BasePage {
    * @param {number} answer - Réponse à donner
    */
   async answerQuestion(answer) {
+    // Get current question number before answering
+    const currentProgress = await this.progressText.textContent();
+    
     await this.answerInput.fill(answer.toString());
     await this.submitButton.click();
+    
+    // Wait for either the progress to change (next question) or results to show
+    await this.page.waitForFunction(
+      (prevProgress) => {
+        const progressElement = document.querySelector('#progress');
+        const resultsElement = document.querySelector('#results');
+        const currentProgress = progressElement ? progressElement.textContent : '';
+        const resultsVisible = resultsElement && !resultsElement.classList.contains('hidden');
+        
+        return currentProgress !== prevProgress || resultsVisible;
+      },
+      currentProgress,
+      { timeout: 5000 }
+    );
   }
 
   /**
    * Passe une question
    */
   async skipQuestion() {
+    // Get current question number before skipping
+    const currentProgress = await this.progressText.textContent();
+    
     await this.skipButton.click();
+    
+    // Wait for either the progress to change (next question) or results to show
+    await this.page.waitForFunction(
+      (prevProgress) => {
+        const progressElement = document.querySelector('#progress');
+        const resultsElement = document.querySelector('#results');
+        const currentProgress = progressElement ? progressElement.textContent : '';
+        const resultsVisible = resultsElement && !resultsElement.classList.contains('hidden');
+        
+        return currentProgress !== prevProgress || resultsVisible;
+      },
+      currentProgress,
+      { timeout: 5000 }
+    );
   }
 
   /**
@@ -160,7 +194,7 @@ export class MultiplicationPage extends BasePage {
 
   /**
    * Récupère les éléments de correction
-   * @returns {Promise<Array<{icon: string, question: string, isCorrect: boolean, isSkipped: boolean}>>}
+   * @returns {Promise<Array<{icon: string, question: string, isCorrect: boolean, isSkipped: boolean, isIncorrect: boolean}>>}
    */
   async getCorrectionItems() {
     const items = await this.correctionList.locator('.correction-item').all();
@@ -173,11 +207,15 @@ export class MultiplicationPage extends BasePage {
         .locator('.correction-question')
         .textContent();
 
+      // Check for exact class matches (not substrings)
+      const classList = classes ? classes.split(' ') : [];
+      
       corrections.push({
         icon: icon.trim(),
         question: question.trim(),
-        isCorrect: classes.includes('correct'),
-        isSkipped: classes.includes('skipped'),
+        isCorrect: classList.includes('correct'),
+        isSkipped: classList.includes('skipped'),
+        isIncorrect: classList.includes('incorrect'),
       });
     }
 
@@ -199,7 +237,7 @@ export class MultiplicationPage extends BasePage {
    */
   async countIncorrectAnswers() {
     const corrections = await this.getCorrectionItems();
-    return corrections.filter((c) => !c.isCorrect && !c.isSkipped).length;
+    return corrections.filter((c) => c.isIncorrect).length;
   }
 
   /**
