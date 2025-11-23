@@ -112,7 +112,7 @@ Pour des guidelines détaillées, consultez le dossier [`docs/`](../docs/) :
 
 ### Revues et Audits
 
-- **Code Review:** [`CODE_REVIEW.md`](../CODE_REVIEW.md) - Analyse complète du code (11 novembre 2025)
+- **Code Review:** [`docs/CODE_REVIEW.md`](../docs/CODE_REVIEW.md) - Analyse complète du code (11 novembre 2025)
 
 ### Index Complet
 
