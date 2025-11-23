@@ -22,6 +22,12 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
   - Coverage cible: 90%+
   - Approche: TDD (Test-Driven Development)
 
+- **[E2E_TESTING.md](./E2E_TESTING.md)** - Tests End-to-End avec Playwright
+  - Framework: Playwright Test
+  - Scope: Parcours utilisateur complets
+  - Coverage: 25 tests E2E (navigation, jeu, localStorage, responsive)
+  - Navigateurs: Chromium, Firefox, Mobile Chrome
+
 ### 📦 Gestion des Dépendances
 
 - **[YARN_MIGRATION.md](./YARN_MIGRATION.md)** - Migration npm → Yarn v4 et guide d'utilisation
@@ -52,7 +58,6 @@ Les guidelines suivantes seront ajoutées au fur et à mesure :
 ### Tests (futur)
 
 - `INTEGRATION_TESTING.md` - Tests d'intégration pour les pages HTML complètes
-- `E2E_TESTING.md` - Tests end-to-end avec Playwright
 - `VISUAL_REGRESSION.md` - Tests de régression visuelle
 
 ### Développement (futur)
@@ -89,6 +94,7 @@ docs/
 ├── README.md                        # Ce fichier (index)
 ├── COMMIT_GUIDELINES.md             # Conventional Commits
 ├── DOCUMENTATION_GUIDELINES.md      # Gestion de la documentation
+├── E2E_TESTING.md                   # Tests End-to-End avec Playwright
 ├── TESTING_GUIDELINES.md            # Tests unitaires
 ├── YARN_MIGRATION.md                # Migration npm → Yarn v4
 └── [futurs fichiers...]             # Guidelines à venir
@@ -116,5 +122,5 @@ Tous les fichiers de ce dossier suivent les standards définis dans [DOCUMENTATI
 
 ---
 
-**Dernière mise à jour:** 11 novembre 2025  
+**Dernière mise à jour:** 23 novembre 2025  
 **Maintenu par:** AI Agent + développeurs
