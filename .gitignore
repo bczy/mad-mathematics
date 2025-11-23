@@ -5,6 +5,11 @@ node_modules/
 coverage/
 .nyc_output/
 
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache/
+
 # Environment
 .env
 .env.local
