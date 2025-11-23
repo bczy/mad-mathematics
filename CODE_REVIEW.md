@@ -4,6 +4,8 @@
 **Branch:** updated-multiplication-mode  
 **Total Lines of Code:** 1,274 (5 HTML, 1 JS, 1 CSS)
 
+**⚠️ Note importante (ajoutée le 23 novembre 2025) :** Ce projet exige que **tout le code et la documentation soient en français** (commentaires, variables, JSDoc, messages, etc.). Voir [docs/CODE_STYLE.md](docs/CODE_STYLE.md) pour les conventions obligatoires.
+
 ---
 
 ## 🎯 Overall Assessment

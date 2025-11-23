@@ -1,11 +1,31 @@
 # Documentation Guidelines - Mad Mathematics
 
-**Dernière mise à jour:** 11 novembre 2025  
-**Objectif:** Maintenir une documentation toujours synchronisée avec le code
+**Dernière mise à jour:** 23 novembre 2025  
+**Objectif:** Maintenir une documentation toujours synchronisée avec le code  
+**Langue:** Français (obligatoire)
 
 ---
 
 ## 🎯 Principes Fondamentaux
+
+### 0. **Langue : Tout en Français**
+
+> **RÈGLE ABSOLUE : Toute la documentation et le code de ce projet doivent être rédigés en français.**
+
+Cela inclut sans exception :
+
+- ✅ **Documentation Markdown** (README, guides, ADR, etc.)
+- ✅ **Commentaires dans le code** (JavaScript, HTML, CSS)
+- ✅ **JSDoc et docstrings** de toutes les fonctions
+- ✅ **Noms de variables et fonctions** (voir [CODE_STYLE.md](./CODE_STYLE.md))
+- ✅ **Messages de commit** (voir [COMMIT_GUIDELINES.md](./COMMIT_GUIDELINES.md))
+- ✅ **Messages d'erreur et console.log**
+- ✅ **Textes d'interface utilisateur**
+- ✅ **Tests et assertions** (voir [TESTING_GUIDELINES.md](./TESTING_GUIDELINES.md))
+
+**Pourquoi ?** Mad Mathematics est un projet éducatif destiné à des enfants francophones. L'usage exclusif du français assure la cohérence, l'accessibilité et la maintenabilité du projet.
+
+**Référence complète :** Voir [docs/CODE_STYLE.md](./CODE_STYLE.md) pour les conventions détaillées.
 
 ### 1. **Documentation as Code**
 
@@ -15,6 +35,7 @@ La documentation fait partie intégrante du projet. Elle doit être :
 - ✅ **Versionnée** - Commitée avec les changements de code
 - ✅ **Accessible** - Centralisée et facile à trouver
 - ✅ **Utile** - Contient des informations actionnables, pas des évidences
+- ✅ **En français** - Langue unique du projet (documentation ET code)
 
 ### 2. **La règle d'or : Demander avant de documenter**
 
@@ -180,6 +201,8 @@ Index de toute la documentation technique du projet.
 ### 4. **JSDoc / Commentaires inline**
 
 **Rôle:** Documentation du code source directement dans les fichiers.
+
+**Important:** Tous les commentaires et la JSDoc doivent être **en français**. Voir [CODE_STYLE.md](./CODE_STYLE.md) pour les conventions complètes.
 
 **Exemple pour `shared.js`:**
 

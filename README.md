@@ -2,6 +2,18 @@
 
 Educational math game suite for practicing arithmetic operations in French.
 
+## 🇫🇷 Langue du Projet / Project Language
+
+**Français uniquement / French only**
+
+Ce projet est entièrement en français - documentation, code, commentaires, commits, tout. C'est un projet éducatif destiné à des enfants francophones.
+
+This project is entirely in French - documentation, code, comments, commits, everything. It's an educational project for French-speaking children.
+
+📖 **Convention de code :** Voir [docs/CODE_STYLE.md](docs/CODE_STYLE.md) pour toutes les conventions (noms de variables, commentaires, JSDoc, etc.)
+
+---
+
 ## 🎮 Features
 
 - **Multiplication Tables** - Practice times tables with different difficulty levels
