@@ -112,7 +112,7 @@ Tous les fichiers de ce dossier suivent les standards définis dans [DOCUMENTATI
 
 - **Projet principal:** [README.md](../README.md)
 - **Instructions AI:** [.github/copilot-instructions.md](../.github/copilot-instructions.md)
-- **Code Review:** [CODE_REVIEW.md](./CODE_REVIEW.md)
+- **Code Review:** [CODE_REVIEW.md](../CODE_REVIEW.md)
 
 ---
 
