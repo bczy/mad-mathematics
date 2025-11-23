@@ -73,7 +73,7 @@ test.describe('Responsive - Mobile 360px', () => {
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(100);
+
     }
 
     // Attendre les résultats
@@ -193,7 +193,7 @@ test.describe('Responsive - Desktop 1280px', () => {
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(100);
+
     }
 
     // Attendre les résultats
@@ -266,7 +266,7 @@ test.describe('Responsive - Tablet 768px', () => {
     // Jouer rapidement
     for (let i = 0; i < 15; i++) {
       await multiPage.skipQuestion();
-      await page.waitForTimeout(50);
+
     }
 
     await multiPage.waitForResults();

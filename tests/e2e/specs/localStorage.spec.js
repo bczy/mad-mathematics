@@ -19,11 +19,11 @@ test.describe('LocalStorage Persistence', () => {
 
     await multiPage.goto();
 
-    // Saisir un nom de joueur
-    await multiPage.playerNameInput.fill('PersistentPlayer');
-
-    // Attendre un peu pour la sauvegarde
-    await page.waitForTimeout(500);
+    // Démarrer un jeu pour sauvegarder le nom
+    await multiPage.startGame('PersistentPlayer', 'Sorcier');
+    
+    // Vérifier que le jeu a démarré
+    await expect(multiPage.gameArea).toBeVisible();
 
     // Recharger la page
     await page.reload();
@@ -49,7 +49,7 @@ test.describe('LocalStorage Persistence', () => {
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(100);
+
     }
 
     // Attendre les résultats
@@ -76,7 +76,7 @@ test.describe('LocalStorage Persistence', () => {
     // Passer rapidement toutes les questions
     for (let i = 0; i < 15; i++) {
       await multiPage.skipQuestion();
-      await page.waitForTimeout(100);
+
     }
 
     await multiPage.waitForResults();
@@ -108,13 +108,13 @@ test.describe('LocalStorage Persistence', () => {
       for (let i = 0; i < questionsToAnswer; i++) {
         const correctAnswer = await multiPage.getCorrectAnswer();
         await multiPage.answerQuestion(correctAnswer);
-        await page.waitForTimeout(50);
+
       }
 
       // Skip le reste
       for (let i = questionsToAnswer; i < 15; i++) {
         await multiPage.skipQuestion();
-        await page.waitForTimeout(50);
+
       }
 
       await multiPage.waitForResults();
@@ -145,7 +145,7 @@ test.describe('LocalStorage Persistence', () => {
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(100);
+
     }
 
     await multiPage.waitForResults();
@@ -170,7 +170,7 @@ test.describe('LocalStorage Persistence', () => {
     // Skip toutes les questions
     for (let i = 0; i < 15; i++) {
       await multiPage.skipQuestion();
-      await page.waitForTimeout(50);
+
     }
 
     await multiPage.waitForResults();
@@ -200,7 +200,7 @@ test.describe('LocalStorage Persistence', () => {
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(100);
+
     }
 
     await multiPage.waitForResults();
@@ -212,7 +212,7 @@ test.describe('LocalStorage Persistence', () => {
     for (let i = 0; i < 15; i++) {
       const correctAnswer = await multiPage.getCorrectAnswer();
       await multiPage.answerQuestion(correctAnswer);
-      await page.waitForTimeout(100);
+
     }
 
     await multiPage.waitForResults();
