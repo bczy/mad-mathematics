@@ -50,9 +50,3 @@ jobs:
         with:
           lcov-file: ./coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Auto-approve Copilot PRs
-        if: github.event_name == 'pull_request' && github.actor == 'Copilot'
-        uses: hmarr/auto-approve-action@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
