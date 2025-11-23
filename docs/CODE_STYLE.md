@@ -353,7 +353,7 @@ const nom = 'Alice';
 const template = `Bonjour ${nom}`;
 
 // ❌ MAUVAIS
-const message = 'Bravo !';
+const message = "Bravo !";
 ```
 
 #### Variables
