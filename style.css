@@ -10,7 +10,7 @@
   --magic-purple-light: #6b4a8d;
   --magic-gold: #ffd700;
   --magic-gold-light: #ffed4e;
-  
+
   /* Couleurs des états */
   --success-green: #22c55e;
   --success-green-medium: #16a34a;
@@ -21,12 +21,12 @@
   --danger-red: #ef4444;
   --danger-red-medium: #dc2626;
   --danger-red-dark: #b91c1c;
-  
+
   /* Couleurs de texte */
   --text-primary: #222;
   --text-muted: #666;
   --text-light: rgba(255, 255, 255, 0.92);
-  
+
   /* Anciens accents (rétro-compatibilité) */
   --accent-1: #6b4a8d;
   --accent-2: #9b59b6;
@@ -61,7 +61,7 @@ body.magic-theme::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
+  background-image:
     radial-gradient(2px 2px at 20% 30%, white, transparent),
     radial-gradient(2px 2px at 60% 70%, white, transparent),
     radial-gradient(1px 1px at 50% 50%, white, transparent),
@@ -78,7 +78,8 @@ body.magic-theme::before {
 }
 
 @keyframes stars-twinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.6;
     background-position: 0% 0%;
   }
@@ -138,7 +139,11 @@ input[type='number'] {
    ======================================== */
 .gold-btn,
 .submit-btn {
-  background: linear-gradient(135deg, var(--magic-gold), var(--magic-gold-light));
+  background: linear-gradient(
+    135deg,
+    var(--magic-gold),
+    var(--magic-gold-light)
+  );
   color: var(--magic-purple-dark);
   border: none;
   padding: 12px 20px;
@@ -146,7 +151,9 @@ input[type='number'] {
   cursor: pointer;
   font-weight: 700;
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   font-size: 1rem;
 }
 
@@ -165,7 +172,11 @@ input[type='number'] {
    Boutons de sélection de difficulté
    ======================================== */
 .difficulty-btn {
-  background: linear-gradient(135deg, var(--magic-gold), var(--magic-gold-light));
+  background: linear-gradient(
+    135deg,
+    var(--magic-gold),
+    var(--magic-gold-light)
+  );
   color: var(--magic-purple-dark);
   border: none;
   padding: 14px 20px;
@@ -173,7 +184,9 @@ input[type='number'] {
   cursor: pointer;
   font-weight: 700;
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   font-size: 1.1rem;
   display: flex;
   flex-direction: column;
@@ -220,7 +233,9 @@ input[type='number'] {
   margin: 20px auto;
   display: block;
   background: white;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 
 .player-name-input:focus {
@@ -235,9 +250,16 @@ input[type='number'] {
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
 }
 
 /* ========================================
@@ -470,31 +492,31 @@ input[type='number'] {
     padding: 16px;
     margin: 12px;
   }
-  
+
   /* Game area responsive */
   .game-area {
     padding: 30px 15px;
   }
-  
+
   .game-area .question {
     font-size: 3.5rem;
     padding: 25px;
     margin: 30px 0;
   }
-  
-  .game-area input[type="number"],
-  .game-area input[type="text"] {
+
+  .game-area input[type='number'],
+  .game-area input[type='text'] {
     font-size: 2.2rem;
     padding: 18px;
     width: 180px;
   }
-  
+
   .game-area .submit-btn,
   .skip-btn {
     font-size: 1.3rem;
     padding: 16px 35px;
   }
-  
+
   .difficulty-btn {
     min-height: 90px;
   }
@@ -514,72 +536,72 @@ input[type='number'] {
     font-size: 16px;
     padding: 8px 10px;
   }
-  
+
   /* Game area responsive */
   .game-area {
     padding: 20px 15px;
   }
-  
+
   .game-area .progress {
     font-size: 1rem;
     margin-bottom: 15px;
   }
-  
+
   .time-progress-container {
     margin: 15px 0;
   }
-  
+
   .time-progress-bar {
     height: 25px;
   }
-  
+
   .time-progress-label {
     font-size: 0.8rem;
   }
-  
+
   .game-area .question {
     font-size: 3rem;
     padding: 20px;
     margin: 25px 0;
     letter-spacing: 2px;
   }
-  
-  .game-area input[type="number"],
-  .game-area input[type="text"] {
+
+  .game-area input[type='number'],
+  .game-area input[type='text'] {
     font-size: 2rem;
     padding: 16px;
     width: 160px;
     margin: 12px 0;
   }
-  
+
   .game-area .submit-btn,
   .skip-btn {
     font-size: 1.2rem;
     padding: 14px 30px;
   }
-  
+
   .correction-section h3 {
     font-size: 1.5rem;
   }
-  
+
   .correction-item {
     padding: 12px;
     grid-template-columns: 35px 1fr;
     gap: 12px;
   }
-  
+
   .correction-icon {
     font-size: 1.3rem;
   }
-  
+
   .correction-question {
     font-size: 1.1rem;
   }
-  
+
   .correction-answer {
     font-size: 0.95rem;
   }
-  
+
   .difficulty-btn {
     min-height: 80px;
     padding: 12px;
@@ -595,100 +617,100 @@ input[type='number'] {
   h1 {
     font-size: 22px;
   }
-  
+
   /* Game area responsive */
   .game-area {
     padding: 15px 10px;
   }
-  
+
   .game-area .progress {
     font-size: 0.95rem;
     margin-bottom: 12px;
   }
-  
+
   .time-progress-container {
     margin: 12px 0;
   }
-  
+
   .time-progress-bar {
     height: 22px;
   }
-  
+
   .time-progress-label {
     font-size: 0.75rem;
   }
-  
+
   .game-area .question {
     font-size: 2.5rem;
     padding: 15px;
     margin: 20px 0;
     letter-spacing: 1px;
   }
-  
+
   .game-area .feedback {
     font-size: 1.1rem;
     margin: 12px 0;
     min-height: 35px;
   }
-  
-  .game-area input[type="number"],
-  .game-area input[type="text"] {
+
+  .game-area input[type='number'],
+  .game-area input[type='text'] {
     font-size: 1.8rem;
     padding: 14px;
     width: 140px;
     margin: 10px 0;
   }
-  
+
   .game-area .submit-btn,
   .skip-btn {
     font-size: 1.1rem;
     padding: 12px 25px;
   }
-  
+
   .action-buttons {
     gap: 10px;
     margin-top: 10px;
   }
-  
+
   .review-badge {
     font-size: 0.9rem;
     padding: 6px 16px;
     margin-bottom: 12px;
   }
-  
+
   .correction-section {
     margin-top: 20px;
     padding: 12px;
   }
-  
+
   .correction-section h3 {
     font-size: 1.3rem;
     margin-bottom: 15px;
   }
-  
+
   .correction-list {
     max-height: 350px;
   }
-  
+
   .correction-item {
     padding: 10px;
     margin-bottom: 8px;
     grid-template-columns: 30px 1fr;
     gap: 10px;
   }
-  
+
   .correction-icon {
     font-size: 1.2rem;
   }
-  
+
   .correction-question {
     font-size: 1rem;
   }
-  
+
   .correction-answer {
     font-size: 0.9rem;
   }
-  
+
   .difficulty-btn {
     min-height: 70px;
     padding: 10px;
@@ -759,13 +781,25 @@ input[type='number'] {
 }
 
 @keyframes pulse-warning {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 @keyframes pulse-danger {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
 }
 
 .game-area .question {
@@ -794,8 +828,8 @@ input[type='number'] {
   color: var(--danger-red);
 }
 
-.game-area input[type="number"],
-.game-area input[type="text"] {
+.game-area input[type='number'],
+.game-area input[type='text'] {
   font-size: 2.5rem;
   padding: 20px;
   width: 200px;
@@ -808,13 +842,13 @@ input[type='number'] {
   font-weight: bold;
 }
 
-.game-area input[type="number"]::placeholder,
-.game-area input[type="text"]::placeholder {
+.game-area input[type='number']::placeholder,
+.game-area input[type='text']::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.game-area input[type="number"]:focus,
-.game-area input[type="text"]:focus {
+.game-area input[type='number']:focus,
+.game-area input[type='text']:focus {
   outline: none;
   border-color: rgba(255, 215, 0, 0.8);
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
@@ -909,7 +943,8 @@ input[type='number'] {
 }
 
 @keyframes pulse-bar {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -942,7 +977,11 @@ input[type='number'] {
 }
 
 .skip-btn {
-  background: linear-gradient(135deg, var(--warning-orange) 0%, var(--warning-orange-medium) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--warning-orange) 0%,
+    var(--warning-orange-medium) 100%
+  );
   color: white;
   padding: 18px 40px;
   font-size: 1.5rem;
@@ -968,7 +1007,11 @@ input[type='number'] {
    ======================================== */
 .review-badge {
   display: inline-block;
-  background: linear-gradient(135deg, var(--warning-orange) 0%, var(--warning-orange-medium) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--warning-orange) 0%,
+    var(--warning-orange-medium) 100%
+  );
   color: white;
   padding: 8px 20px;
   border-radius: 20px;
@@ -979,7 +1022,8 @@ input[type='number'] {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }

@@ -96,33 +96,33 @@ const y = Math.random() * 100;
 
 ```javascript
 // ✅ BON - Verbes français descriptifs
-function afficherResultats() { }
-function calculerScore(reponses) { }
-function verifierReponse(reponseUtilisateur, reponseCorrecte) { }
-function sauvegarderMeilleurScore(nom, score, temps, niveau) { }
-function genererQuestion(difficulte) { }
+function afficherResultats() {}
+function calculerScore(reponses) {}
+function verifierReponse(reponseUtilisateur, reponseCorrecte) {}
+function sauvegarderMeilleurScore(nom, score, temps, niveau) {}
+function genererQuestion(difficulte) {}
 
 // ❌ MAUVAIS - Verbes anglais
-function showResults() { }
-function calculateScore() { }
-function checkAnswer() { }
+function showResults() {}
+function calculateScore() {}
+function checkAnswer() {}
 ```
 
 **Patterns courants :**
 
-| Action                 | Verbe français | Exemple                          |
-| ---------------------- | -------------- | -------------------------------- |
-| Afficher / Montrer     | `afficher`     | `afficherMessage()`              |
-| Créer / Initialiser    | `creer`        | `creerTimer()`                   |
-| Calculer               | `calculer`     | `calculerTempsTotal()`           |
-| Vérifier / Valider     | `verifier`     | `verifierFormulaire()`           |
-| Sauvegarder / Enreg.   | `sauvegarder`  | `sauvegarderProgression()`       |
-| Charger / Récupérer    | `charger`      | `chargerMeilleursScores()`       |
-| Mettre à jour          | `mettreAJour`  | `mettreAJourAffichage()`         |
-| Démarrer / Commencer   | `demarrer`     | `demarrerJeu()`                  |
-| Arrêter / Stopper      | `arreter`      | `arreterTimer()`                 |
-| Réinitialiser / Reset  | `reinitialiser`| `reinitialiserJeu()`             |
-| Générer                | `generer`      | `genererNombreAleatoire()`       |
+| Action                | Verbe français  | Exemple                    |
+| --------------------- | --------------- | -------------------------- |
+| Afficher / Montrer    | `afficher`      | `afficherMessage()`        |
+| Créer / Initialiser   | `creer`         | `creerTimer()`             |
+| Calculer              | `calculer`      | `calculerTempsTotal()`     |
+| Vérifier / Valider    | `verifier`      | `verifierFormulaire()`     |
+| Sauvegarder / Enreg.  | `sauvegarder`   | `sauvegarderProgression()` |
+| Charger / Récupérer   | `charger`       | `chargerMeilleursScores()` |
+| Mettre à jour         | `mettreAJour`   | `mettreAJourAffichage()`   |
+| Démarrer / Commencer  | `demarrer`      | `demarrerJeu()`            |
+| Arrêter / Stopper     | `arreter`       | `arreterTimer()`           |
+| Réinitialiser / Reset | `reinitialiser` | `reinitialiserJeu()`       |
+| Générer               | `generer`       | `genererNombreAleatoire()` |
 
 #### Classes et Objets (si utilisés)
 
@@ -133,7 +133,7 @@ class GestionnaireScore {
     this.scoreActuel = 0;
     this.meilleursScores = [];
   }
-  
+
   ajouterPoints(points) {
     this.scoreActuel += points;
   }
@@ -239,8 +239,8 @@ const valeur = input.value;
 function formaterTemps(secondes) {
   const minutes = Math.floor(secondes / 60);
   const secondesRestantes = Math.floor(secondes % 60);
-  return minutes > 0 
-    ? `${minutes}m ${secondesRestantes}s` 
+  return minutes > 0
+    ? `${minutes}m ${secondesRestantes}s`
     : `${secondesRestantes}s`;
 }
 
@@ -262,25 +262,24 @@ function formaterTemps(secondes) {
  * @example
  * // Score parfait rapide - entre dans le top 5
  * sauvegarderMeilleurScore('Alice', 15, 45, 'facile')  // true
- * 
+ *
  * // Score moyen - peut-être pas dans le top 5
  * sauvegarderMeilleurScore('Bob', 8, 120, 'difficile')  // false
  */
 function sauvegarderMeilleurScore(nom, score, temps, niveau) {
   try {
-    let meilleursScores = JSON.parse(
-      localStorage.getItem(`highscores_${niveau}`)
-    ) || [];
-    
-    const nouveauScore = { 
-      nom, 
-      score, 
-      temps, 
-      date: new Date().toISOString() 
+    let meilleursScores =
+      JSON.parse(localStorage.getItem(`highscores_${niveau}`)) || [];
+
+    const nouveauScore = {
+      nom,
+      score,
+      temps,
+      date: new Date().toISOString()
     };
-    
+
     meilleursScores.push(nouveauScore);
-    
+
     // Trier : meilleur score d'abord, puis temps le plus rapide
     meilleursScores.sort((a, b) => {
       if (b.score !== a.score) {
@@ -288,17 +287,17 @@ function sauvegarderMeilleurScore(nom, score, temps, niveau) {
       }
       return a.temps - b.temps;
     });
-    
+
     const estDansTop5 = meilleursScores.indexOf(nouveauScore) < 5;
-    
+
     // Garder seulement les 5 meilleurs
     meilleursScores = meilleursScores.slice(0, 5);
-    
+
     localStorage.setItem(
-      `highscores_${niveau}`, 
+      `highscores_${niveau}`,
       JSON.stringify(meilleursScores)
     );
-    
+
     return estDansTop5;
   } catch (erreur) {
     console.error('Échec de sauvegarde du meilleur score:', erreur);
@@ -323,9 +322,9 @@ function exemple() {
 
 // ❌ MAUVAIS - 4 espaces ou tabulations
 function exemple() {
-    if (condition) {
-        faireQuelqueChose();
-    }
+  if (condition) {
+    faireQuelqueChose();
+  }
 }
 ```
 
@@ -339,8 +338,8 @@ const valeur = 10;
 faireQuelqueChose();
 
 // ❌ MAUVAIS
-const valeur = 10
-faireQuelqueChose()
+const valeur = 10;
+faireQuelqueChose();
 ```
 
 #### Guillemets
@@ -354,7 +353,7 @@ const nom = 'Alice';
 const template = `Bonjour ${nom}`;
 
 // ❌ MAUVAIS
-const message = "Bravo !";
+const message = 'Bravo !';
 ```
 
 #### Variables
@@ -366,10 +365,10 @@ const message = "Bravo !";
 const scoreMaximum = 15;
 let scoreActuel = 0;
 
-scoreActuel = 10;  // OK avec let
+scoreActuel = 10; // OK avec let
 
 // ❌ MAUVAIS
-var scoreMaximum = 15;  // Ne jamais utiliser var
+var scoreMaximum = 15; // Ne jamais utiliser var
 ```
 
 #### Longueur de ligne
@@ -378,7 +377,7 @@ var scoreMaximum = 15;  // Ne jamais utiliser var
 
 ```javascript
 // ✅ BON - Ligne coupée pour lisibilité
-const messageComplet = 
+const messageComplet =
   'Félicitations ! Vous avez terminé avec un score parfait. ' +
   'Votre temps sera enregistré dans le classement.';
 
@@ -389,7 +388,8 @@ const messageComplet = `
 `;
 
 // ❌ MAUVAIS - Ligne trop longue
-const messageComplet = 'Félicitations ! Vous avez terminé avec un score parfait. Votre temps sera enregistré dans le classement.';
+const messageComplet =
+  'Félicitations ! Vous avez terminé avec un score parfait. Votre temps sera enregistré dans le classement.';
 ```
 
 #### Console et débogage
@@ -406,7 +406,7 @@ console.log('Starting game with level:', level);
 console.error('Error loading scores:', error);
 
 // ⚠️ À RETIRER avant commit
-console.log('DEBUG: valeur =', valeur);  // OK en développement, à enlever
+console.log('DEBUG: valeur =', valeur); // OK en développement, à enlever
 ```
 
 ---
@@ -433,7 +433,7 @@ console.log('DEBUG: valeur =', valeur);  // OK en développement, à enlever
 
 <!-- ❌ MAUVAIS - Commentaires en anglais -->
 <!-- Difficulty selection section -->
-<div id="difficulty-selection">
+<div id="difficulty-selection"></div>
 ```
 
 ### Attributs et IDs
@@ -442,12 +442,12 @@ console.log('DEBUG: valeur =', valeur);  // OK en développement, à enlever
 
 ```html
 <!-- ✅ BON - IDs en anglais (convention), texte en français -->
-<input 
-  type="text" 
-  id="player-name" 
+<input
+  type="text"
+  id="player-name"
   placeholder="Entre ton nom"
   aria-label="Nom du joueur"
->
+/>
 
 <button id="start-btn">Démarrer</button>
 <div class="results-container">
@@ -464,23 +464,20 @@ console.log('DEBUG: valeur =', valeur);  // OK en développement, à enlever
 
 ```html
 <!-- ✅ BON - ARIA en français -->
-<input 
-  type="number" 
-  id="answer-input" 
+<input
+  type="number"
+  id="answer-input"
   aria-label="Votre réponse"
   aria-required="true"
   placeholder="?"
->
+/>
 
-<button 
-  id="submit-btn"
-  aria-label="Valider la réponse"
->
+<button id="submit-btn" aria-label="Valider la réponse">
   🪄 Lancer le sort !
 </button>
 
 <!-- ❌ MAUVAIS - ARIA en anglais -->
-<input aria-label="Your answer">
+<input aria-label="Your answer" />
 ```
 
 ---
@@ -531,17 +528,26 @@ console.log('DEBUG: valeur =', valeur);  // OK en développement, à enlever
 
 ```css
 /* ✅ BON - Convention BEM en anglais */
-.game-area { }
-.game-area__question { }
-.game-area__timer { }
+.game-area {
+}
+.game-area__question {
+}
+.game-area__timer {
+}
 
-.button { }
-.button--primary { }
-.button--disabled { }
+.button {
+}
+.button--primary {
+}
+.button--disabled {
+}
 
-.highscore-list { }
-.highscore-list__item { }
-.highscore-list__item--gold { }
+.highscore-list {
+}
+.highscore-list__item {
+}
+.highscore-list__item--gold {
+}
 
 /* Note : On suit la convention BEM en anglais car c'est le standard,
    mais les commentaires restent en français */
@@ -584,17 +590,17 @@ function genererQuestionMultiplication(niveau) {
     default:
       plageMax = 10;
   }
-  
+
   // Générer deux nombres aléatoires dans la plage
   const num1 = Math.floor(Math.random() * plageMax) + 1;
   const num2 = Math.floor(Math.random() * plageMax) + 1;
-  
+
   // Calculer la réponse correcte
   const reponse = num1 * num2;
-  
+
   // Construire le texte de la question
   const texte = `${num1} × ${num2} = ?`;
-  
+
   return { num1, num2, reponse, texte };
 }
 
@@ -611,7 +617,7 @@ function genererQuestionMultiplication(niveau) {
  */
 function verifierReponse(reponseUtilisateur, reponseCorrecte) {
   const estCorrect = parseInt(reponseUtilisateur) === reponseCorrecte;
-  
+
   if (estCorrect) {
     // Feedback positif
     afficherMessage('✅ Bravo ! Bonne réponse !', 'vert');
@@ -623,7 +629,7 @@ function verifierReponse(reponseUtilisateur, reponseCorrecte) {
       'rouge'
     );
   }
-  
+
   // Enregistrer la réponse dans l'historique
   historiqueReponses.push({
     question: questionActuelle.texte,
@@ -631,7 +637,7 @@ function verifierReponse(reponseUtilisateur, reponseCorrecte) {
     reponseCorrecte,
     estCorrect
   });
-  
+
   return estCorrect;
 }
 ```
@@ -641,112 +647,112 @@ function verifierReponse(reponseUtilisateur, reponseCorrecte) {
 ```html
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mad Mathematics - Table de Multiplication</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- En-tête de la page -->
-  <header>
-    <h1>🧙‍♂️ Mad Mathematics - Multiplications Magiques ✨</h1>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mad Mathematics - Table de Multiplication</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- En-tête de la page -->
+    <header>
+      <h1>🧙‍♂️ Mad Mathematics - Multiplications Magiques ✨</h1>
+    </header>
 
-  <!-- Écran de sélection de difficulté -->
-  <div id="difficulty-selection">
-    <h2>Choisis ton niveau de magie</h2>
-    
-    <!-- Saisie du nom du joueur -->
-    <div class="player-input">
-      <input 
-        type="text" 
-        id="player-name" 
-        placeholder="Entre ton nom de sorcier"
-        aria-label="Nom du joueur"
-        maxlength="50"
-      >
+    <!-- Écran de sélection de difficulté -->
+    <div id="difficulty-selection">
+      <h2>Choisis ton niveau de magie</h2>
+
+      <!-- Saisie du nom du joueur -->
+      <div class="player-input">
+        <input
+          type="text"
+          id="player-name"
+          placeholder="Entre ton nom de sorcier"
+          aria-label="Nom du joueur"
+          maxlength="50"
+        />
+      </div>
+
+      <!-- Boutons de sélection de niveau -->
+      <div class="difficulty-buttons">
+        <button onclick="demarrerJeu('facile')" class="btn-difficulty">
+          ⭐ Apprenti Sorcier
+        </button>
+        <button onclick="demarrerJeu('moyen')" class="btn-difficulty">
+          ⭐⭐ Sorcier Confirmé
+        </button>
+        <button onclick="demarrerJeu('difficile')" class="btn-difficulty">
+          ⭐⭐⭐ Archimage
+        </button>
+      </div>
     </div>
 
-    <!-- Boutons de sélection de niveau -->
-    <div class="difficulty-buttons">
-      <button onclick="demarrerJeu('facile')" class="btn-difficulty">
-        ⭐ Apprenti Sorcier
-      </button>
-      <button onclick="demarrerJeu('moyen')" class="btn-difficulty">
-        ⭐⭐ Sorcier Confirmé
-      </button>
-      <button onclick="demarrerJeu('difficile')" class="btn-difficulty">
-        ⭐⭐⭐ Archimage
-      </button>
-    </div>
-  </div>
+    <!-- Zone de jeu (cachée au départ) -->
+    <div id="game-area" style="display: none;">
+      <!-- Timer et progression -->
+      <div class="game-header">
+        <div class="timer">⏱️ Temps : <span id="timer">60</span>s</div>
+        <div class="progress">
+          Question <span id="current-q">1</span> / <span id="total-q">15</span>
+        </div>
+      </div>
 
-  <!-- Zone de jeu (cachée au départ) -->
-  <div id="game-area" style="display: none;">
-    <!-- Timer et progression -->
-    <div class="game-header">
-      <div class="timer">⏱️ Temps : <span id="timer">60</span>s</div>
-      <div class="progress">Question <span id="current-q">1</span> / <span id="total-q">15</span></div>
-    </div>
+      <!-- Question actuelle -->
+      <div class="question-container">
+        <h2 id="question">5 × 7 = ?</h2>
+      </div>
 
-    <!-- Question actuelle -->
-    <div class="question-container">
-      <h2 id="question">5 × 7 = ?</h2>
-    </div>
+      <!-- Saisie de réponse -->
+      <div class="answer-container">
+        <input
+          type="number"
+          id="answer-input"
+          placeholder="?"
+          aria-label="Votre réponse"
+          aria-required="true"
+        />
+        <button id="submit-btn" onclick="verifierReponse()">
+          🪄 Lancer le sort !
+        </button>
+      </div>
 
-    <!-- Saisie de réponse -->
-    <div class="answer-container">
-      <input 
-        type="number" 
-        id="answer-input" 
-        placeholder="?"
-        aria-label="Votre réponse"
-        aria-required="true"
-      >
-      <button id="submit-btn" onclick="verifierReponse()">
-        🪄 Lancer le sort !
-      </button>
+      <!-- Zone de feedback -->
+      <div id="feedback" class="feedback"></div>
     </div>
 
-    <!-- Zone de feedback -->
-    <div id="feedback" class="feedback"></div>
-  </div>
+    <!-- Écran de résultats (caché au départ) -->
+    <div id="results" style="display: none;">
+      <h2>🎉 Résultats</h2>
 
-  <!-- Écran de résultats (caché au départ) -->
-  <div id="results" style="display: none;">
-    <h2>🎉 Résultats</h2>
-    
-    <!-- Score final -->
-    <div class="final-score">
-      <p>Score : <span id="final-score">0</span> / 15</p>
-      <p>Temps : <span id="final-time">0s</span></p>
+      <!-- Score final -->
+      <div class="final-score">
+        <p>Score : <span id="final-score">0</span> / 15</p>
+        <p>Temps : <span id="final-time">0s</span></p>
+      </div>
+
+      <!-- Classement -->
+      <div class="highscores">
+        <h3>🏆 Meilleurs Scores</h3>
+        <ul id="highscore-list"></ul>
+      </div>
+
+      <!-- Bouton rejouer -->
+      <button onclick="reinitialiserJeu()">🔄 Rejouer</button>
     </div>
 
-    <!-- Classement -->
-    <div class="highscores">
-      <h3>🏆 Meilleurs Scores</h3>
-      <ul id="highscore-list"></ul>
-    </div>
+    <script src="shared.js"></script>
+    <script>
+      // Variables globales du jeu
+      let niveauActuel = '';
+      let questionActuelle = null;
+      let scoreJoueur = 0;
+      let tempsRestant = 60;
+      let intervalTimer = null;
 
-    <!-- Bouton rejouer -->
-    <button onclick="reinitialiserJeu()">
-      🔄 Rejouer
-    </button>
-  </div>
-
-  <script src="shared.js"></script>
-  <script>
-    // Variables globales du jeu
-    let niveauActuel = '';
-    let questionActuelle = null;
-    let scoreJoueur = 0;
-    let tempsRestant = 60;
-    let intervalTimer = null;
-
-    // ... reste du code JavaScript
-  </script>
-</body>
+      // ... reste du code JavaScript
+    </script>
+  </body>
 </html>
 ```
 
@@ -796,10 +802,10 @@ Avant de commiter votre code, vérifiez :
 ```javascript
 // ❌ MAUVAIS - Mélange français/anglais
 function calculerScore() {
-  const totalQuestions = 15;  // OK
-  const correctAnswers = 12;  // ❌ Anglais
+  const totalQuestions = 15; // OK
+  const correctAnswers = 12; // ❌ Anglais
   const pourcentage = (correctAnswers / totalQuestions) * 100;
-  console.log('Score calculated:', pourcentage);  // ❌ Anglais
+  console.log('Score calculated:', pourcentage); // ❌ Anglais
   return pourcentage;
 }
 
