@@ -19,8 +19,10 @@ For development with live reload:
 # Python
 python3 -m http.server 8000
 
-# Node.js
-npx serve .
+# With Yarn / npm script (preferred)
+yarn serve
+# or
+npm run serve
 ```
 
 Then open `http://localhost:8000`
@@ -40,6 +42,8 @@ yarn install
 ### Available Commands
 
 ```bash
+# Local dev server
+yarn serve             # Start a simple static server on port 8000 (uses Python 3)
 # Commit with Commitizen (recommended)
 yarn commit
 

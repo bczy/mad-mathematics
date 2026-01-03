@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles for Mad Mathematics */
+@layer base {
+  body {
+    @apply min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  /* Gold gradient button style (from original design) */
+  .btn-gold {
+    @apply bg-gradient-to-br from-yellow-400 to-yellow-500 text-gray-900 font-bold px-6 py-3 rounded-lg shadow-lg;
+    @apply hover:from-yellow-300 hover:to-yellow-400 transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2;
+  }
+
+  /* Dark magical background (multiplication page style) */
+  .bg-dark-magic {
+    background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%);
+  }
+}
