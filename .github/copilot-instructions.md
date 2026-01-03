@@ -71,8 +71,10 @@ Open HTML files directly in browser (no build step required). For live reload du
 
 ```bash
 python3 -m http.server 8000
+# or use the project script
+yarn serve
 # or
-npx serve .
+npm run serve
 ```
 
 ### Deployment
@@ -125,10 +127,17 @@ Voir [`docs/README.md`](../docs/README.md) pour la liste complète et les guidel
 ### Package Manager
 
 - **Gestionnaire** : Yarn v4 (Modern/Berry) avec Plug'n'Play
+- **REQUIRED** : **Always use Yarn 4 - NEVER use npm**
 - **Lockfile** : `yarn.lock`
 - **Installation** : `yarn install`
 - **CI/CD** : `yarn install --immutable`
 - **Documentation** : [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md)
+
+**Why Yarn 4 only:**
+- Consistent dependency resolution across all environments
+- Plug'n'Play performance benefits
+- Project is configured specifically for Yarn 4
+- Using npm will cause conflicts and inconsistencies
 
 ### Build
 
@@ -176,8 +185,8 @@ ESLint is configured for code quality checks:
 # Option 1: Python
 python3 -m http.server 8000
 
-# Option 2: Node.js
-npx serve .
+# Option 2: Yarn script (preferred)
+yarn serve
 ```
 
 Then open `http://localhost:8000` in your browser.

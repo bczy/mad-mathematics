@@ -29,3 +29,7 @@ build/
 .yarn/*
 !.yarn/releases
 .pnp.*
+
+# GitHub Spec Kit - Agent folders (may contain credentials)
+.github/agents/
+.github/prompts/
