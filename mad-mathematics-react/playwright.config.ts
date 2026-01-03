@@ -26,10 +26,10 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
   ],
-  // Commented out for manual dev server control
-  // webServer: {
-  //   command: 'yarn dev',
-  //   url: 'http://localhost:5173',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: {
+    command: 'yarn dev --port 5173',
+    url: 'http://localhost:5173',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
 });
