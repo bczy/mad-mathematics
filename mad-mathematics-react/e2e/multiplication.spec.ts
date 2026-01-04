@@ -88,11 +88,14 @@ test.describe('Multiplication Page E2E', () => {
       // Wait for game screen
       await expect(page.getByRole('timer')).toBeVisible();
       
-      // Skip all 15 questions quickly
+      // Skip all 15 questions
+      const skipButton = page.getByRole('button', { name: /passer/i });
       for (let i = 0; i < 15; i++) {
-        await page.getByRole('button', { name: /passer/i }).click();
-        // Wait for next question or results screen
-        await page.waitForTimeout(100);
+        await skipButton.click();
+        // Wait for next question (progressbar changes) or results screen appears
+        if (i < 14) {
+          await expect(page.getByRole('progressbar', { name: new RegExp(`question ${i + 2}`, 'i') })).toBeVisible();
+        }
       }
       
       // Should show results screen with "Rejouer" button
@@ -111,9 +114,13 @@ test.describe('Multiplication Page E2E', () => {
       await page.getByRole('button', { name: /apprenti/i }).click();
       
       // Skip all questions
+      const skipButton = page.getByRole('button', { name: /passer/i });
       for (let i = 0; i < 15; i++) {
-        await page.getByRole('button', { name: /passer/i }).click();
-        await page.waitForTimeout(50);
+        await skipButton.click();
+        // Wait for next question (progressbar changes) or results screen appears
+        if (i < 14) {
+          await expect(page.getByRole('progressbar', { name: new RegExp(`question ${i + 2}`, 'i') })).toBeVisible();
+        }
       }
       
       // Wait for results
@@ -132,9 +139,13 @@ test.describe('Multiplication Page E2E', () => {
       await page.getByRole('button', { name: /apprenti/i }).click();
       
       // Skip all questions
+      const skipButton = page.getByRole('button', { name: /passer/i });
       for (let i = 0; i < 15; i++) {
-        await page.getByRole('button', { name: /passer/i }).click();
-        await page.waitForTimeout(50);
+        await skipButton.click();
+        // Wait for next question (progressbar changes) or results screen appears
+        if (i < 14) {
+          await expect(page.getByRole('progressbar', { name: new RegExp(`question ${i + 2}`, 'i') })).toBeVisible();
+        }
       }
       
       // Wait for results

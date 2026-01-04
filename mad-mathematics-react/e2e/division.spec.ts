@@ -55,9 +55,13 @@ test.describe('Division Page E2E', () => {
       await expect(page.getByRole('timer')).toBeVisible();
       
       // Skip all 20 questions
+      const skipButton = page.getByRole('button', { name: /passer/i });
       for (let i = 0; i < 20; i++) {
-        await page.getByRole('button', { name: /passer/i }).click();
-        await page.waitForTimeout(100);
+        await skipButton.click();
+        // Wait for next question (progressbar changes) or results screen appears
+        if (i < 19) {
+          await expect(page.getByRole('progressbar', { name: new RegExp(`question ${i + 2}`, 'i') })).toBeVisible();
+        }
       }
       
       await expect(page.getByRole('button', { name: /rejouer/i })).toBeVisible({ timeout: 10000 });
