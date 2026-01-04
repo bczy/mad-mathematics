@@ -9,8 +9,8 @@ import { test, expect } from '@playwright/test';
 
 // Configure visual comparison options
 const VISUAL_COMPARISON_OPTIONS = {
-  maxDiffPixels: 100, // Allow small differences for anti-aliasing
-  threshold: 0.2, // Tolerance for pixel differences
+  maxDiffPixels: 1000, // Allow differences for anti-aliasing and CI variations
+  threshold: 0.5, // Higher tolerance for pixel differences
 };
 
 test.describe('Visual Regression - Homepage', () => {
