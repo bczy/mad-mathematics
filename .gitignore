@@ -31,5 +31,29 @@ build/
 .pnp.*
 
 # GitHub Spec Kit - Agent folders (may contain credentials)
-.github/agents/
-.github/prompts/
+mad-mathematics-react/playwright-report/
+.gitignore
+mad-mathematics-react/playwright-report/index.html
+mad-mathematics-react/test-results/.last-run.json
+mad-mathematics-react/test-results/.playwright-artifacts-10/3d227a7a70cc108fb8231f961344075d.png
+mad-mathematics-react/test-results/.playwright-artifacts-10/27c004e6d0479285ec1cd13efb0f3292.png
+mad-mathematics-react/test-results/.playwright-artifacts-10/109b22cace39e669040756f1442a3d48.png
+mad-mathematics-react/test-results/.playwright-artifacts-10/a690b80328f1d16c566b948f20f88e73.png
+mad-mathematics-react/test-results/.playwright-artifacts-10/fef73d7543919f45eaa1f385a743caed.png
+mad-mathematics-react/test-results/.playwright-artifacts-11/3e8175c256f78ded4f36c04d85bb1e2d.png
+mad-mathematics-react/test-results/.playwright-artifacts-11/014c66de351e4afdf8ee4ec2c87cc67b.png
+mad-mathematics-react/test-results/.playwright-artifacts-11/15b4365da2832c9c56eb1b030ade2189.png
+mad-mathematics-react/test-results/.playwright-artifacts-11/2530e26f2b1477c650b7623eb65ea463.png
+mad-mathematics-react/test-results/.playwright-artifacts-11/bb7d1a528df724e1622d680cc48e7043.png
+mad-mathematics-react/test-results/.playwright-artifacts-8/41c774328ebab927042929ed02b0a364.png
+mad-mathematics-react/test-results/.playwright-artifacts-8/370a8cae53f0454c19c39361b0bad228.png
+mad-mathematics-react/test-results/.playwright-artifacts-8/21283dbae50f106eabe5b1ac62942c80.png
+mad-mathematics-react/test-results/.playwright-artifacts-8/c7606d18e3dc515fc3e789b5f3f8cf16.png
+mad-mathematics-react/test-results/.playwright-artifacts-8/e65bbd0c6ad6821f3f9ca96c272ae2c2.png
+mad-mathematics-react/test-results/.playwright-artifacts-9/5c500a8a569434049ef958f24a6f79c3.png
+mad-mathematics-react/test-results/.playwright-artifacts-9/5293b73c03e96b784c8cc972a1b57c92.png
+mad-mathematics-react/test-results/.playwright-artifacts-9/d3adadd1ca47c16005853d70b4c45b93.png
+mad-mathematics-react/test-results/.playwright-artifacts-9/eed47e7f758647b22bb872bd562e8f71.png
+mad-mathematics-react/test-results/division-Division-Page-E2E-12b0b-when-difficulty-is-selected-webkit/test-failed-1.png
+mad-mathematics-react/test-results/
+mad-mathematics-react/playwright-report/index.html
