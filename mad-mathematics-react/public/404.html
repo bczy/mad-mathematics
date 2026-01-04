@@ -1,61 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirection - Mad Mathematics</title>
-  <script>
-    // Legacy URL redirections for bookmark compatibility
-    const redirectMap = {
-      'table-de-multiplication.html': '/multiplication',
-      'table-des-additions.html': '/addition',
-      'table-des-soustractions.html': '/soustraction',
-      'table-des-divisions.html': '/division',
-    };
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirection - Mad Mathematics</title>
+    <script>
+      // Legacy URL redirections for bookmark compatibility
+      const redirectMap = {
+        'table-de-multiplication.html': '/multiplication',
+        'table-des-additions.html': '/addition',
+        'table-des-soustractions.html': '/soustraction',
+        'table-des-divisions.html': '/division'
+      };
 
-    // Get the current path
-    const currentPath = window.location.pathname.split('/').pop();
-    
-    // Check if we need to redirect
-    if (redirectMap[currentPath]) {
-      const newPath = redirectMap[currentPath];
-      console.log(`Redirecting from ${currentPath} to ${newPath}`);
-      window.location.replace(newPath);
-    } else {
-      // Default redirect to home
-      window.location.replace('/');
-    }
-  </script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-    .message {
-      text-align: center;
-      padding: 2rem;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    p {
-      font-size: 1.2rem;
-      opacity: 0.8;
-    }
-  </style>
-</head>
-<body>
-  <div class="message">
-    <h1>🧙‍♂️ Redirection en cours...</h1>
-    <p>Vous allez être redirigé vers la nouvelle version.</p>
-  </div>
-</body>
+      // Get the current path
+      const currentPath = window.location.pathname.split('/').pop();
+
+      // Check if we need to redirect
+      if (redirectMap[currentPath]) {
+        const newPath = redirectMap[currentPath];
+        console.log(`Redirecting from ${currentPath} to ${newPath}`);
+        window.location.replace(newPath);
+      } else {
+        // Default redirect to home
+        window.location.replace('/');
+      }
+    </script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: linear-gradient(
+          135deg,
+          #1a0033 0%,
+          #2d1b4e 50%,
+          #1a0033 100%
+        );
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .message {
+        text-align: center;
+        padding: 2rem;
+      }
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      p {
+        font-size: 1.2rem;
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="message">
+      <h1>🧙‍♂️ Redirection en cours...</h1>
+      <p>Vous allez être redirigé vers la nouvelle version.</p>
+    </div>
+  </body>
 </html>

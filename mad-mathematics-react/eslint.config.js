@@ -13,11 +13,11 @@ export default defineConfig([
       js.configs.recommended,
       tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
+      reactRefresh.configs.vite
     ],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: globals.browser
     },
     rules: {
       // Disable overly strict React Compiler rules
@@ -25,7 +25,7 @@ export default defineConfig([
       // - setState in effects for derived state (e.g., reset on prop change)
       // - Accessing refs in computed values
       'react-hooks/set-state-in-effect': 'off',
-      'react-hooks/refs': 'off',
-    },
-  },
+      'react-hooks/refs': 'off'
+    }
+  }
 ]);
