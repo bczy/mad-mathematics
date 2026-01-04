@@ -1,0 +1,64 @@
+name: Update Playwright Snapshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Playwright project (chromium, firefox, webkit)'
+        required: true
+        default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+
+jobs:
+  update-snapshots:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mad-mathematics-react
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Install Playwright browsers
+        run: yarn playwright install --with-deps ${{ inputs.project }}
+
+      - name: Build application
+        run: yarn build
+
+      - name: Update snapshots
+        run: yarn e2e --project=${{ inputs.project }} --update-snapshots
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push snapshots
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "test(e2e): update Playwright snapshots from CI [skip ci]"
+          git push
