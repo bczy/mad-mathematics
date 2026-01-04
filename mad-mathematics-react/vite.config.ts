@@ -14,5 +14,22 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        // Manual chunks for optimal code splitting
+        manualChunks: {
+          // Vendor libraries in separate chunks
+          'react-vendor': ['react', 'react-dom'],
+          'router': ['react-router-dom'],
+          'store': ['zustand'],
+        },
+      },
+    },
+    // Target modern browsers for smaller bundles
+    target: 'esnext',
+    // Minification settings
+    minify: 'esbuild',
+    // Chunk size warnings
+    chunkSizeWarningLimit: 500,
   },
 })
