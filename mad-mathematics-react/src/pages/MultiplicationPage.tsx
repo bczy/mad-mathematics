@@ -3,7 +3,7 @@
  * Main multiplication game page with 3-state flow: Selection → Game → Results
  */
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store';
 import { useGameTimer } from '../hooks/useGameTimer';
@@ -50,7 +50,7 @@ export function MultiplicationPage() {
 
   // Track if highscore was saved
   const highscoreSavedRef = useRef(false);
-  const isInTop5Ref = useRef(false);
+  const [isInTop5, setIsInTop5] = useState(false);
 
   // Current question
   const currentQuestion = questions[currentQuestionIndex];
@@ -103,7 +103,7 @@ export function MultiplicationPage() {
       const generatedQuestions = generateQuestions(selectedDifficulty);
       startGame(selectedDifficulty, generatedQuestions);
       highscoreSavedRef.current = false;
-      isInTop5Ref.current = false;
+      setIsInTop5(false);
       resetTimer();
       startTimer();
     },
@@ -121,13 +121,13 @@ export function MultiplicationPage() {
     if (status === 'results' && difficulty && !highscoreSavedRef.current) {
       highscoreSavedRef.current = true;
       const storageKey = createHighscoreKey('multiplication', difficulty.id);
-      const isTop5 = addHighscore(storageKey, {
+      const result = addHighscore(storageKey, {
         name: playerName || 'Anonyme',
         score,
         time: timeElapsed,
         date: new Date().toISOString(),
       });
-      isInTop5Ref.current = isTop5;
+      setIsInTop5(result);
     }
   }, [status, difficulty, playerName, score, timeElapsed, addHighscore]);
 
@@ -165,7 +165,7 @@ export function MultiplicationPage() {
       timeElapsed={timeElapsed}
       answers={answers}
       difficulty={difficulty!}
-      isInTop5={isInTop5Ref.current}
+      isInTop5={isInTop5}
       playerName={playerName || 'Anonyme'}
       onPlayAgain={handlePlayAgain}
       onChangeDifficulty={handlePlayAgain}

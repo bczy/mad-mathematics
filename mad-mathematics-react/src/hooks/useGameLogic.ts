@@ -70,12 +70,13 @@ function generateQuestion(
       num2 = randomInt(minNum, num1);
       break;
 
-    case '÷':
+    case '÷': {
       // Generate divisible pairs (num2 * quotient = num1)
       num2 = randomInt(Math.max(1, minNum), maxNum); // Avoid division by zero
       const quotient = randomInt(minNum, maxNum);
       num1 = num2 * quotient;
       break;
+    }
 
     default:
       throw new Error(`Unknown operation: ${operation}`);

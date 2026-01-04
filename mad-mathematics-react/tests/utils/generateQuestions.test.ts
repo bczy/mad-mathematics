@@ -11,7 +11,7 @@ import {
   generateUniqueQuestions,
   isSameQuestion,
 } from '../../src/utils/generateQuestions';
-import type { Difficulty, Question } from '../../src/types';
+import type { Difficulty, Question, Operation } from '../../src/types';
 
 describe('randomInt', () => {
   it('generates numbers within range', () => {
@@ -71,7 +71,7 @@ describe('calculate', () => {
 
   describe('error handling', () => {
     it('throws for unknown operation', () => {
-      expect(() => calculate(5, 5, '%' as any)).toThrow('Unknown operation');
+      expect(() => calculate(5, 5, '%' as unknown as Operation)).toThrow('Unknown operation');
     });
   });
 });

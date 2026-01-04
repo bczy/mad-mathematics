@@ -7,7 +7,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import App from '../src/App';
 import { HomePage, MultiplicationPage, AdditionPage, SoustractionPage, DivisionPage } from '../src/pages';
 import { useStore } from '../src/store';
 
@@ -163,8 +162,6 @@ describe('Route State Preservation', () => {
   });
 
   it('preserves player name across route changes', async () => {
-    const user = userEvent.setup();
-    
     // Set player name in store
     useStore.getState().setPlayerName('Mathéo');
     
