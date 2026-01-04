@@ -18,7 +18,7 @@ Phase 1 project setup has been completed successfully with all dependencies inst
 - **T002** ✅ Core dependencies installed: react@19.2.0, react-dom@19.2.0, react-router-dom@7.11.0, zustand@5.0.9, zod@4.3.4
 - **T003** ✅ Dev dependencies installed: typescript@5.9.3, vite@7.2.4, tailwindcss@3.4.19, eslint@9.39.1
 - **T004** ✅ Testing dependencies installed: vitest@4.0.16, @testing-library/react@16.3.1, @playwright/test@1.57.0
-- **T005** ✅ TypeScript configured with strict mode, path aliases (@/*), test types
+- **T005** ✅ TypeScript configured with strict mode, path aliases (@/\*), test types
 - **T006** ✅ Vite configured with React plugin, path aliases, build settings
 - **T007** ✅ Tailwind CSS initialized with custom content paths
 - **T008** ✅ Custom Tailwind theme created (gold colors, dark-magic gradient)
@@ -39,11 +39,13 @@ Phase 1 project setup has been completed successfully with all dependencies inst
 ## System Requirements
 
 ### Node.js Upgrade
+
 - ✅ Node.js upgraded from v18.19.1 to v20.19.6 (LTS)
 - ✅ npm upgraded to v10.8.2
 - ✅ nvm v0.40.1 installed for version management
 
 ### Package Manager
+
 - ✅ Yarn 4.12.0 configured via Corepack
 - ✅ `packageManager` field added to package.json
 - ✅ Switched from Plug'n'Play to node-modules for compatibility
@@ -54,17 +56,17 @@ Phase 1 project setup has been completed successfully with all dependencies inst
 
 All package.json scripts have been tested and verified:
 
-| Command | Status | Output |
-|---------|--------|--------|
-| `yarn install` | ✅ PASS | Clean install, no warnings |
-| `yarn build` | ✅ PASS | Builds to dist/, 193.96 KB bundle |
-| `yarn lint` | ✅ PASS | No linting errors |
-| `yarn test:run` | ✅ PASS | 2/2 tests passing |
-| `yarn test:coverage` | ✅ PASS | Coverage reporting works |
-| `yarn test:ui` | ✅ PASS | Vitest UI launches |
-| `yarn dev` | ✅ PASS | Dev server on port 5173 |
-| `yarn preview` | ✅ PASS | Preview server on port 4173 |
-| `yarn e2e` | ✅ CONFIGURED | Playwright ready (chromium installed) |
+| Command              | Status        | Output                                |
+| -------------------- | ------------- | ------------------------------------- |
+| `yarn install`       | ✅ PASS       | Clean install, no warnings            |
+| `yarn build`         | ✅ PASS       | Builds to dist/, 193.96 KB bundle     |
+| `yarn lint`          | ✅ PASS       | No linting errors                     |
+| `yarn test:run`      | ✅ PASS       | 2/2 tests passing                     |
+| `yarn test:coverage` | ✅ PASS       | Coverage reporting works              |
+| `yarn test:ui`       | ✅ PASS       | Vitest UI launches                    |
+| `yarn dev`           | ✅ PASS       | Dev server on port 5173               |
+| `yarn preview`       | ✅ PASS       | Preview server on port 4173           |
+| `yarn e2e`           | ✅ CONFIGURED | Playwright ready (chromium installed) |
 
 ---
 
@@ -115,29 +117,34 @@ mad-mathematics-react/
 ## Configuration Details
 
 ### TypeScript (tsconfig.app.json)
+
 - Strict mode enabled
 - Path aliases: `@/*` → `src/*`
 - Test types: vitest/globals, @testing-library/jest-dom
 - Target: ES2022
 
 ### Tailwind CSS (tailwind.config.js)
+
 - Custom colors: gold (#ffd700, #ffed4e)
 - Custom gradients: dark-magic (purple gradient)
 - Plugins: @tailwindcss/forms
 
 ### Vitest (vitest.config.ts)
+
 - Environment: jsdom
 - Coverage provider: v8
 - Coverage thresholds: 90% (statements, branches, functions, lines)
 - Setup file: tests/setup.ts
 
 ### Playwright (playwright.config.ts)
+
 - Test directory: e2e/
 - Browsers: chromium, firefox, webkit
 - Base URL: http://localhost:5173
 - Screenshots on failure, traces on retry
 
 ### GitHub Actions (.github/workflows/ci.yml)
+
 - Jobs: test → build → e2e → deploy
 - Runs on: ubuntu-latest, Node.js 20
 - Deploys to GitHub Pages on main branch
@@ -149,21 +156,25 @@ mad-mathematics-react/
 ## Known Issues & Resolutions
 
 ### Issue 1: Tailwind CSS v4 PostCSS Plugin Error ✅ RESOLVED
+
 - **Problem:** Tailwind v4 requires separate `@tailwindcss/postcss` package
 - **Solution:** Downgraded to Tailwind CSS v3.4.19
 - **Status:** Resolved, builds successfully
 
 ### Issue 2: Corepack PnP Conflicts ✅ RESOLVED
+
 - **Problem:** Yarn Plug'n'Play trying to access corepack (Node.js built-in)
 - **Solution:** Switched to `nodeLinker: node-modules` in .yarnrc.yml
 - **Status:** Resolved, no more warnings
 
 ### Issue 3: Vitest "No test files found" ✅ RESOLVED
+
 - **Problem:** No test files existed initially
 - **Solution:** Created src/setup.test.ts with basic verification tests
 - **Status:** Resolved, 2/2 tests passing
 
 ### Issue 4: Playwright webServer Hanging ✅ RESOLVED
+
 - **Problem:** Playwright webServer config causing test hangs
 - **Solution:** Commented out webServer in playwright.config.ts for manual control
 - **Status:** Resolved, can run manually or re-enable for CI
@@ -173,6 +184,7 @@ mad-mathematics-react/
 ## Test Files Created
 
 ### Unit Test (src/setup.test.ts)
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 
@@ -188,6 +200,7 @@ describe('Setup verification', () => {
 ```
 
 ### E2E Test (e2e/setup.spec.ts)
+
 ```typescript
 import { test, expect } from '@playwright/test';
 
@@ -208,12 +221,14 @@ test.describe('Setup verification', () => {
 Phase 1 is complete. Ready to proceed to Phase 2: Foundational Development
 
 ### Phase 2 Tasks (T017-T049)
+
 - Create Zustand store structure
 - Implement shared utilities (formatTime, generateQuestions, validation)
 - Create reusable components (Button, Timer, ProgressBar, HighscoreTable)
 - Setup E2E scaffolding
 
 ### Estimated Timeline
+
 - Phase 2: 3-4 days
 - Phase 3 (Multiplication Page): 2 days
 - Phase 4 (Other Pages): 2 days

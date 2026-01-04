@@ -5,7 +5,7 @@
 **Status**: Draft  
 **Input**: User description: "Refonte complète du projet en React + TypeScript + Tailwind CSS pour améliorer la maintenabilité, éliminer la duplication de code et faciliter l'évolution future. Migration de toutes les pages de jeu (multiplication, addition, soustraction, division) vers une architecture basée sur des composants réutilisables."
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Architecture de Composants Réutilisables (Priority: P1)
 
@@ -114,27 +114,20 @@ En tant qu'utilisateur, je veux que l'application se charge rapidement et reste 
 
 - **Que se passe-t-il quand** localStorage est plein ou désactivé ?
   - Afficher un message d'erreur convivial et permettre de jouer sans sauvegarde de scores
-  
 - **Que se passe-t-il quand** un joueur entre un nom très long (> 100 caractères) ?
   - Tronquer le nom avec ellipsis (`...`) dans l'affichage mais stocker le nom complet
-  
 - **Que se passe-t-il quand** un joueur entre des caractères Unicode/emojis dans son nom ?
   - Accepter et afficher correctement (validation Zod pour les strings)
-  
 - **Que se passe-t-il quand** la connexion Internet est perdue pendant une partie ?
   - L'application continue de fonctionner (100% client-side, pas d'API)
-  
 - **Que se passe-t-il quand** un joueur rafraîchit la page pendant une partie ?
   - La partie en cours est perdue (comportement acceptable, comme actuellement)
-  
 - **Que se passe-t-il quand** les données localStorage sont corrompues (JSON invalide) ?
   - Parser avec try/catch, réinitialiser aux valeurs par défaut, logger l'erreur en console
-  
 - **Que se passe-t-il quand** le navigateur ne supporte pas les features modernes (très vieux Safari) ?
   - Afficher une bannière "Navigateur non supporté, veuillez mettre à jour" (config browserslist)
 
-
-## Functional Requirements *(mandatory)*
+## Functional Requirements _(mandatory)_
 
 ### Architecture & Setup
 
@@ -162,7 +155,7 @@ En tant qu'utilisateur, je veux que l'application se charge rapidement et reste 
 
 **FR-017**: Create Zustand store with slices for: `playerName`, `highscores` (keyed by level), `currentGameState` (active game session)  
 **FR-018**: Implement Zustand middleware for localStorage persistence (sync player name and highscores automatically)  
-**FR-019**: Create typed selectors and actions for store access (usePlayerName, useHighscores, useSaveHighscore, etc.)  
+**FR-019**: Create typed selectors and actions for store access (usePlayerName, useHighscores, useSaveHighscore, etc.)
 
 ### Custom Hooks (Game Logic)
 
@@ -260,7 +253,7 @@ En tant qu'utilisateur, je veux que l'application se charge rapidement et reste 
 
 ---
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 These are measurable, technology-agnostic outcomes to verify feature success:
 
@@ -312,7 +305,7 @@ These are measurable, technology-agnostic outcomes to verify feature success:
 
 ---
 
-## Key Entities *(if relevant)*
+## Key Entities _(if relevant)_
 
 ### Highscore
 
@@ -364,7 +357,7 @@ These are measurable, technology-agnostic outcomes to verify feature success:
 
 ---
 
-## Assumptions *(if any)*
+## Assumptions _(if any)_
 
 1. **Deployment**: GitHub Pages hosting continues to be the deployment target (Vite build outputs static files compatible with GH Pages)
 
@@ -384,7 +377,7 @@ These are measurable, technology-agnostic outcomes to verify feature success:
 
 ---
 
-## Migration Strategy *(optional but recommended)*
+## Migration Strategy _(optional but recommended)_
 
 **Deployment Approach**: Big-bang migration - All development happens in the `001-react-tailwind-refactor` feature branch. The vanilla JS version remains on production (main branch) until Phase 6 is complete, tested, and validated. At that point, the React version replaces the vanilla JS version entirely via a single merge and deployment.
 

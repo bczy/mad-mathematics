@@ -55,6 +55,7 @@ All features MUST be built using React with TypeScript and Tailwind CSS. Compone
 **Rationale**: Component-based development eliminates code duplication, improves maintainability, and enables faster feature development. TypeScript provides type safety preventing runtime errors. Tailwind CSS ensures consistent styling with utility-first approach. This modernization supports long-term project evolution while maintaining educational quality.
 
 **Non-negotiable rules**:
+
 - React 18+ for all UI components
 - TypeScript for type safety (strict mode enabled)
 - Tailwind CSS for all styling (no custom CSS except Tailwind config)
@@ -67,6 +68,7 @@ All features MUST be built using React with TypeScript and Tailwind CSS. Compone
 Code changes MUST follow the TDD cycle: Write failing tests → Get approval → Implement code to pass tests → Refactor.
 
 **Coverage requirements (NON-NEGOTIABLE)**:
+
 - Minimum 90% coverage on all metrics (statements, branches, functions, lines)
 - All components MUST have unit tests with Vitest + React Testing Library
 - Tests MUST be co-located with components (e.g., `Button.test.tsx` next to `Button.tsx`)
@@ -74,6 +76,7 @@ Code changes MUST follow the TDD cycle: Write failing tests → Get approval →
 - Tests MUST use proper React testing patterns (render, screen, userEvent)
 
 **React testing specifics**:
+
 - Test component behavior, not implementation details
 - Use accessibility queries (getByRole, getByLabelText) over test IDs
 - Mock external dependencies (localStorage, APIs) consistently
@@ -86,12 +89,14 @@ Code changes MUST follow the TDD cycle: Write failing tests → Get approval →
 Documentation MUST be synchronized with code changes in the same commit. AI agents MUST request explicit user approval before modifying documentation.
 
 **Mandatory documentation workflow**:
+
 1. Detect documentation impact when code changes
 2. Request user permission: "This change impacts [file.md]. Update documentation?"
 3. Wait for approval before proceeding
 4. Commit code + docs together (atomic commits)
 
 **Documentation structure**:
+
 - `.github/copilot-instructions.md` - Master index for AI agents and developers
 - `docs/*.md` - Specialized guidelines (testing, deployment, architecture)
 - `README.md` - Project overview and quick start
@@ -104,6 +109,7 @@ Documentation MUST be synchronized with code changes in the same commit. AI agen
 All user-facing text MUST be in French. Features MUST prioritize children's engagement through gamification (scores, timers, medals, emojis).
 
 **UX requirements**:
+
 - UI text in French (no English except technical comments)
 - Immediate visual feedback (green ✅ for correct, red ❌ for incorrect)
 - Thematic difficulty naming (Apprenti/Sorcier/Archimage, not Easy/Medium/Hard)
@@ -117,6 +123,7 @@ All user-facing text MUST be in French. Features MUST prioritize children's enga
 Components MUST follow React accessibility best practices and WCAG 2.1 guidelines. Responsive design MUST support mobile devices using Tailwind's responsive utilities.
 
 **Accessibility checklist**:
+
 - Use semantic HTML elements in JSX (`<button>`, `<input type="number">`, `<section>`)
 - ARIA attributes via props (aria-label, aria-describedby, role)
 - Keyboard navigation support (onKeyDown handlers, focus management)
@@ -125,6 +132,7 @@ Components MUST follow React accessibility best practices and WCAG 2.1 guideline
 - Focus indicators visible (Tailwind's focus: variants)
 
 **Component design principles**:
+
 - Single Responsibility: Each component does one thing well
 - Composition over inheritance: Build complex UIs from simple components
 - Props typing: All props must have TypeScript interfaces
@@ -132,6 +140,7 @@ Components MUST follow React accessibility best practices and WCAG 2.1 guideline
 - Error boundaries: Wrap game sections to prevent full app crashes
 
 **Simplicity rules**:
+
 - Prefer composition over complex logic
 - Extract reusable logic into custom hooks
 - Keep components < 200 lines (split if larger)
@@ -144,6 +153,7 @@ Components MUST follow React accessibility best practices and WCAG 2.1 guideline
 All commits MUST pass automated quality checks: TypeScript compilation, linting (ESLint + React rules), formatting (Prettier), and conventional commit format.
 
 **Commit format (REQUIRED)**:
+
 ```
 type(scope): description
 
@@ -159,6 +169,7 @@ Examples:
 **Branch naming (REQUIRED)**: `type/description` (e.g., `feat/timer-component`, `fix/typescript-errors`)
 
 **TypeScript standards**:
+
 - Strict mode enabled (`strict: true` in tsconfig.json)
 - No `any` types (use `unknown` and type guards if needed)
 - Explicit return types for functions (except simple arrow functions)
@@ -166,6 +177,7 @@ Examples:
 - Exhaustive switch statements (ensure all cases covered)
 
 **React/Code style**:
+
 - 2-space indentation
 - Single quotes for strings
 - Semicolons required
@@ -175,6 +187,7 @@ Examples:
 - Components in PascalCase, hooks in camelCase with 'use' prefix
 
 **ESLint rules (enforced)**:
+
 - `@typescript-eslint/recommended`
 - `plugin:react/recommended`
 - `plugin:react-hooks/recommended`
@@ -187,6 +200,7 @@ Examples:
 Production deployment uses Vite build process to generate optimized static assets for GitHub Pages. Build output MUST be production-ready and performant.
 
 **Build pipeline (REQUIRED)**:
+
 - Vite for development server (HMR - Hot Module Replacement)
 - TypeScript compilation as part of build
 - Tailwind CSS purging for minimal CSS bundle
@@ -195,6 +209,7 @@ Production deployment uses Vite build process to generate optimized static asset
 - Environment variables via `.env` files (never commit secrets)
 
 **Deployment process**:
+
 - GitHub Actions workflow builds on push to `main`
 - Build output to `dist/` directory
 - GitHub Pages serves `dist/` as static SPA
@@ -202,6 +217,7 @@ Production deployment uses Vite build process to generate optimized static asset
 - LocalStorage for all data persistence (scores, player names)
 
 **Performance targets (enforced)**:
+
 - Initial load: < 2 seconds on 3G connection
 - Time to Interactive: < 1 second
 - Lighthouse score: 90+ (Performance, Accessibility, Best Practices)
@@ -209,6 +225,7 @@ Production deployment uses Vite build process to generate optimized static asset
 - Core Web Vitals: LCP < 2.5s, FID < 100ms, CLS < 0.1
 
 **Security considerations**:
+
 - Validate all user input (player names, scores) with Zod schemas
 - Use React's built-in XSS protection (automatic escaping)
 - Never commit secrets or API keys (use env vars)
@@ -222,6 +239,7 @@ Production deployment uses Vite build process to generate optimized static asset
 ### Technology Stack (LOCKED)
 
 **Production (mandatory)**:
+
 - React 18+
 - TypeScript 5+ (strict mode)
 - Tailwind CSS 3+
@@ -230,6 +248,7 @@ Production deployment uses Vite build process to generate optimized static asset
 - Zod (runtime validation)
 
 **Development Dependencies**:
+
 - Yarn v4 (Plug'n'Play) for dependency management
 - Vitest for unit testing
 - React Testing Library + @testing-library/user-event
@@ -242,6 +261,7 @@ Production deployment uses Vite build process to generate optimized static asset
 ### Component Architecture Standards
 
 **Directory structure (REQUIRED)**:
+
 ```
 src/
 ├── components/          # Reusable UI components
@@ -271,6 +291,7 @@ src/
 ```
 
 **Component patterns**:
+
 - Shared UI components in `components/` (Button, Input, Card, Timer, etc.)
 - Game-specific components in `features/<game-name>/`
 - Custom hooks for reusable logic (game state, timers, localStorage)
@@ -280,6 +301,7 @@ src/
 ### Type Safety Requirements
 
 **All code MUST be type-safe**:
+
 - No implicit `any` (enforce via `noImplicitAny: true`)
 - Props interfaces for all components
 - Return types for functions (especially hooks)
@@ -287,6 +309,7 @@ src/
 - Discriminated unions for state machines (e.g., game states)
 
 **Example patterns**:
+
 ```typescript
 // Component props
 interface ButtonProps {
@@ -315,6 +338,7 @@ type GameState =
 ### Build & Bundle Optimization
 
 **Vite configuration requirements**:
+
 - CSS code splitting enabled
 - Asset inlining threshold: 4KB
 - Chunk size warnings at 500KB
@@ -323,6 +347,7 @@ type GameState =
 - Compression (gzip + brotli) in production
 
 **Tailwind optimization**:
+
 - Purge unused classes in production
 - JIT (Just-In-Time) mode enabled
 - Custom theme values minimized (use defaults when possible)
@@ -341,7 +366,7 @@ type GameState =
 ### Browser Support
 
 - Chromium-based browsers (Chrome, Edge, Opera) - last 2 versions
-- Firefox - last 2 versions  
+- Firefox - last 2 versions
 - Safari - last 2 versions
 - No IE11 support required
 - Mobile browsers: iOS Safari 14+, Chrome Android 90+
@@ -380,6 +405,7 @@ type GameState =
 ### Hotfix Process
 
 For critical bugs in production:
+
 1. Create branch: `fix/critical-bug-name`
 2. Implement fix with TypeScript
 3. Add regression test
@@ -393,6 +419,7 @@ For critical bugs in production:
 This constitution supersedes all other development practices. In conflicts between this document and other guidelines, the constitution takes precedence.
 
 **Amendment procedure**:
+
 1. Propose amendment via GitHub Discussion or Issue
 2. Document rationale and impact analysis
 3. Require maintainer approval (consensus)
@@ -412,6 +439,7 @@ This constitution supersedes all other development practices. In conflicts betwe
 ### Complexity Justification
 
 Any violation of principles (e.g., adding a framework, lowering coverage threshold) MUST include:
+
 1. Specific problem being solved
 2. Why simpler alternative is insufficient
 3. Mitigation plan for added complexity
@@ -420,6 +448,7 @@ Any violation of principles (e.g., adding a framework, lowering coverage thresho
 ### Runtime Guidance
 
 For AI agents and developers, runtime guidance during feature development is found in:
+
 - `.github/copilot-instructions.md` - Primary reference (update for React patterns)
 - `docs/TESTING_GUIDELINES.md` - Test patterns (update for React Testing Library)
 - `docs/DOCUMENTATION_GUIDELINES.md` - Documentation workflows (unchanged)

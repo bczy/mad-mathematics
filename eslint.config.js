@@ -7,7 +7,10 @@ export default [
       'build/**',
       '.husky/**',
       '.yarn/**',
-      '.pnp.*'
+      '.pnp.*',
+      'mad-mathematics-react/dist/**',
+      'mad-mathematics-react/coverage/**',
+      'mad-mathematics-react/node_modules/**'
     ]
   },
   {

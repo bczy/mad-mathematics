@@ -41,18 +41,18 @@ Ouvrir [http://localhost:5173](http://localhost:5173) dans votre navigateur.
 
 ## 📜 Scripts Disponibles
 
-| Commande | Description |
-|----------|-------------|
-| `yarn dev` | Démarre le serveur de développement (HMR) |
-| `yarn build` | Build de production optimisé |
-| `yarn preview` | Prévisualise le build de production |
-| `yarn test` | Lance les tests unitaires en mode watch |
-| `yarn test:run` | Lance les tests unitaires une fois |
-| `yarn test:coverage` | Génère le rapport de couverture |
-| `yarn e2e` | Lance les tests E2E Playwright |
-| `yarn e2e:ui` | Lance Playwright en mode interactif |
-| `yarn lint` | Vérifie le code avec ESLint |
-| `yarn tsc -b` | Vérifie les types TypeScript |
+| Commande             | Description                               |
+| -------------------- | ----------------------------------------- |
+| `yarn dev`           | Démarre le serveur de développement (HMR) |
+| `yarn build`         | Build de production optimisé              |
+| `yarn preview`       | Prévisualise le build de production       |
+| `yarn test`          | Lance les tests unitaires en mode watch   |
+| `yarn test:run`      | Lance les tests unitaires une fois        |
+| `yarn test:coverage` | Génère le rapport de couverture           |
+| `yarn e2e`           | Lance les tests E2E Playwright            |
+| `yarn e2e:ui`        | Lance Playwright en mode interactif       |
+| `yarn lint`          | Vérifie le code avec ESLint               |
+| `yarn tsc -b`        | Vérifie les types TypeScript              |
 
 ## 🏗️ Architecture
 
@@ -80,17 +80,17 @@ src/
 
 ### Stack Technique
 
-| Technologie | Usage |
-|-------------|-------|
-| **React 19** | UI Library avec hooks |
-| **TypeScript 5.9** | Type safety strict |
-| **Vite 7** | Build tool & dev server |
-| **Tailwind CSS 3** | Styling utility-first |
-| **Zustand 5** | État global léger |
-| **React Router 7** | Routing client-side |
-| **Zod 4** | Validation runtime |
-| **Vitest** | Tests unitaires |
-| **Playwright** | Tests E2E & visual regression |
+| Technologie        | Usage                         |
+| ------------------ | ----------------------------- |
+| **React 19**       | UI Library avec hooks         |
+| **TypeScript 5.9** | Type safety strict            |
+| **Vite 7**         | Build tool & dev server       |
+| **Tailwind CSS 3** | Styling utility-first         |
+| **Zustand 5**      | État global léger             |
+| **React Router 7** | Routing client-side           |
+| **Zod 4**          | Validation runtime            |
+| **Vitest**         | Tests unitaires               |
+| **Playwright**     | Tests E2E & visual regression |
 
 ## 🧪 Tests
 
@@ -130,6 +130,7 @@ yarn build
 ```
 
 Le build optimisé est généré dans `dist/`:
+
 - Bundle gzippé: ~93KB
 - Code splitting avec lazy loading
 - Modulepreload pour les chunks critiques
@@ -137,6 +138,7 @@ Le build optimisé est généré dans `dist/`:
 ### Déploiement GitHub Pages
 
 Le déploiement est automatique via GitHub Actions:
+
 1. Push sur `main` déclenche le workflow CI/CD
 2. Tests (lint, typecheck, unit, E2E) s'exécutent
 3. Build de production

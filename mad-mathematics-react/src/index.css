@@ -6,7 +6,10 @@
 @layer base {
   body {
     @apply min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
   }
 }
 

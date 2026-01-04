@@ -134,6 +134,7 @@ Voir [`docs/README.md`](../docs/README.md) pour la liste complète et les guidel
 - **Documentation** : [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md)
 
 **Why Yarn 4 only:**
+
 - Consistent dependency resolution across all environments
 - Plug'n'Play performance benefits
 - Project is configured specifically for Yarn 4
