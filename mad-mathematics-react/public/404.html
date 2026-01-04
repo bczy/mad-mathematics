@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirection - Mad Mathematics</title>
     <script>
+      // Base path for GitHub Pages deployment
+      const basePath = '/mad-mathematics';
+
       // Legacy URL redirections for bookmark compatibility
       const redirectMap = {
         'table-de-multiplication.html': '/multiplication',
@@ -13,17 +16,19 @@
         'table-des-divisions.html': '/division'
       };
 
-      // Get the current path
-      const currentPath = window.location.pathname.split('/').pop();
+      // Get the current path (remove base path if present)
+      const fullPath = window.location.pathname;
+      const pathWithoutBase = fullPath.replace(basePath, '');
+      const currentPath = pathWithoutBase.split('/').pop();
 
       // Check if we need to redirect
       if (redirectMap[currentPath]) {
-        const newPath = redirectMap[currentPath];
+        const newPath = basePath + redirectMap[currentPath];
         console.log(`Redirecting from ${currentPath} to ${newPath}`);
         window.location.replace(newPath);
       } else {
         // Default redirect to home
-        window.location.replace('/');
+        window.location.replace(basePath + '/');
       }
     </script>
     <style>
