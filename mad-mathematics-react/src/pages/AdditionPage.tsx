@@ -45,6 +45,8 @@ export function AdditionPage() {
   // Local state for per-question timer
   const [questionTimeElapsed, setQuestionTimeElapsed] = useState(0);
   const [totalTimeSpent, setTotalTimeSpent] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [isInTop5, setIsInTop5] = useState(false);
   const timerIntervalRef = useRef<number | null>(null);
 
   // Game logic hook
@@ -52,7 +54,6 @@ export function AdditionPage() {
 
   // Track if highscore was saved
   const highscoreSavedRef = useRef(false);
-  const isInTop5Ref = useRef(false);
 
   // Current question
   const currentQuestion = questions[currentQuestionIndex];
@@ -70,6 +71,7 @@ export function AdditionPage() {
     
     // Only start timer if there's a time limit (0 = unlimited)
     if (timeLimit > 0) {
+      setIsTimerRunning(true);
       timerIntervalRef.current = window.setInterval(() => {
         setQuestionTimeElapsed((prev) => {
           const next = prev + 1;
@@ -86,16 +88,8 @@ export function AdditionPage() {
       clearInterval(timerIntervalRef.current);
       timerIntervalRef.current = null;
     }
+    setIsTimerRunning(false);
   }, []);
-
-  // Handle timeout for current question
-  useEffect(() => {
-    if (timeLimit > 0 && questionTimeElapsed >= timeLimit) {
-      stopTimer();
-      // Auto-skip on timeout
-      handleSubmitAnswer(null);
-    }
-  }, [questionTimeElapsed, timeLimit, stopTimer]);
 
   // Handle game finish
   const handleGameFinish = useCallback(() => {
@@ -124,13 +118,22 @@ export function AdditionPage() {
     [currentQuestion, currentQuestionIndex, totalQuestions, submitAnswer, handleGameFinish, stopTimer, startQuestionTimer]
   );
 
+  // Handle timeout for current question
+  useEffect(() => {
+    if (timeLimit > 0 && questionTimeElapsed >= timeLimit) {
+      stopTimer();
+      // Auto-skip on timeout
+      handleSubmitAnswer(null);
+    }
+  }, [questionTimeElapsed, timeLimit, stopTimer, handleSubmitAnswer]);
+
   // Handle difficulty selection and game start
   const handleStartGame = useCallback(
     (selectedDifficulty: Difficulty) => {
       const generatedQuestions = generateQuestions(selectedDifficulty);
       startGame(selectedDifficulty, generatedQuestions);
       highscoreSavedRef.current = false;
-      isInTop5Ref.current = false;
+      setIsInTop5(false);
       setQuestionTimeElapsed(0);
       setTotalTimeSpent(0);
       startQuestionTimer();
@@ -160,13 +163,13 @@ export function AdditionPage() {
     if (status === 'results' && difficulty && !highscoreSavedRef.current) {
       highscoreSavedRef.current = true;
       const storageKey = createHighscoreKey('addition', difficulty.id);
-      const isTop5 = addHighscore(storageKey, {
+      const result = addHighscore(storageKey, {
         name: playerName || 'Anonyme',
         score,
         time: totalTimeSpent,
         date: new Date().toISOString(),
       });
-      isInTop5Ref.current = isTop5;
+      setIsInTop5(result);
     }
   }, [status, difficulty, playerName, score, totalTimeSpent, addHighscore]);
 
@@ -189,7 +192,7 @@ export function AdditionPage() {
         totalQuestions={totalQuestions}
         timeElapsed={questionTimeElapsed}
         timeLimit={timeLimit}
-        isRunning={timerIntervalRef.current !== null}
+        isRunning={isTimerRunning}
         onSubmit={handleSubmitAnswer}
         onSkip={() => handleSubmitAnswer(null)}
       />
@@ -204,7 +207,7 @@ export function AdditionPage() {
       timeElapsed={totalTimeSpent}
       answers={answers}
       difficulty={difficulty!}
-      isInTop5={isInTop5Ref.current}
+      isInTop5={isInTop5}
       playerName={playerName || 'Anonyme'}
       onPlayAgain={handlePlayAgain}
       onChangeDifficulty={handlePlayAgain}

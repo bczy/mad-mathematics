@@ -44,11 +44,11 @@ export function QuestionDisplay({
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Focus input on mount and when question changes
+  // Reset input value and focus when question changes
   useEffect(() => {
-    inputRef.current?.focus();
     setInputValue('');
-  }, [question]);
+    inputRef.current?.focus();
+  }, [question.num1, question.num2, question.operation]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

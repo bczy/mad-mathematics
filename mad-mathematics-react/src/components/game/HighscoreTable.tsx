@@ -49,11 +49,11 @@ export function HighscoreTable({
 }: HighscoreTableProps) {
   // Get the raw highscores map and select just the array we need
   const highscoresMap = useStore((state) => state.highscores);
-  const highscores = highscoresMap[storageKey] || [];
 
   // Create display rows (always show 5 rows, with placeholders for empty slots)
-  const displayRows = useMemo(() => 
-    Array.from({ length: MAX_HIGHSCORES }, (_, index) => {
+  const displayRows = useMemo(() => {
+    const highscores = highscoresMap[storageKey] || [];
+    return Array.from({ length: MAX_HIGHSCORES }, (_, index) => {
       const score = highscores[index];
       return {
         rank: getRankDisplay(index),
@@ -62,7 +62,8 @@ export function HighscoreTable({
         time: score?.time ?? null,
         isEmpty: !score,
       };
-    }), [highscores]);
+    });
+  }, [highscoresMap, storageKey]);
 
   return (
     <div className={`bg-purple-900/30 rounded-xl p-4 ${className}`} role="region" aria-label="Tableau des meilleurs scores">
