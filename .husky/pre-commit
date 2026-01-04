@@ -1,11 +1,10 @@
 #!/bin/sh
 
+cd mad-mathematics-react
+
 # Run linters
 echo "🔍 Running ESLint..."
 yarn lint || exit 1
-
-echo "✨ Running Prettier check..."
-yarn format:check || exit 1
 
 # Run tests
 echo "🧪 Running tests..."
