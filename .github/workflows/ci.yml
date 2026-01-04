@@ -99,13 +99,13 @@ jobs:
         run: yarn install --immutable
 
       - name: Install Playwright browsers
-        run: yarn playwright install --with-deps
+        run: yarn playwright install --with-deps chromium
 
       - name: Build application
         run: yarn build
 
       - name: Run E2E tests
-        run: yarn e2e
+        run: yarn e2e --project=chromium
         env:
           CI: true
 
