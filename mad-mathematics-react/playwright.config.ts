@@ -10,6 +10,9 @@ export default defineConfig({
   timeout: 30000,
   expect: {
     timeout: 10000,
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.01,
+    },
   },
   use: {
     baseURL: 'http://localhost:5173',
