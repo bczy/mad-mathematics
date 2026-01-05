@@ -3,14 +3,16 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: '/mad-mathematics/',
+  // Use /mad-mathematics/ only for production build (GitHub Pages)
+  // Use / for development server
+  base: command === 'build' ? '/mad-mathematics/' : '/',
   build: {
     outDir: 'dist',
     sourcemap: true,
@@ -32,4 +34,4 @@ export default defineConfig({
     // Chunk size warnings
     chunkSizeWarningLimit: 500,
   },
-})
+}))
