@@ -287,6 +287,7 @@ Pour des guidelines détaillées, consultez le dossier [`docs/`](../docs/) :
 ### Processus et Méthodologie
 
 - **Documentation:** [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md) - Comment gérer la documentation
+- **Cohérence:** [`docs/DOCUMENTATION_COHERENCE_CHECKLIST.md`](../docs/DOCUMENTATION_COHERENCE_CHECKLIST.md) - Checklist de cohérence documentation/code
 - **Tests:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests React avec Vitest + Testing Library
 - **Composants:** [`docs/COMPONENT_GUIDELINES.md`](../docs/COMPONENT_GUIDELINES.md) - Patterns React et architecture
 - **Commits:** [`docs/COMMIT_GUIDELINES.md`](../docs/COMMIT_GUIDELINES.md) - Conventional Commits
