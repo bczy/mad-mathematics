@@ -2,57 +2,193 @@
 
 ## Project Overview
 
-**Mad Mathematics** is a French-language educational math game suite with multiple interactive arithmetic practice pages. It's a static web app using vanilla HTML/CSS/JS, designed for children to practice multiplication, addition, subtraction, and division with gamification (scores, timers, medals).
+**Mad Mathematics** is a French-language educational math game suite with multiple interactive arithmetic practice pages. It's a **React + TypeScript + Tailwind CSS** single-page application (SPA) designed for children to practice multiplication, addition, subtraction, and division with gamification (scores, timers, medals).
+
+> ⚠️ **Constitution v2.0.0**: This project has migrated from vanilla HTML/CSS/JS to a modern React stack. See [Constitution](../.specify/memory/constitution.md) for the authoritative technical decisions.
 
 ## Architecture
 
-### Core Structure
+### Technology Stack (REQUIRED)
 
-- **Landing page**: `index.html` - links to all game modes
-- **Game pages**: `table-de-multiplication.html`, `table-des-additions.html`, `table-des-soustractions.html`, `table-des-divisions.html`
-- **Shared code**: `shared.js` contains reusable functions (highscores, timers, player name persistence)
-- **Shared styles**: `style.css` provides common UI patterns and theming
-- **Deployment**: Static GitHub Pages deployment via `.github/workflows/static.yml`
+| Layer | Technology | Version |
+|-------|------------|---------|
+| **UI Framework** | React | 19+ |
+| **Language** | TypeScript | 5.9+ (strict mode) |
+| **Styling** | Tailwind CSS | 4+ |
+| **Build Tool** | Vite | 7+ |
+| **Routing** | React Router | 7+ |
+| **State Management** | Zustand | 5+ |
+| **Validation** | Zod | 4+ |
+| **Testing** | Vitest + React Testing Library | - |
+| **E2E Testing** | Playwright | 1.57+ |
+| **Package Manager** | Yarn v4 (PnP) | 4.12+ |
+
+### Project Structure
+
+```
+mad-mathematics/
+├── .github/
+│   └── copilot-instructions.md      # This file (AI agent instructions)
+├── .specify/
+│   └── memory/
+│       └── constitution.md          # Authoritative project rules
+├── docs/                             # Technical documentation
+├── mad-mathematics-react/            # Main React application
+│   ├── src/
+│   │   ├── components/               # Reusable UI components
+│   │   │   ├── common/               # Button, Card, etc.
+│   │   │   └── game/                 # GameArea, Timer, HighscoreTable, etc.
+│   │   ├── hooks/                    # Custom React hooks
+│   │   │   ├── useGameLogic.ts       # Game state management
+│   │   │   ├── useGameTimer.ts       # Timer logic
+│   │   │   └── useKeyboardInput.ts   # Keyboard handling
+│   │   ├── pages/                    # Route components
+│   │   │   ├── HomePage.tsx
+│   │   │   ├── MultiplicationPage.tsx
+│   │   │   ├── AdditionPage.tsx
+│   │   │   ├── SoustractionPage.tsx
+│   │   │   └── DivisionPage.tsx
+│   │   ├── store/                    # Zustand state stores
+│   │   │   ├── slices/               # State slices
+│   │   │   └── middleware/           # Store middleware
+│   │   ├── types/                    # TypeScript type definitions
+│   │   │   ├── game.ts
+│   │   │   ├── highscore.ts
+│   │   │   └── store.ts
+│   │   ├── utils/                    # Pure utility functions
+│   │   │   ├── formatTime.ts
+│   │   │   ├── generateQuestions.ts
+│   │   │   ├── validation.ts
+│   │   │   └── colorContrast.ts
+│   │   ├── App.tsx                   # Root component with routing
+│   │   └── main.tsx                  # Entry point
+│   ├── tests/                        # Test files
+│   ├── e2e/                          # Playwright E2E tests
+│   ├── vite.config.ts
+│   ├── vitest.config.ts
+│   ├── tailwind.config.js
+│   └── package.json
+└── specs/                            # Feature specifications
+```
 
 ### Game Page Pattern
 
-Each game page follows this consistent structure:
+Each game page follows this consistent structure (as React components):
 
-1. **Difficulty selection screen** with player name input
-2. **Game area** with question display, timer, progress bar, answer input
-3. **Results screen** with score, detailed correction list, and top 5 highscores per difficulty
+1. **Difficulty selection screen** (`DifficultySelector` component) with player name input
+2. **Game area** (`GameArea` component) with question display, timer, progress bar, answer input
+3. **Results screen** (`ResultsScreen` component) with score, detailed correction list, and top 5 highscores per difficulty
 
 ## Key Conventions
 
-### Shared Utilities (`shared.js`)
+### Component Patterns
 
-Always use these functions instead of reimplementing:
+#### Reusable Components (`src/components/`)
 
-- `formatTime(seconds)` - formats timer display as "Xm Ys" or "Xs"
-- `saveHighscore(name, score, time, level)` - stores scores in localStorage, returns `true` if top 5
-- `loadHighscoresToElement(level, element)` - renders top 5 scores with medals (🥇🥈🥉), always shows 5 rows
-- `loadPlayerName(inputId)` / `savePlayerName(name)` - persists player name across sessions
+```typescript
+// Button.tsx - Example pattern
+interface ButtonProps {
+  onClick: () => void;
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'danger';
+  disabled?: boolean;
+}
 
-### Styling Patterns
+export const Button: React.FC<ButtonProps> = ({ 
+  onClick, 
+  children, 
+  variant = 'primary',
+  disabled = false 
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={cn(
+        'px-4 py-2 rounded-lg font-semibold transition-all',
+        variant === 'primary' && 'bg-gradient-to-r from-yellow-400 to-yellow-300',
+        variant === 'secondary' && 'bg-gray-200 text-gray-800',
+        disabled && 'opacity-50 cursor-not-allowed'
+      )}
+    >
+      {children}
+    </button>
+  );
+};
+```
 
-- Use `.special-bg` class for dark/magical themed backgrounds (see multiplication page)
-- Highscore tables use a 3-column grid layout with rank/name/score headers via `.hs-headers`
-- Buttons use gradient backgrounds: yellow (`linear-gradient(135deg,#ffd700,#ffed4e)`) for primary actions
-- Responsive layout: `@media (max-width: 768px)` switches highscore grids to single column
+#### Custom Hooks (`src/hooks/`)
 
-### Game Logic Conventions
+- `useGameLogic` - Game state machine (questions, answers, score)
+- `useGameTimer` - Countdown timer with callbacks
+- `useKeyboardInput` - Keyboard event handling for answer input
 
-- **Multiplication page** (reference implementation): 15 questions, 60s time limit, shows progress bar with color states (green → warning → danger)
-- **Addition/subtraction/division pages**: 20 questions, variable time limits by difficulty (30s/10s/5s)
-- Questions must avoid invalid scenarios:
-  - Subtraction: ensure `num1 >= num2` to prevent negative results
-  - Division: generate pairs where `num1 = num2 × quotient` to ensure whole number answers
-- Store answer history with `{question, userAnswer, correctAnswer, isCorrect, skipped}` for detailed correction display
+#### Utility Functions (`src/utils/`)
 
-### LocalStorage Schema
+- `formatTime(seconds)` - Formats timer display as "Xm Ys" or "Xs"
+- `generateQuestions(operation, difficulty)` - Creates question sets
+- `validatePlayerName(name)` - Validates player name with Zod
 
-- Highscores: `highscores_${level}` → array of `{name, score, time, date}` objects (max 5, sorted by score desc then time asc)
+### State Management (Zustand)
+
+```typescript
+// Store structure
+interface GameStore {
+  // Player state
+  playerName: string;
+  setPlayerName: (name: string) => void;
+  
+  // Game state
+  gameStatus: 'idle' | 'playing' | 'finished';
+  currentQuestion: Question | null;
+  score: number;
+  
+  // Highscores
+  highscores: Record<string, Highscore[]>;
+  saveHighscore: (level: string, score: number, time: number) => boolean;
+}
+```
+
+### LocalStorage Schema (unchanged)
+
+- Highscores: `highscores_${level}` → array of `{name, score, time, date}` objects (max 5)
 - Player name: `playerName` → string
+
+### Styling with Tailwind CSS
+
+```typescript
+// Use Tailwind utility classes directly in JSX
+<div className="bg-gradient-to-br from-purple-900 to-indigo-900 min-h-screen">
+  <h1 className="text-4xl font-bold text-white text-center py-8">
+    🧙‍♂️ Mad Mathematics ✨
+  </h1>
+</div>
+
+// Responsive design with breakpoints
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {/* Cards */}
+</div>
+```
+
+### TypeScript Conventions
+
+```typescript
+// Props interfaces (always named *Props)
+interface TimerProps {
+  initialTime: number;
+  onTimeout: () => void;
+  onTick?: (remaining: number) => void;
+}
+
+// Game state types (discriminated unions)
+type GameState =
+  | { status: 'idle' }
+  | { status: 'playing'; question: Question; timeLeft: number }
+  | { status: 'finished'; score: number; timeElapsed: number };
+
+// Strict typing - NO any
+// Use unknown + type guards if needed
+```
 
 ## Language & UX
 
@@ -65,42 +201,84 @@ Always use these functions instead of reimplementing:
 
 ## Development Workflows
 
-### Testing Locally
-
-Open HTML files directly in browser (no build step required). For live reload during development:
+### Getting Started
 
 ```bash
-python3 -m http.server 8000
-# or use the project script
-yarn serve
-# or
-npm run serve
+# Navigate to React app
+cd mad-mathematics-react
+
+# Enable Corepack (once per machine)
+corepack enable
+
+# Install dependencies
+yarn install
+
+# Start development server (with HMR)
+yarn dev
 ```
 
-### Deployment
+### Available Scripts
 
-Automatic deployment to GitHub Pages on push to `main` branch via GitHub Actions. No manual steps needed.
+| Command | Description |
+|---------|-------------|
+| `yarn dev` | Start Vite dev server with HMR |
+| `yarn build` | TypeScript check + production build |
+| `yarn preview` | Preview production build locally |
+| `yarn test` | Run Vitest in watch mode |
+| `yarn test:run` | Run tests once |
+| `yarn test:coverage` | Generate coverage report |
+| `yarn test:ui` | Open Vitest UI |
+| `yarn lint` | Run ESLint |
+| `yarn e2e` | Run Playwright E2E tests |
+| `yarn e2e:ui` | Open Playwright UI |
 
-## Common Tasks
+### Testing
 
-### Adding a New Game Mode
+**Unit Tests (Vitest + React Testing Library)**
 
-1. Copy existing game HTML (e.g., `table-de-multiplication.html`)
-2. Update title and operation logic (change `× ` to target operator)
-3. Ensure question generation logic matches operator constraints
-4. Link from `index.html` with consistent button styling
-5. Use unique `level` identifier in highscore functions
+```typescript
+// Button.test.tsx
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Button } from './Button';
 
-### Modifying Difficulty Levels
+describe('Button', () => {
+  test('calls onClick when clicked', async () => {
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
+    
+    render(<Button onClick={handleClick}>Click me</Button>);
+    
+    await user.click(screen.getByRole('button', { name: /click me/i }));
+    
+    expect(handleClick).toHaveBeenCalledOnce();
+  });
+});
+```
 
-Update both:
+**E2E Tests (Playwright)**
 
-- `setDifficulty()` or `startGame()` function parameters (time limits, table ranges)
-- UI button text/descriptions in difficulty selection screen
+```typescript
+// e2e/multiplication.spec.ts
+import { test, expect } from '@playwright/test';
 
-### Debugging Highscores
+test('completes a multiplication game', async ({ page }) => {
+  await page.goto('/');
+  await page.click('text=Multiplication');
+  await page.fill('[data-testid="player-name"]', 'Testeur');
+  await page.click('text=Apprenti');
+  
+  // Play game...
+  await expect(page.locator('.results-screen')).toBeVisible();
+});
+```
 
-Check browser DevTools → Application → Local Storage → `file://` or site domain. Keys are `highscores_${level}` and `playerName`.
+### Code Quality
+
+- **ESLint**: TypeScript + React + Accessibility rules
+- **TypeScript**: Strict mode enabled
+- **Coverage**: 90%+ required on all metrics
+- **Conventional Commits**: `type(scope): description`
 
 ## 📚 Documentation Technique
 
@@ -108,17 +286,15 @@ Pour des guidelines détaillées, consultez le dossier [`docs/`](../docs/) :
 
 ### Processus et Méthodologie
 
-- **Documentation:** [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md) - Comment gérer la documentation (demander autorisation, organisation, workflows)
-- **Tests unitaires:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests pour shared.js avec Vitest (TDD, coverage 90%+)
-- **Gestion des dépendances:** [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md) - Migration npm → Yarn v4, commandes et troubleshooting
-
-### Revues et Audits
-
-- **Code Review:** [`docs/CODE_REVIEW.md`](../docs/CODE_REVIEW.md) - Analyse complète du code (11 novembre 2025)
+- **Documentation:** [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md) - Comment gérer la documentation
+- **Tests:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests React avec Vitest + Testing Library
+- **Composants:** [`docs/COMPONENT_GUIDELINES.md`](../docs/COMPONENT_GUIDELINES.md) - Patterns React et architecture
+- **Commits:** [`docs/COMMIT_GUIDELINES.md`](../docs/COMMIT_GUIDELINES.md) - Conventional Commits
+- **Yarn:** [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md) - Yarn v4 avec Plug'n'Play
 
 ### Index Complet
 
-Voir [`docs/README.md`](../docs/README.md) pour la liste complète et les guidelines à venir.
+Voir [`docs/README.md`](../docs/README.md) pour la liste complète.
 
 ---
 
@@ -126,81 +302,57 @@ Voir [`docs/README.md`](../docs/README.md) pour la liste complète et les guidel
 
 ### Package Manager
 
-- **Gestionnaire** : Yarn v4 (Modern/Berry) avec Plug'n'Play
-- **REQUIRED** : **Always use Yarn 4 - NEVER use npm**
-- **Lockfile** : `yarn.lock`
-- **Installation** : `yarn install`
-- **CI/CD** : `yarn install --immutable`
-- **Documentation** : [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md)
-
-**Why Yarn 4 only:**
-
-- Consistent dependency resolution across all environments
-- Plug'n'Play performance benefits
-- Project is configured specifically for Yarn 4
-- Using npm will cause conflicts and inconsistencies
+- **Gestionnaire**: Yarn v4 (Modern/Berry) avec Plug'n'Play
+- **REQUIRED**: **Always use Yarn 4 - NEVER use npm**
+- **Working directory**: `mad-mathematics-react/`
+- **Installation**: `yarn install`
+- **CI/CD**: `yarn install --immutable`
 
 ### Build
 
-No build step required. This is a static website with vanilla HTML/CSS/JS.
+```bash
+cd mad-mathematics-react
+yarn build
+```
+
+Output goes to `dist/` directory for deployment.
 
 ### Testing
 
-Tests are implemented using Vitest. See [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) for details.
-
-- Test framework: Vitest
-- To run tests: `yarn test` (watch mode) or `yarn test:run` (once)
-- To run with coverage: `yarn test:coverage`
-- To run with UI: `yarn test:ui`
-
-**Installation (first time):**
-
 ```bash
-# Activer Corepack (une seule fois par machine)
-corepack enable
+# Unit tests (Vitest + React Testing Library)
+yarn test          # Watch mode
+yarn test:run      # Single run
+yarn test:coverage # With coverage
 
-# Installer les dépendances
-yarn install
+# E2E tests (Playwright)
+yarn e2e           # Headless
+yarn e2e:ui        # Interactive UI
 ```
 
 ### Linting
 
-ESLint is configured for code quality checks:
-
-- Check code: `yarn lint`
-- Auto-fix issues: `yarn lint:fix`
-- Format code: `yarn format`
-- Check formatting: `yarn format:check`
+```bash
+yarn lint          # Check for issues
+```
 
 **Code style:**
 
-- Use 2-space indentation
-- Use `const`/`let` (not `var`)
-- Use semicolons
-- Use single quotes for strings
-- Keep functions small and focused
-
-### Local Development Server
-
-```bash
-# Option 1: Python
-python3 -m http.server 8000
-
-# Option 2: Yarn script (preferred)
-yarn serve
-```
-
-Then open `http://localhost:8000` in your browser.
+- 2-space indentation
+- Single quotes for strings
+- Semicolons required
+- `const` by default (never `var`)
+- Named exports for components
+- PascalCase for components, camelCase for hooks/utils
 
 ## Security Guidelines
 
 ### Code Security
 
 - **Never commit secrets** or API keys to the repository
-- **Validate all user input** before using it (e.g., player names, scores)
-- **Sanitize localStorage data** when reading to prevent injection attacks
-- **Use `textContent` instead of `innerHTML`** when displaying user-generated content
-- **Avoid `eval()` and similar dangerous functions**
+- **Validate all user input** with Zod schemas before using
+- **React auto-escapes** JSX output (XSS protection built-in)
+- **Sanitize localStorage data** when reading to prevent injection
 
 ### Data Privacy
 
@@ -208,80 +360,69 @@ Then open `http://localhost:8000` in your browser.
 - Player names and scores never leave the user's device
 - No tracking, analytics, or third-party scripts
 
-### Dependencies
-
-- Avoid adding new dependencies unless absolutely necessary
-- If you must add a dependency, check for known vulnerabilities
-- Keep the project lightweight and framework-free
-
 ## Troubleshooting
 
 ### Common Issues
 
-**Issue: Highscores not saving**
+**Issue: TypeScript errors on build**
 
-- Check browser DevTools → Application → Local Storage
-- Ensure localStorage is enabled in the browser
-- Verify the `level` parameter matches the expected format in `shared.js`
+- Run `yarn tsc --noEmit` to see all type errors
+- Check for missing type definitions
+- Ensure strict mode rules are followed
 
-**Issue: Timer not working correctly**
+**Issue: Tests failing**
 
-- Check if `startTime` is being set correctly in the game logic
-- Verify `setInterval` is being cleared properly on game end
-- Look for race conditions between timer updates and game completion
+- Run `yarn test:run` to see full error output
+- Check that mocks are properly reset between tests
+- Verify React Testing Library queries match rendered output
 
-**Issue: Questions are invalid (negative results, non-integer division)**
+**Issue: Vite HMR not working**
 
-- Review question generation logic
-- For subtraction: ensure `num1 >= num2`
-- For division: ensure `num1 = num2 × quotient` before presenting question
+- Check console for errors
+- Restart dev server: `yarn dev`
+- Clear browser cache
 
-**Issue: Responsive layout broken**
+**Issue: Tailwind classes not applying**
 
-- Check if changes respect `@media (max-width: 768px)` breakpoints
-- Verify grid layouts degrade properly to single column
-- Test on mobile viewport in DevTools
+- Check `tailwind.config.js` content paths
+- Ensure class names are complete (no dynamic string concatenation)
+- Restart Vite dev server
 
-**Issue: GitHub Pages deployment not updating**
+**Issue: E2E tests failing**
 
-- Check GitHub Actions workflow status in repository
-- Verify changes are pushed to `main` branch
-- Check `.github/workflows/static.yml` is valid
-- Wait up to 5 minutes for deployment to complete
+- Run `yarn e2e:ui` for interactive debugging
+- Check that dev server is running
+- Verify selectors match current DOM structure
 
 ### Debugging Tools
 
-- **Browser DevTools Console**: Check for JavaScript errors
-- **DevTools Network tab**: Verify all resources load correctly
-- **DevTools Application tab**: Inspect localStorage data
-- **DevTools Device Toolbar**: Test responsive layouts
-- **GitHub Actions logs**: Check deployment status
+- **React DevTools**: Inspect component tree and state
+- **Vite**: Fast HMR and clear error messages
+- **Vitest UI**: Visual test runner (`yarn test:ui`)
+- **Playwright Trace Viewer**: Debug E2E test failures
 
 ## Tool Preferences and Constraints
 
-### Required Tools
+### Required Stack
 
-- **Vanilla JavaScript only** - no frameworks (React, Vue, Angular, etc.)
-- **No build tools** - no webpack, vite, parcel for production code
-- **No preprocessors** - no TypeScript, Sass, Less for production code
-- **No package dependencies** for production - keep `package.json` dev-only
-
-### Allowed Tools (Development Only)
-
-- Test frameworks (Vitest) for testing `shared.js`
-- Local development servers for live reload
-- Linters/formatters if needed (but follow existing style)
+- **React 19+** with functional components and hooks
+- **TypeScript 5.9+** in strict mode (no `any`)
+- **Tailwind CSS 4+** for all styling
+- **Vite 7+** for development and build
+- **Vitest + React Testing Library** for unit tests
+- **Playwright** for E2E tests
 
 ### Coding Principles
 
-1. **Simplicity first** - prefer simple, readable code over clever solutions
-2. **Avoid premature optimization** - focus on correctness, then performance
-3. **Minimal changes** - don't refactor working code unless fixing a bug
-4. **Progressive enhancement** - ensure core functionality works without JavaScript
-5. **Accessibility** - use semantic HTML, ARIA labels, keyboard navigation
+1. **Component-based architecture** - Small, reusable, composable components
+2. **Type safety first** - TypeScript strict mode, no `any`
+3. **Test behavior, not implementation** - Use accessibility queries
+4. **Accessibility** - WCAG 2.1 compliance, keyboard navigation
+5. **French UX** - All user-facing text in French
 
 ## Notes
 
-- This is a pure vanilla JS project with no build step - keep it simple and avoid adding framework dependencies
-- Uses Yarn v4 (Berry) with Plug'n'Play for dependency management - see [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md) for details
+- This is a **React + TypeScript** project built with Vite
+- Uses Yarn v4 (Berry) with Plug'n'Play for dependency management
 - All documentation updates require explicit approval (see [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md))
+- Constitution v2.0.0 is the authoritative source for technical decisions

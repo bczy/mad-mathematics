@@ -16,11 +16,20 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
 
 ### 🧪 Tests
 
-- **[TESTING_GUIDELINES.md](./TESTING_GUIDELINES.md)** - Guidelines complètes pour les tests unitaires
-  - Framework: Vitest
-  - Scope: Tests de `shared.js`
+- **[TESTING_GUIDELINES.md](./TESTING_GUIDELINES.md)** - Guidelines complètes pour les tests React
+  - Framework: Vitest + React Testing Library
+  - Scope: Tests unitaires et intégration React
   - Coverage cible: 90%+
   - Approche: TDD (Test-Driven Development)
+  - Patterns: Components, hooks, utils, E2E avec Playwright
+
+### 🎨 Développement React
+
+- **[COMPONENT_GUIDELINES.md](./COMPONENT_GUIDELINES.md)** - Patterns React et architecture de composants
+  - Structure des composants (common/, game/)
+  - Hooks personnalisés (useGameLogic, useGameTimer, useKeyboardInput)
+  - State management avec Zustand
+  - Types TypeScript et validation Zod
 
 ### 📦 Gestion des Dépendances
 
@@ -116,5 +125,5 @@ Tous les fichiers de ce dossier suivent les standards définis dans [DOCUMENTATI
 
 ---
 
-**Dernière mise à jour:** 11 novembre 2025  
+**Dernière mise à jour:** 10 janvier 2026  
 **Maintenu par:** AI Agent + développeurs
