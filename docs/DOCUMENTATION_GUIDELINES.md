@@ -1,6 +1,6 @@
 # Documentation Guidelines - Mad Mathematics
 
-**Dernière mise à jour:** 11 novembre 2025  
+**Dernière mise à jour:** 10 janvier 2026  
 **Objectif:** Maintenir une documentation toujours synchronisée avec le code
 
 ---
@@ -177,46 +177,86 @@ Index de toute la documentation technique du projet.
 - ✅ Fichier renommé ou supprimé
 - ✅ Changement de structure
 
-### 4. **JSDoc / Commentaires inline**
+### 4. **TSDoc / Commentaires inline**
 
-**Rôle:** Documentation du code source directement dans les fichiers.
+**Rôle:** Documentation du code source directement dans les fichiers TypeScript/React.
 
-**Exemple pour `shared.js`:**
+**Exemple pour utilities (`src/utils/formatTime.ts`):**
 
-```javascript
+```typescript
 /**
  * Formate un nombre de secondes en chaîne "Xm Ys" ou "Xs"
  *
- * @param {number} seconds - Nombre de secondes à formater
- * @returns {string} Temps formaté (ex: "1m 30s" ou "45s")
+ * @param seconds - Nombre de secondes à formater
+ * @returns Temps formaté (ex: "1m 30s" ou "45s")
  *
  * @example
+ * ```ts
  * formatTime(65)  // "1m 5s"
  * formatTime(30)  // "30s"
  * formatTime(0)   // "0s"
+ * formatTime(-10) // "0s" (gère les négatifs)
+ * ```
  */
-function formatTime(seconds) {
+export function formatTime(seconds: number): string {
+  if (seconds < 0) return '0s';
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return m > 0 ? `${m}m ${s}s` : `${s}s`;
 }
+```
 
+**Exemple pour composants React (`src/components/common/Button.tsx`):**
+
+```typescript
 /**
- * Sauvegarde un score dans le top 5 du niveau spécifié
+ * Bouton réutilisable avec variantes de style
  *
- * @param {string} name - Nom du joueur (max 500 caractères)
- * @param {number} score - Score obtenu (0-15 pour niveaux normaux)
- * @param {number} time - Temps en secondes
- * @param {string} level - Niveau de difficulté ('facile', 'moyen', 'difficile', 'super-multi')
- * @returns {boolean} true si dans le top 5, false sinon ou en cas d'erreur
- *
- * @throws Ne throw jamais - retourne false en cas d'erreur localStorage
+ * @param props - Propriétés du bouton
+ * @param props.onClick - Fonction appelée au clic
+ * @param props.children - Contenu du bouton
+ * @param props.variant - Style du bouton ('primary' | 'secondary' | 'danger')
+ * @param props.disabled - État désactivé du bouton
  *
  * @example
- * saveHighscore('Alice', 15, 45, 'facile')  // true
- * saveHighscore('Bob', 5, 120, 'difficile') // false (pas top 5)
+ * ```tsx
+ * <Button onClick={handleStart} variant="primary">
+ *   Commencer
+ * </Button>
+ * ```
  */
-function saveHighscore(name, score, time, level) {
+export const Button: React.FC<ButtonProps> = ({
+  onClick,
+  children,
+  variant = 'primary',
+  disabled = false,
+}) => {
+  // ...
+};
+```
+
+**Exemple pour hooks personnalisés (`src/hooks/useGameTimer.ts`):**
+
+```typescript
+/**
+ * Hook pour gérer un timer de jeu avec compte à rebours
+ *
+ * @param options - Configuration du timer
+ * @param options.initialTime - Temps initial en secondes
+ * @param options.onTimeout - Callback appelé quand le temps expire
+ * @param options.onTick - Callback appelé à chaque seconde (optionnel)
+ *
+ * @returns État et contrôles du timer
+ *
+ * @example
+ * ```tsx
+ * const { timeLeft, isRunning, start, stop } = useGameTimer({
+ *   initialTime: 60,
+ *   onTimeout: handleGameEnd,
+ * });
+ * ```
+ */
+export function useGameTimer(options: GameTimerOptions): GameTimerReturn {
   // ...
 }
 ```
@@ -279,18 +319,18 @@ Avant de commiter du code, vérifier :
 ```
 🔔 Mise à jour de documentation requise
 
-J'ai ajouté/modifié la fonction `[nom]` dans `[fichier]`.
+J'ai ajouté/modifié le composant/hook/fonction `[nom]` dans `[fichier]`.
 
 Fichiers de documentation impactés:
-- `.github/copilot-instructions.md` (nouvelle fonction partagée)
-- `docs/TESTING_GUIDELINES.md` (exemples de tests à ajouter)
-- `shared.js` (JSDoc de la fonction)
+- `.github/copilot-instructions.md` (nouveau composant/hook partagé)
+- `docs/TESTING_GUIDELINES.md` (exemples de tests React à ajouter)
+- `[fichier.tsx/ts]` (TSDoc du composant/fonction)
 
 Dois-je mettre à jour la documentation maintenant ?
 
 Changements prévus:
-1. Ajouter exemple de test pour `[fonction]`
-2. Documenter paramètres et edge cases
+1. Ajouter exemple de test React Testing Library pour `[composant/hook]`
+2. Documenter props/paramètres TypeScript et edge cases
 3. Mettre à jour index dans copilot-instructions.md
 ```
 
@@ -299,13 +339,13 @@ Changements prévus:
 ```
 🔔 Mise à jour de documentation requise
 
-J'ai corrigé un bug dans `[fonction]` qui impacte son comportement:
+J'ai corrigé un bug dans `[composant/fonction/hook]` qui impacte son comportement:
 - Avant: [comportement bugué]
 - Après: [comportement corrigé]
 
 Fichiers impactés:
-- `docs/TESTING_GUIDELINES.md` (exemple de test incorrect)
-- `shared.js` (JSDoc avec mauvais exemple)
+- `docs/TESTING_GUIDELINES.md` (exemple de test React incorrect)
+- `[fichier.tsx/ts]` (TSDoc avec mauvais exemple)
 
 Dois-je corriger la documentation ?
 ```
@@ -345,42 +385,59 @@ Dois-je les mettre à jour ?
 
 ## 🎯 Scénarios Pratiques
 
-### Scénario 1: Ajout d'une fonction à `shared.js`
+### Scénario 1: Ajout d'un hook personnalisé
 
 **Code:**
 
-```javascript
-// Nouvelle fonction ajoutée
-function resetAllHighscores() {
-  const levels = ['facile', 'moyen', 'difficile', 'super-multi'];
-  levels.forEach((level) => localStorage.removeItem(`highscores_${level}`));
+```typescript
+// src/hooks/useLocalStorage.ts - Nouveau hook ajouté
+import { useState, useEffect } from 'react';
+
+/**
+ * Hook pour synchroniser state avec localStorage
+ */
+export function useLocalStorage<T>(key: string, initialValue: T) {
+  const [value, setValue] = useState<T>(() => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : initialValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue] as const;
 }
 ```
 
 **Action AI Agent:**
 
 ```
-🔔 Nouvelle fonction `resetAllHighscores` ajoutée à shared.js
+🔔 Nouveau hook `useLocalStorage` ajouté dans src/hooks/
 
 Fichiers impactés:
 1. `.github/copilot-instructions.md`
-   → Ajouter dans section "Shared Utilities"
+   → Ajouter dans section "Custom Hooks"
 
 2. `docs/TESTING_GUIDELINES.md`
-   → Ajouter exemples de tests pour cette fonction
+   → Ajouter exemples de tests React Testing Library
 
-3. `shared.js`
-   → Ajouter JSDoc
+3. `src/hooks/useLocalStorage.ts`
+   → Ajouter TSDoc complet
 
-Dois-je mettre à jour ces 3 fichiers ?
+4. `src/hooks/index.ts`
+   → Exporter le nouveau hook
+
+Dois-je mettre à jour ces 4 fichiers ?
 ```
 
 **Après autorisation:**
 
-- ✅ Ajouter JSDoc à la fonction
+- ✅ Ajouter TSDoc au hook
 - ✅ Ajouter section de tests dans TESTING_GUIDELINES.md
 - ✅ Mettre à jour copilot-instructions.md
-- ✅ Commit: `feat: add resetAllHighscores + update docs`
+- ✅ Exporter depuis index.ts
+- ✅ Commit: `feat(hooks): add useLocalStorage hook + update docs`
 
 ---
 
@@ -388,15 +445,21 @@ Dois-je mettre à jour ces 3 fichiers ?
 
 **Code:**
 
-```javascript
+```typescript
+// src/utils/formatTime.ts
+
 // AVANT
-function formatTime(seconds) {
+export function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
   return m > 0 ? `${m}m ${s}s` : `${s}s`;
 }
 
 // APRÈS (gestion des négatifs)
-function formatTime(seconds) {
-  if (seconds < 0) return '0s';
+export function formatTime(seconds: number): string {
+  if (seconds < 0) return '0s'; // Nouvelle validation
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
   return m > 0 ? `${m}m ${s}s` : `${s}s`;
 }
 ```
@@ -404,15 +467,16 @@ function formatTime(seconds) {
 **Action AI Agent:**
 
 ```
-🔔 Comportement de `formatTime` modifié
+🔔 Comportement de `formatTime` modifié (src/utils/formatTime.ts)
 
 Changement:
 - Maintenant retourne "0s" pour valeurs négatives
-- Avant: résultat imprévisible
+- Avant: résultat imprévisible (NaN possible)
 
 Fichiers impactés:
-1. `shared.js` → Mettre à jour JSDoc (@example avec négatif)
+1. `src/utils/formatTime.ts` → Mettre à jour TSDoc (@example avec négatif)
 2. `docs/TESTING_GUIDELINES.md` → Ajouter test pour edge case négatif
+3. `tests/utils/formatTime.test.ts` → Ajouter test case
 
 Dois-je documenter ce changement ?
 ```
@@ -545,10 +609,12 @@ Quelle est la source de vérité ?
 
 Checklist à faire chaque mois :
 
-- [ ] Vérifier que toutes les fonctions de `shared.js` ont JSDoc
+- [ ] Vérifier que tous les composants, hooks et utils ont TSDoc
+- [ ] Vérifier que toutes les props TypeScript sont documentées
 - [ ] Vérifier que `docs/README.md` liste tous les fichiers `docs/*.md`
 - [ ] Vérifier que `.github/copilot-instructions.md` référence toutes les guidelines
 - [ ] Tester tous les exemples de code dans la documentation
+- [ ] Vérifier que les tests React sont à jour avec les composants
 - [ ] Mettre à jour les dates "Dernière mise à jour"
 
 ---
@@ -617,26 +683,29 @@ Commit 1: "feat: add feature X + update docs"
 
 ```bash
 # Feature avec nouvelle doc
-feat: add createGameTimer to shared.js + TESTING_GUIDELINES update
+feat(hooks): add useGameTimer hook + update docs
 
-- Add reusable timer utility function
-- Update TESTING_GUIDELINES.md with timer test examples
-- Add JSDoc documentation
+- Add reusable timer custom hook with TypeScript
+- Update TESTING_GUIDELINES.md with React Testing Library examples
+- Add TSDoc documentation with usage examples
 - Reference in copilot-instructions.md
+- Export from hooks/index.ts
 
 # Fix avec correction doc
-fix: handle negative values in formatTime + update docs
+fix(utils): handle negative values in formatTime + update docs
 
 - Return '0s' for negative input instead of NaN
-- Update JSDoc with edge case example
-- Add test case in TESTING_GUIDELINES.md
+- Update TSDoc with edge case example
+- Add test case in formatTime.test.ts
+- Update TESTING_GUIDELINES.md examples
 
 # Refactor avec sync doc
-refactor: extract timer logic + synchronize documentation
+refactor(components): extract Timer component + sync docs
 
-- Move timer code from game pages to shared.js
+- Extract Timer from game pages to common/Timer.tsx
 - Update all affected documentation files
-- Fix outdated examples in guidelines
+- Fix outdated React examples in guidelines
+- Update component props interfaces
 ````
 
 ### Sans documentation (cas rares)
@@ -665,16 +734,18 @@ Toujours maintenir cette section à jour :
 
 ### Guidelines de développement
 
-- **Tests unitaires:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Tests pour shared.js avec Vitest
-- **Tests d'intégration:** [`docs/INTEGRATION_TESTING.md`](../docs/INTEGRATION_TESTING.md) - Tests des pages complètes
-- **Tests E2E:** [`docs/E2E_TESTING.md`](../docs/E2E_TESTING.md) - Tests end-to-end avec Playwright
-- **Déploiement:** [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md) - Procédures GitHub Pages
-- **Architecture:** [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md) - ADR et décisions techniques
-- **Accessibilité:** [`docs/ACCESSIBILITY.md`](../docs/ACCESSIBILITY.md) - Standards WCAG 2.1
+- **Tests React:** [`docs/TESTING_GUIDELINES.md`](../docs/TESTING_GUIDELINES.md) - Vitest + React Testing Library
+- **Composants React:** [`docs/COMPONENT_GUIDELINES.md`](../docs/COMPONENT_GUIDELINES.md) - Patterns et architecture
+- **Tests E2E:** Tests Playwright intégrés (voir e2e/)
+- **Déploiement:** Vite build + GitHub Pages (voir README.md)
+- **Yarn v4:** [`docs/YARN_MIGRATION.md`](../docs/YARN_MIGRATION.md) - Gestionnaire de dépendances
+- **Commits:** [`docs/COMMIT_GUIDELINES.md`](../docs/COMMIT_GUIDELINES.md) - Conventional Commits
+- **Documentation:** [`docs/DOCUMENTATION_GUIDELINES.md`](../docs/DOCUMENTATION_GUIDELINES.md) - Ce document
 
-### Revues et audits
+### Constitution et Architecture
 
-- **Code Review:** [`CODE_REVIEW.md`](../CODE_REVIEW.md) - Analyse complète du 11 nov 2025
+- **Constitution:** [`.specify/memory/constitution.md`](../.specify/memory/constitution.md) - Principes fondamentaux v2.0.0
+- **Specs:** [`specs/`](../specs/) - Spécifications des features
 
 ### Index complet
 
@@ -723,3 +794,5 @@ Si incertitude sur la documentation :
 ---
 
 **Rappel:** La documentation est vivante. Elle évolue avec le code, jamais seule.
+
+**Dernière révision:** Migration React + TypeScript + Tailwind CSS (Constitution v2.0.0 - 10 janvier 2026)

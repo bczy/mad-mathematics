@@ -1,8 +1,8 @@
 # Testing Guidelines - Mad Mathematics
 
-**Dernière mise à jour:** 11 novembre 2025  
-**Scope:** Tests unitaires pour `shared.js`  
-**Framework:** Vitest  
+**Dernière mise à jour:** 10 janvier 2026  
+**Scope:** Tests React avec Vitest + React Testing Library  
+**Framework:** Vitest + React Testing Library + Playwright  
 **Coverage cible:** 90%+
 
 ---
@@ -15,7 +15,16 @@ Ce projet suit une approche **TDD (Test-Driven Development)** :
 2. ✅ **Écrire le code minimal** pour passer le test (Green)
 3. ♻️ **Refactoriser** en gardant les tests verts (Refactor)
 
-**Principe clé:** Les tests sont la **documentation vivante** du code. Un test doit être lisible comme une spécification.
+**Principe clé:** Les tests sont la **documentation vivante** du code. Un test React doit tester le **comportement utilisateur**, pas l'implémentation.
+
+### Testing Library Guiding Principles
+
+> "The more your tests resemble the way your software is used, the more confidence they can give you."
+
+- ✅ **Test from user perspective** - Query par rôle ARIA, label, text
+- ✅ **Avoid implementation details** - Ne pas tester state interne
+- ✅ **Accessibility-first queries** - Utiliser getByRole, getByLabelText
+- ❌ **Avoid test IDs** - Seulement en dernier recours
 
 ---
 
@@ -26,64 +35,61 @@ Ce projet suit une approche **TDD (Test-Driven Development)** :
 ```json
 {
   "devDependencies": {
-    "vitest": "^1.0.0",
-    "@vitest/ui": "^1.0.0",
-    "@vitest/coverage-v8": "^1.0.0",
-    "vitest-localstorage-mock": "^0.1.0",
-    "jsdom": "^23.0.0"
+    "vitest": "^4.0.16",
+    "@vitest/ui": "^4.0.16",
+    "@vitest/coverage-v8": "^4.0.16",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@playwright/test": "^1.57.0",
+    "jsdom": "^27.4.0"
   }
 }
 ```
 
-### Installation
+### Configuration (`vitest.config.ts`)
 
-```bash
-npm install -D vitest @vitest/ui @vitest/coverage-v8 vitest-localstorage-mock jsdom
-```
-
-### Configuration (`vitest.config.js`)
-
-```javascript
+```typescript
 import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./tests/setup.js'],
+    setupFiles: ['./tests/setup.ts'],
+    include: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
-      include: ['shared.js'],
-      exclude: ['tests/**', '*.config.js', '*.html'],
-      // Seuils de couverture - FAIL si en dessous
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: ['src/main.tsx', 'src/**/*.test.{ts,tsx}'],
       statements: 90,
       branches: 90,
       functions: 90,
       lines: 90,
-      // Branches critiques à 100%
-      perFile: true
     },
-    // Isolation stricte entre tests
-    isolate: true,
-    // Timeout par défaut
-    testTimeout: 5000
-  }
+  },
 });
 ```
 
-### Setup global (`tests/setup.js`)
+### Setup global (`tests/setup.ts`)
 
-```javascript
-import 'vitest-localstorage-mock';
-import { beforeEach } from 'vitest';
+```typescript
+import '@testing-library/jest-dom';
+import { cleanup } from '@testing-library/react';
+import { afterEach } from 'vitest';
 
-// Reset complet avant chaque test pour isolation totale
-beforeEach(() => {
-  localStorage.clear();
-  sessionStorage.clear();
-  vi.clearAllMocks();
-  vi.restoreAllMocks();
+// Cleanup after each test
+afterEach(() => {
+  cleanup();
 });
 ```
 
@@ -94,133 +100,155 @@ beforeEach(() => {
 ### Organisation Co-located
 
 ```
-mad-mathematics/
-├── shared.js                    # Code source
-├── shared.test.js               # Tests unitaires (co-located)
+mad-mathematics-react/
+├── src/
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── Button.tsx
+│   │   │   └── Card.tsx
+│   │   └── game/
+│   │       ├── GameArea.tsx
+│   │       └── Timer.tsx
+│   ├── hooks/
+│   │   ├── useGameLogic.ts
+│   │   └── useGameTimer.ts
+│   └── utils/
+│       ├── formatTime.ts
+│       └── validation.ts
 ├── tests/
-│   ├── setup.js                 # Configuration globale
-│   ├── fixtures/
-│   │   └── index.js             # Données de test statiques
-│   └── helpers/
-│       └── test-utils.js        # Utilitaires de test réutilisables
-├── vitest.config.js             # Configuration Vitest
-└── package.json
+│   ├── setup.ts
+│   ├── components/
+│   │   ├── Button.test.tsx
+│   │   ├── Timer.test.tsx
+│   │   └── HighscoreTable.test.tsx
+│   ├── hooks/
+│   │   ├── useGameLogic.test.ts
+│   │   └── useGameTimer.test.ts
+│   └── utils/
+│       ├── formatTime.test.ts
+│       └── validation.test.ts
+└── e2e/
+    ├── multiplication.spec.ts
+    └── addition.spec.ts
 ```
 
 ### Naming Convention
 
-- **Fichiers de test:** `*.test.js` (co-located à côté du code)
-- **Fixtures:** `tests/fixtures/*.js`
-- **Helpers:** `tests/helpers/*.js`
+- **Component tests:** `ComponentName.test.tsx`
+- **Hook tests:** `useHookName.test.ts`
+- **Utility tests:** `functionName.test.ts`
+- **E2E tests:** `feature.spec.ts`
 
 ---
 
 ## ✍️ Style de Tests
 
-### Pattern de base
+### Pattern de base (Component)
 
-```javascript
-import { describe, test, expect, beforeEach } from 'vitest';
-import { formatTime, saveHighscore } from './shared.js';
-import { FIXTURES } from './tests/fixtures/index.js';
+```typescript
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Button } from '@/components/common/Button';
 
-describe('formatTime', () => {
-  test('converts 65 seconds to "1m 5s"', () => {
-    const result = formatTime(65);
-    expect(result).toBe('1m 5s');
+describe('Button', () => {
+  test('renders children correctly', () => {
+    render(<Button>Click me</Button>);
+    
+    expect(screen.getByRole('button')).toHaveTextContent('Click me');
   });
 
-  test('converts 30 seconds to "30s"', () => {
-    const result = formatTime(30);
-    expect(result).toBe('30s');
+  test('calls onClick when clicked', async () => {
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
+    
+    render(<Button onClick={handleClick}>Click me</Button>);
+    
+    await user.click(screen.getByRole('button', { name: /click me/i }));
+    
+    expect(handleClick).toHaveBeenCalledOnce();
   });
 
-  describe('edge cases', () => {
-    test('handles 0 seconds', () => {
-      expect(formatTime(0)).toBe('0s');
+  describe('variants', () => {
+    test('applies primary styles', () => {
+      render(<Button variant="primary">Primary</Button>);
+      
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('from-yellow-400');
     });
 
-    test('handles negative values gracefully', () => {
-      expect(formatTime(-10)).toBe('0s'); // ou throw Error selon spec
-    });
-
-    test('handles very large values', () => {
-      expect(formatTime(7200)).toBe('120m 0s');
+    test('applies secondary styles', () => {
+      render(<Button variant="secondary">Secondary</Button>);
+      
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('from-purple-600');
     });
   });
 });
 ```
 
-### Conventions de nommage
+### Pattern de base (Hook)
 
-#### Describe blocks
+```typescript
+import { describe, test, expect } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { useGameTimer } from '@/hooks/useGameTimer';
 
-```javascript
-// ✅ BON: Nom de la fonction/feature
-describe('saveHighscore', () => {});
-describe('loadHighscoresToElement', () => {});
-
-// ❌ MAUVAIS: Trop verbeux
-describe('Test de la fonction saveHighscore', () => {});
-```
-
-#### Test cases
-
-```javascript
-// ✅ BON: Action + résultat attendu (sans "should")
-test('returns true when score is in top 5', () => {});
-test('sorts highscores by score desc then time asc', () => {});
-
-// ❌ MAUVAIS: Trop vague
-test('works correctly', () => {});
-test('test saveHighscore', () => {});
-```
-
-#### Edge cases groupés
-
-```javascript
-describe('saveHighscore', () => {
-  test('saves valid highscore', () => {});
-
-  describe('edge cases', () => {
-    test('handles localStorage quota exceeded', () => {});
-    test('handles very long player names (>100 chars)', () => {});
-    test('handles Unicode characters and emojis', () => {});
-    test('handles corrupted localStorage data', () => {});
+describe('useGameTimer', () => {
+  test('initializes with correct time', () => {
+    const { result } = renderHook(() => 
+      useGameTimer({ initialTime: 60 })
+    );
+    
+    expect(result.current.timeLeft).toBe(60);
+    expect(result.current.isRunning).toBe(false);
   });
 
-  describe('error handling', () => {
-    test('returns false when localStorage is unavailable', () => {});
-    test('logs error to console on failure', () => {});
+  test('starts timer correctly', () => {
+    const { result } = renderHook(() => 
+      useGameTimer({ initialTime: 60 })
+    );
+    
+    act(() => {
+      result.current.start();
+    });
+    
+    expect(result.current.isRunning).toBe(true);
+  });
+
+  test('calls onTimeout when time reaches 0', async () => {
+    const onTimeout = vi.fn();
+    const { result } = renderHook(() => 
+      useGameTimer({ initialTime: 1, onTimeout })
+    );
+    
+    act(() => {
+      result.current.start();
+    });
+    
+    await vi.waitFor(() => {
+      expect(onTimeout).toHaveBeenCalled();
+    });
   });
 });
 ```
 
----
+### Pattern de base (Utility)
 
-## 🧪 Patterns de Test
+```typescript
+import { describe, test, expect } from 'vitest';
+import { formatTime } from '@/utils/formatTime';
 
-### 1. Test de fonction pure (formatTime)
-
-```javascript
 describe('formatTime', () => {
   test('formats seconds under 60', () => {
-    expect(formatTime(0)).toBe('0s');
-    expect(formatTime(1)).toBe('1s');
     expect(formatTime(30)).toBe('30s');
     expect(formatTime(59)).toBe('59s');
   });
 
   test('formats minutes and seconds', () => {
     expect(formatTime(60)).toBe('1m 0s');
-    expect(formatTime(61)).toBe('1m 1s');
-    expect(formatTime(90)).toBe('1m 30s');
+    expect(formatTime(65)).toBe('1m 5s');
     expect(formatTime(125)).toBe('2m 5s');
-  });
-
-  test('formats large durations', () => {
-    expect(formatTime(3600)).toBe('60m 0s');
-    expect(formatTime(3661)).toBe('61m 1s');
   });
 
   describe('edge cases', () => {
@@ -228,508 +256,242 @@ describe('formatTime', () => {
       expect(formatTime(0)).toBe('0s');
     });
 
-    test('handles negative input', () => {
-      // Définir le comportement attendu
+    test('handles negative values', () => {
       expect(formatTime(-10)).toBe('0s');
     });
-
-    test('handles non-integer input', () => {
-      expect(formatTime(90.7)).toBe('1m 30s'); // Math.floor implicite
-    });
-  });
-});
-```
-
-### 2. Test avec localStorage mock (saveHighscore)
-
-```javascript
-import { vi } from 'vitest';
-
-describe('saveHighscore', () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
-  test('saves new highscore to empty list', () => {
-    const result = saveHighscore('Alice', 15, 45, 'easy');
-
-    expect(result).toBe(true);
-
-    const saved = JSON.parse(localStorage.getItem('highscores_easy'));
-    expect(saved).toHaveLength(1);
-    expect(saved[0]).toMatchObject({
-      name: 'Alice',
-      score: 15,
-      time: 45
-    });
-    expect(saved[0].date).toBeDefined();
-  });
-
-  test('maintains top 5 limit', () => {
-    // Préparer 5 scores existants
-    const existing = FIXTURES.highscores.top5;
-    localStorage.setItem('highscores_easy', JSON.stringify(existing));
-
-    // Ajouter un 6ème score médiocre
-    const result = saveHighscore('Newbie', 5, 60, 'easy');
-
-    expect(result).toBe(false); // pas dans le top 5
-
-    const saved = JSON.parse(localStorage.getItem('highscores_easy'));
-    expect(saved).toHaveLength(5); // toujours 5
-    expect(saved.find((s) => s.name === 'Newbie')).toBeUndefined();
-  });
-
-  test('sorts by score desc, then time asc', () => {
-    saveHighscore('Slow', 10, 60, 'easy');
-    saveHighscore('Fast', 10, 30, 'easy');
-    saveHighscore('Best', 15, 45, 'easy');
-
-    const saved = JSON.parse(localStorage.getItem('highscores_easy'));
-
-    expect(saved[0].name).toBe('Best'); // meilleur score
-    expect(saved[1].name).toBe('Fast'); // score égal, temps meilleur
-    expect(saved[2].name).toBe('Slow'); // score égal, temps pire
-  });
-
-  describe('edge cases', () => {
-    test('handles very long player names', () => {
-      const longName = 'A'.repeat(500);
-      const result = saveHighscore(longName, 15, 45, 'easy');
-
-      expect(result).toBe(true);
-
-      const saved = JSON.parse(localStorage.getItem('highscores_easy'));
-      expect(saved[0].name).toBe(longName);
-    });
-
-    test('handles Unicode and emoji in names', () => {
-      const unicodeName = '🎮 Mathéo 数学 🚀';
-      const result = saveHighscore(unicodeName, 15, 45, 'easy');
-
-      expect(result).toBe(true);
-
-      const saved = JSON.parse(localStorage.getItem('highscores_easy'));
-      expect(saved[0].name).toBe(unicodeName);
-    });
-
-    test('handles localStorage quota exceeded', () => {
-      // Mock setItem pour simuler quota exceeded
-      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-        throw new DOMException('QuotaExceededError');
-      });
-
-      const consoleSpy = vi.spyOn(console, 'error');
-      const result = saveHighscore('Player', 15, 45, 'easy');
-
-      expect(result).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to save highscore:',
-        expect.any(DOMException)
-      );
-    });
-
-    test('handles corrupted localStorage data', () => {
-      localStorage.setItem('highscores_easy', 'INVALID_JSON{');
-
-      const result = saveHighscore('Player', 15, 45, 'easy');
-
-      // Devrait parser comme [] et sauvegarder
-      expect(result).toBe(true);
-      const saved = JSON.parse(localStorage.getItem('highscores_easy'));
-      expect(saved).toHaveLength(1);
-    });
-  });
-
-  describe('error handling', () => {
-    test('returns false when localStorage is unavailable', () => {
-      vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-        throw new Error('localStorage disabled');
-      });
-
-      const result = saveHighscore('Player', 15, 45, 'easy');
-      expect(result).toBe(false);
-    });
-
-    test('logs errors to console', () => {
-      const consoleSpy = vi.spyOn(console, 'error');
-      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-        throw new Error('Test error');
-      });
-
-      saveHighscore('Player', 15, 45, 'easy');
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to save highscore:',
-        expect.any(Error)
-      );
-    });
-  });
-});
-```
-
-### 3. Test avec DOM (loadHighscoresToElement)
-
-```javascript
-describe('loadHighscoresToElement', () => {
-  let container, listElement;
-
-  beforeEach(() => {
-    // Créer un DOM minimal pour le test
-    document.body.innerHTML = `
-      <div id="container">
-        <ul id="highscore-list"></ul>
-      </div>
-    `;
-    container = document.getElementById('container');
-    listElement = document.getElementById('highscore-list');
-  });
-
-  test('renders empty slots when no highscores', () => {
-    loadHighscoresToElement('easy', listElement);
-
-    const items = listElement.querySelectorAll('.highscore-item');
-    expect(items).toHaveLength(5);
-
-    items.forEach((item, index) => {
-      expect(item.classList.contains('empty')).toBe(true);
-      expect(item.textContent).toContain(`${index + 1}.`);
-      expect(item.textContent).toContain('Aucun score');
-    });
-  });
-
-  test('renders highscores with medals', () => {
-    const scores = FIXTURES.highscores.top3;
-    localStorage.setItem('highscores_easy', JSON.stringify(scores));
-
-    loadHighscoresToElement('easy', listElement);
-
-    const items = listElement.querySelectorAll('.highscore-item:not(.empty)');
-    expect(items).toHaveLength(3);
-
-    expect(items[0].textContent).toContain('🥇');
-    expect(items[1].textContent).toContain('🥈');
-    expect(items[2].textContent).toContain('🥉');
-  });
-
-  test('displays score as X/15 for normal levels', () => {
-    localStorage.setItem(
-      'highscores_easy',
-      JSON.stringify([{ name: 'Test', score: 12, time: 45 }])
-    );
-
-    loadHighscoresToElement('easy', listElement);
-
-    expect(listElement.textContent).toContain('12/15');
-  });
-
-  test('displays score as X pts for super-multi level', () => {
-    localStorage.setItem(
-      'highscores_super-multi',
-      JSON.stringify([{ name: 'Test', score: 250, time: 45 }])
-    );
-
-    loadHighscoresToElement('super-multi', listElement);
-
-    expect(listElement.textContent).toContain('250 pts');
-  });
-
-  test('inserts headers before list element', () => {
-    loadHighscoresToElement('easy', listElement);
-
-    const headers = listElement.previousElementSibling;
-    expect(headers).not.toBeNull();
-    expect(headers.classList.contains('hs-headers')).toBe(true);
-    expect(headers.textContent).toContain('Rang');
-    expect(headers.textContent).toContain('Nom');
-    expect(headers.textContent).toContain('Score / Temps');
-  });
-
-  test('does not duplicate headers on multiple calls', () => {
-    loadHighscoresToElement('easy', listElement);
-    loadHighscoresToElement('easy', listElement);
-    loadHighscoresToElement('easy', listElement);
-
-    const allHeaders = container.querySelectorAll('.hs-headers');
-    expect(allHeaders).toHaveLength(1);
-  });
-
-  describe('edge cases', () => {
-    test('handles corrupted localStorage gracefully', () => {
-      localStorage.setItem('highscores_easy', 'INVALID{JSON');
-
-      loadHighscoresToElement('easy', listElement);
-
-      expect(listElement.textContent).toContain('Erreur de chargement');
-    });
-
-    test('handles null element gracefully', () => {
-      expect(() => {
-        loadHighscoresToElement('easy', null);
-      }).not.toThrow();
-    });
-
-    test('handles localStorage unavailable', () => {
-      vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-        throw new Error('localStorage disabled');
-      });
-
-      const consoleSpy = vi.spyOn(console, 'error');
-
-      loadHighscoresToElement('easy', listElement);
-
-      expect(consoleSpy).toHaveBeenCalled();
-      expect(listElement.textContent).toContain('Erreur de chargement');
-    });
-  });
-});
-```
-
-### 4. Test des utilitaires de persistence (loadPlayerName, savePlayerName)
-
-```javascript
-describe('loadPlayerName', () => {
-  beforeEach(() => {
-    document.body.innerHTML = '<input type="text" id="player-name">';
-  });
-
-  test('populates input with saved name', () => {
-    localStorage.setItem('playerName', 'Mathéo');
-
-    loadPlayerName('player-name');
-
-    const input = document.getElementById('player-name');
-    expect(input.value).toBe('Mathéo');
-  });
-
-  test('does nothing when no saved name', () => {
-    loadPlayerName('player-name');
-
-    const input = document.getElementById('player-name');
-    expect(input.value).toBe('');
-  });
-
-  test('handles missing input element gracefully', () => {
-    localStorage.setItem('playerName', 'Test');
-
-    expect(() => {
-      loadPlayerName('non-existent-id');
-    }).not.toThrow();
-  });
-});
-
-describe('savePlayerName', () => {
-  test('saves name to localStorage', () => {
-    savePlayerName('Alice');
-
-    expect(localStorage.getItem('playerName')).toBe('Alice');
-  });
-
-  test('overwrites previous name', () => {
-    savePlayerName('Alice');
-    savePlayerName('Bob');
-
-    expect(localStorage.getItem('playerName')).toBe('Bob');
-  });
-
-  describe('edge cases', () => {
-    test('handles empty string', () => {
-      savePlayerName('');
-      expect(localStorage.getItem('playerName')).toBe('');
-    });
-
-    test('handles Unicode characters', () => {
-      const name = '🎮 Élève 学生';
-      savePlayerName(name);
-      expect(localStorage.getItem('playerName')).toBe(name);
-    });
-
-    test('handles localStorage error gracefully', () => {
-      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-        throw new Error('localStorage full');
-      });
-
-      expect(() => {
-        savePlayerName('Test');
-      }).not.toThrow();
-    });
-  });
-});
-```
-
-### 5. Test du timer (createGameTimer)
-
-```javascript
-describe('createGameTimer', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-    document.body.innerHTML = '<div id="timer">60</div>';
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  test('creates timer with initial state', () => {
-    const timer = createGameTimer({ limit: 30 });
-
-    expect(timer).toHaveProperty('start');
-    expect(timer).toHaveProperty('stop');
-    expect(timer).toHaveProperty('getTotalTime');
-    expect(timer).toHaveProperty('reset');
-  });
-
-  test('decrements time on each tick', () => {
-    const element = document.getElementById('timer');
-    const timer = createGameTimer({ limit: 5, element });
-
-    timer.start();
-
-    expect(element.textContent).toBe('5');
-
-    vi.advanceTimersByTime(1000);
-    expect(element.textContent).toBe('4');
-
-    vi.advanceTimersByTime(1000);
-    expect(element.textContent).toBe('3');
-  });
-
-  test('calls onTick callback', () => {
-    const onTick = vi.fn();
-    const timer = createGameTimer({ limit: 3, onTick });
-
-    timer.start();
-    vi.advanceTimersByTime(1000);
-
-    expect(onTick).toHaveBeenCalledWith(2, 1); // remaining, total
-  });
-
-  test('calls onTimeout when time expires', () => {
-    const onTimeout = vi.fn();
-    const timer = createGameTimer({ limit: 2, onTimeout });
-
-    timer.start();
-    vi.advanceTimersByTime(2000);
-
-    expect(onTimeout).toHaveBeenCalledTimes(1);
-  });
-
-  test('stops timer correctly', () => {
-    const onTick = vi.fn();
-    const timer = createGameTimer({ limit: 10, onTick });
-
-    timer.start();
-    vi.advanceTimersByTime(3000);
-    timer.stop();
-    vi.advanceTimersByTime(5000); // should not trigger more ticks
-
-    expect(onTick).toHaveBeenCalledTimes(3);
-  });
-
-  test('getTotalTime returns accumulated time', () => {
-    const timer = createGameTimer({ limit: 10 });
-
-    timer.start();
-    vi.advanceTimersByTime(3000);
-
-    expect(timer.getTotalTime()).toBe(3);
-  });
-
-  test('reset clears timer state', () => {
-    const timer = createGameTimer({ limit: 10 });
-
-    timer.start();
-    vi.advanceTimersByTime(5000);
-    timer.reset();
-
-    expect(timer.getTotalTime()).toBe(0);
-  });
-
-  test('prevents multiple timers when start called twice', () => {
-    const onTick = vi.fn();
-    const timer = createGameTimer({ limit: 10, onTick });
-
-    timer.start();
-    timer.start(); // second call
-
-    vi.advanceTimersByTime(1000);
-
-    expect(onTick).toHaveBeenCalledTimes(1); // only one timer running
   });
 });
 ```
 
 ---
 
-## 📦 Fixtures
+## 🧪 Patterns de Test React
 
-### Structure (`tests/fixtures/index.js`)
+### 1. Test de Composant avec Props
 
-```javascript
-export const FIXTURES = {
-  highscores: {
-    empty: [],
+```typescript
+describe('Card', () => {
+  test('renders title and content', () => {
+    render(
+      <Card title="Test Title">
+        <p>Test Content</p>
+      </Card>
+    );
+    
+    expect(screen.getByText('Test Title')).toBeInTheDocument();
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
 
-    top3: [
-      { name: 'Alice', score: 15, time: 45, date: '2025-01-01T10:00:00.000Z' },
-      { name: 'Bob', score: 14, time: 50, date: '2025-01-01T10:05:00.000Z' },
-      { name: 'Charlie', score: 13, time: 55, date: '2025-01-01T10:10:00.000Z' }
-    ],
+  test('applies custom className', () => {
+    render(<Card className="custom-class">Content</Card>);
+    
+    const card = screen.getByText('Content').closest('div');
+    expect(card).toHaveClass('custom-class');
+  });
+});
+```
 
-    top5: [
-      { name: 'Alice', score: 15, time: 45, date: '2025-01-01T10:00:00.000Z' },
-      { name: 'Bob', score: 14, time: 50, date: '2025-01-01T10:05:00.000Z' },
-      {
-        name: 'Charlie',
-        score: 13,
-        time: 55,
-        date: '2025-01-01T10:10:00.000Z'
-      },
-      { name: 'David', score: 12, time: 60, date: '2025-01-01T10:15:00.000Z' },
-      { name: 'Eve', score: 11, time: 65, date: '2025-01-01T10:20:00.000Z' }
-    ],
+### 2. Test avec User Events
 
-    sameScorediffTimes: [
-      { name: 'Fast', score: 10, time: 30, date: '2025-01-01T10:00:00.000Z' },
-      { name: 'Slow', score: 10, time: 60, date: '2025-01-01T10:05:00.000Z' }
-    ],
+```typescript
+describe('DifficultySelector', () => {
+  test('calls onSelect when difficulty is chosen', async () => {
+    const user = userEvent.setup();
+    const onSelect = vi.fn();
+    
+    render(<DifficultySelector onSelect={onSelect} />);
+    
+    await user.click(
+      screen.getByRole('button', { name: /apprenti/i })
+    );
+    
+    expect(onSelect).toHaveBeenCalledWith({
+      key: 'apprenti',
+      label: 'Apprenti ⭐',
+      // ... autres props
+    });
+  });
+});
+```
 
-    withUnicode: [
-      {
-        name: '🎮 Mathéo',
-        score: 15,
-        time: 45,
-        date: '2025-01-01T10:00:00.000Z'
-      },
-      {
-        name: '学生 Zhang',
-        score: 14,
-        time: 50,
-        date: '2025-01-01T10:05:00.000Z'
-      }
-    ]
-  },
+### 3. Test avec Formulaires
 
-  players: {
-    valid: 'Mathéo',
-    empty: '',
-    long: 'A'.repeat(500),
-    unicode: '🎮 Élève 数学 المعلم 🚀',
-    withSpaces: '  Jean Dupont  ',
-    specialChars: "O'Connor-Smith <script>alert('xss')</script>"
-  },
+```typescript
+describe('PlayerNameInput', () => {
+  test('updates value on user input', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    
+    render(<PlayerNameInput value="" onChange={onChange} />);
+    
+    const input = screen.getByRole('textbox', { name: /nom/i });
+    await user.type(input, 'Mathéo');
+    
+    expect(onChange).toHaveBeenLastCalledWith('Mathéo');
+  });
 
-  times: {
-    zero: 0,
-    underMinute: [1, 30, 59],
-    exactMinute: 60,
-    overMinute: [61, 90, 125],
-    large: [3600, 7200],
-    negative: -10
-  },
+  test('shows error for invalid input', async () => {
+    const user = userEvent.setup();
+    
+    render(<PlayerNameInput value="" onChange={vi.fn()} />);
+    
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'AB'); // Trop court
+    await user.tab(); // Trigger blur
+    
+    expect(screen.getByText(/au moins 3 caractères/i)).toBeInTheDocument();
+  });
+});
+```
 
-  levels: ['facile', 'moyen', 'difficile', 'super-multi']
-};
+### 4. Test avec Zustand Store
+
+```typescript
+import { renderHook, act } from '@testing-library/react';
+import { useGameStore } from '@/store';
+
+describe('gameStore', () => {
+  test('starts game with player name', () => {
+    const { result } = renderHook(() => useGameStore());
+    
+    act(() => {
+      result.current.setPlayerName('Alice');
+      result.current.startGame('apprenti');
+    });
+    
+    expect(result.current.gameStatus).toBe('playing');
+    expect(result.current.playerName).toBe('Alice');
+  });
+
+  test('saves highscore correctly', () => {
+    const { result } = renderHook(() => useGameStore());
+    
+    act(() => {
+      result.current.setPlayerName('Alice');
+      result.current.saveHighscore('apprenti', 15, 45);
+    });
+    
+    const highscores = result.current.highscores['apprenti'];
+    expect(highscores).toHaveLength(1);
+    expect(highscores[0]).toMatchObject({
+      name: 'Alice',
+      score: 15,
+      time: 45,
+    });
+  });
+});
+```
+
+### 5. Test avec React Router
+
+```typescript
+import { BrowserRouter } from 'react-router-dom';
+
+describe('HomePage', () => {
+  const renderWithRouter = (component: React.ReactElement) => {
+    return render(
+      <BrowserRouter>
+        {component}
+      </BrowserRouter>
+    );
+  };
+
+  test('navigates to multiplication page', async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<HomePage />);
+    
+    await user.click(
+      screen.getByRole('link', { name: /multiplication/i })
+    );
+    
+    expect(window.location.pathname).toBe('/multiplication');
+  });
+});
+```
+
+### 6. Test avec LocalStorage Mock
+
+```typescript
+describe('HighscoreTable', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  test('loads highscores from localStorage', () => {
+    const mockScores = [
+      { name: 'Alice', score: 15, time: 45, date: '2026-01-01' },
+    ];
+    localStorage.setItem('highscores_apprenti', JSON.stringify(mockScores));
+    
+    render(<HighscoreTable level="apprenti" />);
+    
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('15/15')).toBeInTheDocument();
+  });
+
+  test('renders empty state when no scores', () => {
+    render(<HighscoreTable level="apprenti" />);
+    
+    expect(screen.getAllByText(/aucun score/i)).toHaveLength(5);
+  });
+});
+```
+
+---
+
+## 🎭 Testing Library Queries
+
+### Ordre de Priorité (TOUJOURS SUIVRE)
+
+1. **getByRole** - Accessibilité first
+2. **getByLabelText** - Formulaires
+3. **getByPlaceholderText** - Inputs
+4. **getByText** - Contenu visible
+5. **getByDisplayValue** - Valeurs de formulaires
+6. **getByAltText** - Images
+7. **getByTitle** - Titre SVG/elements
+8. **getByTestId** - Dernier recours (éviter)
+
+### Exemples de Queries
+
+```typescript
+// ✅ BON: getByRole
+const button = screen.getByRole('button', { name: /commencer/i });
+const input = screen.getByRole('textbox', { name: /nom du joueur/i });
+const heading = screen.getByRole('heading', { level: 1 });
+
+// ✅ BON: getByLabelText
+const nameInput = screen.getByLabelText(/nom/i);
+
+// ✅ BON: getByText
+const errorMessage = screen.getByText(/erreur/i);
+
+// ❌ MAUVAIS: getByTestId
+const button = screen.getByTestId('submit-button'); // Éviter !
+```
+
+### Assertions Communes
+
+```typescript
+// Présence dans le DOM
+expect(element).toBeInTheDocument();
+expect(element).not.toBeInTheDocument();
+
+// Visibilité
+expect(element).toBeVisible();
+expect(element).not.toBeVisible();
+
+// Contenu
+expect(element).toHaveTextContent('Hello');
+expect(element).toHaveAttribute('aria-label', 'Close');
+
+// Classes CSS (Tailwind)
+expect(element).toHaveClass('bg-yellow-400');
+
+// Formulaires
+expect(input).toHaveValue('Alice');
+expect(input).toBeDisabled();
+expect(checkbox).toBeChecked();
 ```
 
 ---
@@ -746,7 +508,8 @@ export const FIXTURES = {
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest --watch",
-    "test:related": "vitest related"
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui"
   }
 }
 ```
@@ -755,35 +518,25 @@ export const FIXTURES = {
 
 ```bash
 # Mode watch (développement)
-npm test
+yarn test
 
 # Interface graphique
-npm run test:ui
+yarn test:ui
 
 # Run une fois (CI)
-npm run test:run
+yarn test:run
 
 # Avec coverage
-npm run test:coverage
+yarn test:coverage
 
-# Tester seulement les fichiers modifiés
-npm run test:related shared.js
+# E2E tests
+yarn e2e
+yarn e2e:ui
 ```
 
 ---
 
 ## 📊 Coverage Reports
-
-### Configuration
-
-Le coverage est généré automatiquement dans `coverage/` :
-
-```
-coverage/
-├── index.html           # Rapport HTML navigable
-├── coverage-final.json  # Données brutes
-└── lcov.info           # Format pour Codecov/Coveralls
-```
 
 ### Seuils critiques
 
@@ -796,260 +549,100 @@ coverage/
 
 **Note:** Les tests **échouent** si coverage < 90% sur n'importe quelle métrique.
 
-### Visualisation
-
-```bash
-npm run test:coverage
-open coverage/index.html
-```
-
----
-
-## 🔄 CI/CD Integration
-
-### GitHub Actions (`.github/workflows/test.yml`)
-
-```yaml
-name: Tests
-
-on:
-  push:
-    branches: [main, updated-multiplication-mode]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        run: npm run test:run
-
-      - name: Generate coverage
-        run: npm run test:coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/lcov.info
-          flags: unittests
-          fail_ci_if_error: true
-
-      - name: Comment PR with coverage
-        if: github.event_name == 'pull_request'
-        uses: romeovs/lcov-reporter-action@v0.3.1
-        with:
-          lcov-file: ./coverage/lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-```
-
-### Protection de branche
-
-Dans GitHub Settings > Branches > Branch protection rules :
-
-- ✅ Require status checks to pass before merging
-- ✅ Require branches to be up to date before merging
-- ✅ Status checks: `test`
-
 ---
 
 ## 🎓 Best Practices
 
-### 1. **Arrange-Act-Assert (AAA)**
+### 1. Test du Comportement, pas l'Implémentation
 
-Chaque test suit cette structure :
+```typescript
+// ❌ MAUVAIS: Tester l'implémentation
+test('increments count state', () => {
+  const { result } = renderHook(() => useState(0));
+  act(() => result.current[1](1));
+  expect(result.current[0]).toBe(1);
+});
 
-```javascript
-test('saves highscore correctly', () => {
-  // ARRANGE - Préparer les données et mocks
-  const name = 'Alice';
-  const score = 15;
-  const time = 45;
-  const level = 'easy';
+// ✅ BON: Tester le comportement utilisateur
+test('increments counter when button clicked', async () => {
+  const user = userEvent.setup();
+  render(<Counter />);
+  
+  await user.click(screen.getByRole('button', { name: /increment/i }));
+  
+  expect(screen.getByText('Count: 1')).toBeInTheDocument();
+});
+```
 
-  // ACT - Exécuter la fonction testée
-  const result = saveHighscore(name, score, time, level);
+### 2. Arrange-Act-Assert (AAA)
 
+```typescript
+test('saves highscore correctly', async () => {
+  // ARRANGE - Préparer les données
+  const user = userEvent.setup();
+  render(<GameResults score={15} time={45} level="apprenti" />);
+  
+  // ACT - Exécuter l'action
+  await user.click(screen.getByRole('button', { name: /sauvegarder/i }));
+  
   // ASSERT - Vérifier le résultat
-  expect(result).toBe(true);
-  expect(localStorage.getItem('highscores_easy')).toBeDefined();
+  expect(screen.getByText(/score enregistré/i)).toBeInTheDocument();
 });
 ```
 
-### 2. **One Assertion Per Test (flexible)**
+### 3. Utiliser userEvent au lieu de fireEvent
 
-Privilégier un concept par test, mais regrouper assertions cohérentes :
+```typescript
+// ❌ MAUVAIS: fireEvent (bas niveau)
+fireEvent.click(button);
+fireEvent.change(input, { target: { value: 'test' } });
 
-```javascript
-// ✅ BON: Assertions sur le même concept
-test('formats time correctly', () => {
-  const result = formatTime(65);
-  expect(result).toBe('1m 5s');
-  expect(typeof result).toBe('string');
+// ✅ BON: userEvent (simule vraiment l'utilisateur)
+const user = userEvent.setup();
+await user.click(button);
+await user.type(input, 'test');
+```
+
+### 4. Tests Accessibles = App Accessible
+
+```typescript
+// ✅ BON: Force l'accessibilité
+test('button is accessible', () => {
+  render(<Button>Click me</Button>);
+  
+  // Si getByRole échoue, le bouton n'est pas accessible !
+  const button = screen.getByRole('button', { name: /click me/i });
+  expect(button).toBeInTheDocument();
 });
 
-// ❌ MAUVAIS: Tester plusieurs concepts
-test('formats time and saves highscore', () => {
-  expect(formatTime(65)).toBe('1m 5s');
-  expect(saveHighscore('A', 15, 45, 'easy')).toBe(true);
+// ❌ MAUVAIS: Ignore l'accessibilité
+test('button exists', () => {
+  render(<button>Click me</button>);
+  expect(screen.getByTestId('my-button')).toBeInTheDocument();
 });
 ```
 
-### 3. **Test Isolation**
+### 5. Tests Isolés et Indépendants
 
-Chaque test doit être **indépendant** et **répétable** :
-
-```javascript
+```typescript
 // ✅ BON: Reset avant chaque test
-beforeEach(() => {
-  localStorage.clear();
-});
+describe('GameStore', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
 
-test('test 1', () => {
-  /* ... */
+  test('test 1', () => { /* ... */ });
+  test('test 2', () => { /* ... */ }); // Indépendant de test 1
 });
-test('test 2', () => {
-  /* ... */
-}); // Ne dépend pas de test 1
 
 // ❌ MAUVAIS: Tests dépendants
-test('add first score', () => {
-  saveHighscore('A', 15, 45, 'easy');
+test('saves score', () => {
+  saveHighscore('Alice', 15, 45, 'apprenti');
 });
-test('add second score', () => {
+test('loads score', () => {
   // Dépend du test précédent !
-  saveHighscore('B', 14, 50, 'easy');
-  const scores = JSON.parse(localStorage.getItem('highscores_easy'));
-  expect(scores).toHaveLength(2); // FAIL si test 1 skip
-});
-```
-
-### 4. **Nommer les constantes magiques**
-
-```javascript
-// ✅ BON
-const MAX_HIGHSCORES = 5;
-const DEFAULT_LEVEL = 'easy';
-
-test('maintains top 5 limit', () => {
-  // Ajouter MAX_HIGHSCORES + 1 scores
-  for (let i = 0; i < MAX_HIGHSCORES + 1; i++) {
-    saveHighscore(`Player${i}`, i, 30, DEFAULT_LEVEL);
-  }
-
-  const saved = JSON.parse(localStorage.getItem(`highscores_${DEFAULT_LEVEL}`));
-  expect(saved).toHaveLength(MAX_HIGHSCORES);
-});
-
-// ❌ MAUVAIS
-test('maintains top 5 limit', () => {
-  for (let i = 0; i < 6; i++) {
-    saveHighscore(`Player${i}`, i, 30, 'easy');
-  }
-  expect(saved).toHaveLength(5); // Pourquoi 5 ?
-});
-```
-
-### 5. **Tester les cas limites (boundaries)**
-
-```javascript
-describe('formatTime boundaries', () => {
-  test('handles 0 (minimum)', () => {
-    expect(formatTime(0)).toBe('0s');
-  });
-
-  test('handles 59 (just before minute)', () => {
-    expect(formatTime(59)).toBe('59s');
-  });
-
-  test('handles 60 (exact minute)', () => {
-    expect(formatTime(60)).toBe('1m 0s');
-  });
-
-  test('handles 61 (just after minute)', () => {
-    expect(formatTime(61)).toBe('1m 1s');
-  });
-
-  test('handles very large value', () => {
-    expect(formatTime(Number.MAX_SAFE_INTEGER)).toBeDefined();
-  });
-});
-```
-
-### 6. **Mock avec parcimonie**
-
-Ne mock que ce qui est **nécessaire** :
-
-```javascript
-// ✅ BON: Mock seulement l'API externe
-test('handles localStorage error', () => {
-  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-    throw new Error('Quota exceeded');
-  });
-
-  const result = saveHighscore('A', 15, 45, 'easy');
-  expect(result).toBe(false);
-});
-
-// ❌ MAUVAIS: Tout mocker
-test('saves highscore', () => {
-  vi.mock('./shared.js');
-  const result = saveHighscore('A', 15, 45, 'easy');
-  expect(result).toBe(true); // Ce test ne teste rien !
-});
-```
-
-### 7. **Messages d'erreur clairs**
-
-```javascript
-// ✅ BON: Message descriptif
-test('sorts by score descending', () => {
-  saveHighscore('Low', 5, 30, 'easy');
-  saveHighscore('High', 15, 30, 'easy');
-
-  const saved = JSON.parse(localStorage.getItem('highscores_easy'));
-  expect(saved[0].name).toBe('High'); // "High should be first (highest score)"
-});
-
-// Ou avec matcher personnalisé
-expect(saved[0]).toMatchObject({
-  name: 'High',
-  score: 15
-});
-```
-
-### 8. **Tests lisibles comme documentation**
-
-```javascript
-// ✅ BON: Très lisible
-describe('saveHighscore sorting logic', () => {
-  test('higher score comes first', () => {
-    saveHighscore('Alice', 15, 60, 'easy');
-    saveHighscore('Bob', 10, 30, 'easy');
-
-    const [first, second] = JSON.parse(localStorage.getItem('highscores_easy'));
-    expect(first.name).toBe('Alice');
-  });
-
-  test('when scores equal, faster time comes first', () => {
-    saveHighscore('Slow', 10, 60, 'easy');
-    saveHighscore('Fast', 10, 30, 'easy');
-
-    const [first, second] = JSON.parse(localStorage.getItem('highscores_easy'));
-    expect(first.name).toBe('Fast');
-  });
+  const scores = loadHighscores('apprenti');
+  expect(scores[0].name).toBe('Alice');
 });
 ```
 
@@ -1057,55 +650,31 @@ describe('saveHighscore sorting logic', () => {
 
 ## 🐛 Debugging Tests
 
-### VSCode configuration
+### Debug avec screen.debug()
 
-`.vscode/launch.json` :
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Current Test File",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "test", "--", "${file}"],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    }
-  ]
-}
-```
-
-### Techniques de debug
-
-```javascript
-// 1. Isoler un test avec .only
-test.only('this one test', () => {
-  // Seulement ce test sera exécuté
-});
-
-// 2. Skip un test avec .skip
-test.skip('broken test', () => {
-  // Temporairement désactivé
-});
-
-// 3. Verbose logging
-test('debug issue', () => {
-  const result = saveHighscore('Test', 15, 45, 'easy');
-  console.log('Result:', result);
-  console.log('localStorage:', localStorage.getItem('highscores_easy'));
-  expect(result).toBe(true);
-});
-
-// 4. Debugger dans le code
-test('pause execution', () => {
-  debugger; // Le test pausera ici si lancé avec --inspect
-  const result = formatTime(65);
-  expect(result).toBe('1m 5s');
+```typescript
+test('debugging example', () => {
+  render(<MyComponent />);
+  
+  // Afficher le DOM complet
+  screen.debug();
+  
+  // Afficher un élément spécifique
+  screen.debug(screen.getByRole('button'));
 });
 ```
+
+### Debug avec Vitest UI
+
+```bash
+yarn test:ui
+```
+
+Interface graphique interactive pour:
+- Voir l'arbre de tests
+- Filtrer par fichier/describe/test
+- Voir les assertions en détail
+- Rejouer des tests spécifiques
 
 ---
 
@@ -1114,52 +683,30 @@ test('pause execution', () => {
 ### Documentation officielle
 
 - [Vitest](https://vitest.dev/)
-- [Vitest API](https://vitest.dev/api/)
-- [Testing Library](https://testing-library.com/)
-- [jsdom](https://github.com/jsdom/jsdom)
+- [React Testing Library](https://testing-library.com/react)
+- [Testing Library Queries](https://testing-library.com/docs/queries/about)
+- [user-event](https://testing-library.com/docs/user-event/intro)
+- [Playwright](https://playwright.dev/)
 
 ### Articles recommandés
 
-- [Test Driven Development](https://martinfowler.com/bliki/TestDrivenDevelopment.html) - Martin Fowler
-- [Mocks Aren't Stubs](https://martinfowler.com/articles/mocksArentStubs.html) - Martin Fowler
-- [Writing Tests for React Apps](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library) - Kent C. Dodds
-
-### Exemples de projets
-
-- [Vite](https://github.com/vitejs/vite) - Tests avec Vitest
-- [Vue 3](https://github.com/vuejs/core) - Tests unitaires avancés
-- [Nuxt](https://github.com/nuxt/nuxt) - Tests TDD
+- [Common mistakes with React Testing Library](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library) - Kent C. Dodds
+- [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details)
+- [The Practical Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)
 
 ---
 
 ## ✅ Checklist avant commit
 
-Avant de commit du code ou des tests :
-
-- [ ] Tous les tests passent (`npm test`)
+- [ ] Tous les tests passent (`yarn test:run`)
 - [ ] Coverage >= 90% sur toutes les métriques
 - [ ] Pas de `test.only` ou `test.skip` committé
 - [ ] Pas de `console.log` de debug
-- [ ] Noms de tests descriptifs
-- [ ] Edge cases couverts
-- [ ] Pas de tests dépendants
-- [ ] localStorage reset dans beforeEach
-- [ ] Fixtures utilisées au lieu de données inline
+- [ ] Queries accessibles (getByRole > getByTestId)
+- [ ] userEvent utilisé au lieu de fireEvent
+- [ ] Tests indépendants (beforeEach cleanup)
+- [ ] AAA pattern respecté
 
 ---
 
-## 🎯 Prochaines étapes
-
-Une fois `shared.js` à 90%+ coverage :
-
-1. **Tests d'intégration** pour les pages HTML
-2. **Tests E2E** avec Playwright (user flows complets)
-3. **Tests de performance** (temps de chargement, animations)
-4. **Tests de régression visuelle** (screenshots)
-5. **Tests d'accessibilité** (ARIA, keyboard nav)
-
-Chaque type aura son propre fichier de guidelines dédié.
-
----
-
-**Bonne chance avec vos tests ! 🚀**
+**Dernière révision:** Migration vers React + TypeScript + Tailwind CSS (10 janvier 2026)
