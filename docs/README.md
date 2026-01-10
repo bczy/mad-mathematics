@@ -47,6 +47,13 @@ Ce dossier contient l'ensemble des guidelines et procédures techniques pour le 
   - Synchronisation avec `.github/copilot-instructions.md`
   - Templates de demande et workflows
 
+- **[DOCUMENTATION_COHERENCE_CHECKLIST.md](./DOCUMENTATION_COHERENCE_CHECKLIST.md)** - Checklist de cohérence documentation/code
+  - Checklist pré-commit complète
+  - Audit mensuel de documentation
+  - Scripts d'audit automatique
+  - Détection d'incohérences
+  - Templates de rapport
+
 - **[COMMIT_GUIDELINES.md](./COMMIT_GUIDELINES.md)** - Conventional Commits et bonnes pratiques
   - Format: `type(scope): description`
   - Utilisation de Commitizen
@@ -95,12 +102,13 @@ Les guidelines suivantes seront ajoutées au fur et à mesure :
 
 ```
 docs/
-├── README.md                        # Ce fichier (index)
-├── COMMIT_GUIDELINES.md             # Conventional Commits
-├── DOCUMENTATION_GUIDELINES.md      # Gestion de la documentation
-├── TESTING_GUIDELINES.md            # Tests unitaires
-├── YARN_MIGRATION.md                # Migration npm → Yarn v4
-└── [futurs fichiers...]             # Guidelines à venir
+├── README.md                              # Ce fichier (index)
+├── COMMIT_GUIDELINES.md                   # Conventional Commits
+├── DOCUMENTATION_GUIDELINES.md            # Gestion de la documentation
+├── DOCUMENTATION_COHERENCE_CHECKLIST.md   # Checklist de cohérence
+├── TESTING_GUIDELINES.md                  # Tests unitaires
+├── YARN_MIGRATION.md                      # Migration npm → Yarn v4
+└── [futurs fichiers...]                   # Guidelines à venir
 ```
 
 ---
